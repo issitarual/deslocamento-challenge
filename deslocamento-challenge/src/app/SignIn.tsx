@@ -12,7 +12,12 @@ import { Container } from "@mui/material";
 import EmojiTransportationIcon from "@mui/icons-material/EmojiTransportation";
 import PersonPinIcon from "@mui/icons-material/PersonPin";
 import { useState } from "react";
-import { USER_TYPE, SIGN_UP_COMMAND as SIGN_UP, SIGN_IN_SUBMIT_BUTTON } from "@/helpers/contants";
+import {
+  USER_TYPE,
+  SIGN_UP_COMMAND as SIGN_UP,
+  SIGN_IN_SUBMIT_BUTTON,
+  ACCOUNT_TYPE_COMMAND,
+} from "@/helpers/contants";
 import Logo from "@/components/Logo";
 
 export default function SignIn() {
@@ -56,7 +61,7 @@ export default function SignIn() {
                 alignItems: "center",
               }}
             >
-              <Logo/>
+              <Logo />
               <Box sx={{ width: "100%" }}>
                 <Typography
                   component="h2"
@@ -64,13 +69,27 @@ export default function SignIn() {
                   align="center"
                   sx={{ my: 2 }}
                 >
-                  Selecione o tipo de conta
+                  {ACCOUNT_TYPE_COMMAND}
                 </Typography>
                 <Box display="flex" justifyContent="space-between">
-                  <Button variant={user === USER_TYPE.DRIVER? "contained": "outlined"} sx={{width: "45%"}} startIcon={<EmojiTransportationIcon />} onClick={() => setUser(USER_TYPE.DRIVER)} >
+                  <Button
+                    variant={
+                      user === USER_TYPE.DRIVER ? "contained" : "outlined"
+                    }
+                    sx={{ width: "45%" }}
+                    startIcon={<EmojiTransportationIcon />}
+                    onClick={() => setUser(USER_TYPE.DRIVER)}
+                  >
                     <p>{USER_TYPE.DRIVER}</p>
                   </Button>
-                  <Button variant={user === USER_TYPE.RIDER? "contained": "outlined"} sx={{width: "45%"}} startIcon={<PersonPinIcon />} onClick={() => setUser(USER_TYPE.RIDER)} >
+                  <Button
+                    variant={
+                      user === USER_TYPE.RIDER ? "contained" : "outlined"
+                    }
+                    sx={{ width: "45%" }}
+                    startIcon={<PersonPinIcon />}
+                    onClick={() => setUser(USER_TYPE.RIDER)}
+                  >
                     <p>{USER_TYPE.RIDER}</p>
                   </Button>
                 </Box>
