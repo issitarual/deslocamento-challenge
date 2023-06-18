@@ -1,14 +1,11 @@
-import * as React from 'react'
+import * as React from "react";
 
 type Props = {
-  userId: string
-}
+  userId: string;
+};
 
-const HomePage : React.FC<Props> = ({userId}) => {
-  return(
-    <p>Home</p>
-  )
-
-}
+const HomePage: React.FC<Props> = ({ userId }) => {
+  return <p>Home</p>;
+};
 
 export default HomePage;
