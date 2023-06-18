@@ -1,5 +1,5 @@
 import { useRouter } from "next/router";
-import HomePage from "../../components/HomePage";
+import HomePage from "../../app/HomePage";
 
 const User = () => {
   const router = useRouter();

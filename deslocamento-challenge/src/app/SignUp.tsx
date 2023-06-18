@@ -11,15 +11,12 @@ import Typography from "@mui/material/Typography";
 import { Container } from "@mui/material";
 import EmojiTransportationIcon from "@mui/icons-material/EmojiTransportation";
 import PersonPinIcon from "@mui/icons-material/PersonPin";
-import LocationOnIcon from "@mui/icons-material/LocationOn";
 import { useState } from "react";
+import { USER_TYPE, SIGN_IN_COMMAND as SIGN_IN, SIGN_IN_SUBMIT_BUTTON } from "@/helpers/contants";
+import Logo from "@/components/Logo";
 
-export default function SignIn() {
-  const USER_TYPE = {
-    DRIVER: "Motorista",
-    RIDER: "Passageiro",
-  };
-  const SIGN_UP = "Não possui uma conta? Cadastre-se"
+export default function SignUp() {
+
   const [user, setUser] = useState(USER_TYPE.RIDER);
   const handleSubmit = (event: React.SyntheticEvent) => {
     event.preventDefault();
@@ -60,16 +57,7 @@ export default function SignIn() {
                 alignItems: "center",
               }}
             >
-              <Box display="flex" alignItems="center">
-                <Typography
-                  component="h1"
-                  variant="h5"
-                  sx={{ fontWeight: "bold" }}
-                >
-                  Deslocamento App
-                </Typography>
-                <LocationOnIcon />
-              </Box>
+              <Logo/>
               <Box sx={{ width: "100%" }}>
                 <Typography
                   component="h2"
@@ -127,12 +115,12 @@ export default function SignIn() {
                   variant="contained"
                   sx={{ mt: 3, mb: 2 }}
                 >
-                  Entrar
+                  {SIGN_IN_SUBMIT_BUTTON}
                 </Button>
                 <Grid container alignItems="center" justifyContent="center">
                   <Grid item>
-                    <Link href="/sign-up" variant="body2">
-                      {SIGN_UP}
+                    <Link href="/sign-in" variant="body2">
+                      {SIGN_IN}
                     </Link>
                   </Grid>
                 </Grid>
