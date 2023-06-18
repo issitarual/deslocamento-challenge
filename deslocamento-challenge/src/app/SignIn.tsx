@@ -11,7 +11,7 @@ import Typography from "@mui/material/Typography";
 import { Container } from "@mui/material";
 import EmojiTransportationIcon from "@mui/icons-material/EmojiTransportation";
 import PersonPinIcon from "@mui/icons-material/PersonPin";
-import { useState } from "react";
+import { useGlobalContext } from "@/hooks/useGlobalContext ";
 import {
   USER_TYPE,
   SIGN_UP_COMMAND as SIGN_UP,
@@ -21,7 +21,8 @@ import {
 import Logo from "@/components/Logo";
 
 export default function SignIn() {
-  const [user, setUser] = useState(USER_TYPE.RIDER);
+  const { userType, setUserType } = useGlobalContext();
+
   const handleSubmit = (event: React.SyntheticEvent) => {
     event.preventDefault();
     const target = event.target as typeof event.target & {
@@ -74,21 +75,21 @@ export default function SignIn() {
                 <Box display="flex" justifyContent="space-between">
                   <Button
                     variant={
-                      user === USER_TYPE.DRIVER ? "contained" : "outlined"
+                      userType === USER_TYPE.DRIVER ? "contained" : "outlined"
                     }
                     sx={{ width: "45%" }}
                     startIcon={<EmojiTransportationIcon />}
-                    onClick={() => setUser(USER_TYPE.DRIVER)}
+                    onClick={() => setUserType(USER_TYPE.DRIVER)}
                   >
                     <p>{USER_TYPE.DRIVER}</p>
                   </Button>
                   <Button
                     variant={
-                      user === USER_TYPE.RIDER ? "contained" : "outlined"
+                      userType === USER_TYPE.RIDER ? "contained" : "outlined"
                     }
                     sx={{ width: "45%" }}
                     startIcon={<PersonPinIcon />}
-                    onClick={() => setUser(USER_TYPE.RIDER)}
+                    onClick={() => setUserType(USER_TYPE.RIDER)}
                   >
                     <p>{USER_TYPE.RIDER}</p>
                   </Button>
@@ -117,7 +118,7 @@ export default function SignIn() {
                   fullWidth
                   name="document"
                   label={
-                    user === USER_TYPE.DRIVER ? "Número da habilitação" : "CPF"
+                    userType === USER_TYPE.DRIVER ? "Número da habilitação" : "CPF"
                   }
                   type="password"
                   id="document"

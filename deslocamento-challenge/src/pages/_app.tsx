@@ -4,6 +4,8 @@ import { AppProps } from "next/app";
 import { ThemeProvider } from "@mui/material/styles";
 import CssBaseline from "@mui/material/CssBaseline";
 import { CacheProvider, EmotionCache } from "@emotion/react";
+import { GlobalContextProvider } from "@/helpers/GlobalContext";
+
 import theme from "../config/theme";
 import createEmotionCache from "../config/createEmotionCache";
 
@@ -24,7 +26,9 @@ export default function MyApp(props: MyAppProps) {
       <ThemeProvider theme={theme}>
         {/* CssBaseline kickstart an elegant, consistent, and simple baseline to build upon. */}
         <CssBaseline />
-        <Component {...pageProps} />
+        <GlobalContextProvider>
+          <Component {...pageProps} />
+        </GlobalContextProvider>
       </ThemeProvider>
     </CacheProvider>
   );
