@@ -1,35 +1,35 @@
 import Button from "@mui/material/Button";
 import CssBaseline from "@mui/material/CssBaseline";
 import TextField from "@mui/material/TextField";
-import Link from "@mui/material/Link";
 import Paper from "@mui/material/Paper";
 import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
-import Typography from "@mui/material/Typography";
 import { Container, InputLabel, MenuItem, Select } from "@mui/material";
-import EmojiTransportationIcon from "@mui/icons-material/EmojiTransportation";
-import PersonPinIcon from "@mui/icons-material/PersonPin";
 import { useGlobalContext } from "@/hooks/useGlobalContext ";
+import { FormEventHandler, useState } from "react";
+import { useRouter } from "next/router";
+
 import {
   USER_TYPE,
   SIGN_IN_COMMAND as SIGN_IN,
-  ACCOUNT_TYPE_COMMAND,
   SIGN_UP_SUBMIT_BUTTON,
   CATEGORIA_HABILITAÇÃO_VALUES,
   MISSING_INFORMATION_SIGN_FORM,
   ERROR_SIGN_FORM,
 } from "@/helpers/contants";
-import Logo from "@/components/Logo";
 import { fetchPostDriver } from "@/helpers/api/Driver";
-import { FormEventHandler, useState } from "react";
-import { useRouter } from "next/router";
 import { fetchPostRider } from "@/helpers/api/Rider";
+
+import Logo from "@/components/Logo";
+import AccountTypeOption from "@/components/AccountTypeOptions";
+import SignSubmitButton from "@/components/SignSubmitButton";
 
 export default function SignUp() {
   const router = useRouter();
-  const { userType, setUserType } = useGlobalContext();
+  const { userType } = useGlobalContext();
 
   const [nome, setNome] = useState("");
+  const isUserTypeDriver = userType === USER_TYPE.DRIVER;
 
   // DRIVER
   const [numeroHabilitacao, setNumeroHabilitacao] = useState("");
@@ -50,14 +50,17 @@ export default function SignUp() {
     preventDefault: () => void;
   }): Promise<FormEventHandler<HTMLFormElement> | undefined | void> {
     e.preventDefault();
-    if (
+
+    const isNotValidDriver =
       !nome.trim().length ||
       !numeroHabilitacao.trim().length ||
       !categoriaHabilitacao.trim().length ||
-      !vencimentoHabilitacao.trim().length
-    ) {
+      !vencimentoHabilitacao.trim().length;
+
+    if (isNotValidDriver) {
       return alert(MISSING_INFORMATION_SIGN_FORM);
     }
+
     const isUserSigneUp = await fetchPostDriver({
       nome,
       numeroHabilitacao,
@@ -71,20 +74,22 @@ export default function SignUp() {
   async function handleSubmitRider(e: {
     preventDefault: () => void;
   }): Promise<FormEventHandler<HTMLFormElement> | undefined | void> {
-    const tipoDocumento = "cpf";
     e.preventDefault();
 
-    if (
+    const tipoDocumento = "cpf";
+    const isNotValidRider =
       !nome.trim().length ||
       !numeroDocumento.trim().length ||
       !logradouro.trim().length ||
       !numero.trim().length ||
       !bairro.trim().length ||
       !cidade.trim().length ||
-      !uf.trim().length
-    ) {
+      !uf.trim().length;
+
+    if (isNotValidRider) {
       return alert(MISSING_INFORMATION_SIGN_FORM);
     }
+
     const isUserSigneUp = await fetchPostRider({
       nome,
       numeroDocumento,
@@ -126,45 +131,12 @@ export default function SignUp() {
               }}
             >
               <Logo />
-              <Box sx={{ width: "100%" }}>
-                <Typography
-                  component="h2"
-                  variant="body1"
-                  align="center"
-                  sx={{ my: 2 }}
-                >
-                  {ACCOUNT_TYPE_COMMAND}
-                </Typography>
-                <Box display="flex" justifyContent="space-between">
-                  <Button
-                    variant={
-                      userType === USER_TYPE.DRIVER ? "contained" : "outlined"
-                    }
-                    sx={{ width: "45%" }}
-                    startIcon={<EmojiTransportationIcon />}
-                    onClick={() => setUserType(USER_TYPE.DRIVER)}
-                  >
-                    <p>{USER_TYPE.DRIVER}</p>
-                  </Button>
-                  <Button
-                    variant={
-                      userType === USER_TYPE.RIDER ? "contained" : "outlined"
-                    }
-                    sx={{ width: "45%" }}
-                    startIcon={<PersonPinIcon />}
-                    onClick={() => setUserType(USER_TYPE.RIDER)}
-                  >
-                    <p>{USER_TYPE.RIDER}</p>
-                  </Button>
-                </Box>
-              </Box>
+              <AccountTypeOption />
               <Box
                 component="form"
                 noValidate
                 onSubmit={
-                  userType === USER_TYPE.DRIVER
-                    ? handleSubmitDriver
-                    : handleSubmitRider
+                  isUserTypeDriver ? handleSubmitDriver : handleSubmitRider
                 }
                 sx={{ mt: 1 }}
               >
@@ -188,26 +160,18 @@ export default function SignUp() {
                   required
                   fullWidth
                   name="document"
-                  label={
-                    userType === USER_TYPE.DRIVER
-                      ? "Número da habilitação"
-                      : "CPF"
-                  }
+                  label={isUserTypeDriver ? "Número da habilitação" : "CPF"}
                   type="number"
                   id="document"
                   autoComplete="document"
-                  value={
-                    userType === USER_TYPE.DRIVER
-                      ? numeroHabilitacao
-                      : numeroDocumento
-                  }
+                  value={isUserTypeDriver ? numeroHabilitacao : numeroDocumento}
                   onChange={(e) => {
-                    userType === USER_TYPE.DRIVER
+                    isUserTypeDriver
                       ? setNumeroHabilitacao(e.target.value)
                       : setNumeroDocumento(e.target.value);
                   }}
                 />
-                {userType === USER_TYPE.DRIVER ? (
+                {isUserTypeDriver ? (
                   <>
                     <InputLabel>Categoria</InputLabel>
                     <Select
@@ -335,13 +299,7 @@ export default function SignUp() {
                 >
                   {SIGN_UP_SUBMIT_BUTTON}
                 </Button>
-                <Grid container alignItems="center" justifyContent="center">
-                  <Grid item>
-                    <Link href="/sign-in" variant="body2">
-                      {SIGN_IN}
-                    </Link>
-                  </Grid>
-                </Grid>
+                <SignSubmitButton route={"/sign-in"} command={SIGN_IN}/>
               </Box>
             </Box>
           </Grid>
@@ -349,7 +307,4 @@ export default function SignUp() {
       </Box>
     </Container>
   );
-}
-function useEffect(arg0: () => void, arg1: never[]) {
-  throw new Error("Function not implemented.");
 }

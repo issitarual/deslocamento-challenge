@@ -1,27 +1,27 @@
 import axios from "axios";
-import { Driver, DriverResponse } from "@/types/DriverType";
+import { Driver } from "@/types/DriverType";
 import { API_URL } from "../contants";
 
 const fetchPostDriver = async (driver: Driver) => {
   const DRIVER = "/Condutor";
 
   try {
-    await axios.post<DriverResponse>(`${API_URL + DRIVER}`, driver);
+    await axios.post<string>(`${API_URL + DRIVER}`, driver);
     return true;
   } catch (error) {
-    return(false);
+    return false;
   }
 };
 
-const fetchGetDriver = async () => {
+const fetchGetAllDrivers = async (): Promise<Driver[]> => {
   const DRIVER = "/Condutor";
 
   try {
-    const res = await axios.get<DriverResponse>(`${API_URL + DRIVER}`);
+    const res = await axios.get<Driver[]>(`${API_URL + DRIVER}`);
     return res.data;
-  } catch (error) {
-    return(error);
+  } catch (error: any) {
+    return [];
   }
 };
 
-export { fetchPostDriver, fetchGetDriver };
+export { fetchPostDriver, fetchGetAllDrivers };

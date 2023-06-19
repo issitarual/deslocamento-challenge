@@ -1,38 +1,62 @@
 import Button from "@mui/material/Button";
 import CssBaseline from "@mui/material/CssBaseline";
 import TextField from "@mui/material/TextField";
-import FormControlLabel from "@mui/material/FormControlLabel";
-import Checkbox from "@mui/material/Checkbox";
-import Link from "@mui/material/Link";
 import Paper from "@mui/material/Paper";
 import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
-import Typography from "@mui/material/Typography";
 import { Container } from "@mui/material";
-import EmojiTransportationIcon from "@mui/icons-material/EmojiTransportation";
-import PersonPinIcon from "@mui/icons-material/PersonPin";
 import { useGlobalContext } from "@/hooks/useGlobalContext ";
+import { useRouter } from "next/router";
+import { useState } from "react";
+
 import {
   USER_TYPE,
   SIGN_UP_COMMAND as SIGN_UP,
   SIGN_IN_SUBMIT_BUTTON,
-  ACCOUNT_TYPE_COMMAND,
+  MISSING_INFORMATION_SIGN_FORM,
 } from "@/helpers/contants";
 import Logo from "@/components/Logo";
 
-export default function SignIn() {
-  const { userType, setUserType } = useGlobalContext();
+import AccountTypeOption from "@/components/AccountTypeOptions";
+import SignSubmitButton from "@/components/SignSubmitButton";
+import { fetchGetAllDrivers } from "@/helpers/api/Driver";
+import { fetchGetAllRiders } from "@/helpers/api/Rider";
 
-  const handleSubmit = (event: React.SyntheticEvent) => {
-    event.preventDefault();
-    const target = event.target as typeof event.target & {
-      email: { value: string };
-      password: { value: string };
-    };
-    console.log({
-      email: target.email.value,
-      password: target.password.value,
-    });
+export default function SignIn() {
+  const router = useRouter();
+  const { userType, setUserId } = useGlobalContext();
+
+  const isUserTypeDriver = userType === USER_TYPE.DRIVER;
+
+  const [nome, setNome] = useState("");
+  const [documento, setDocumento] = useState("");
+
+  const handleSubmit = async (e: React.SyntheticEvent) => {
+    e.preventDefault();
+
+    const isNotValidUser = !nome.trim().length || !documento.trim().length;
+    if (isNotValidUser) {
+      return alert(MISSING_INFORMATION_SIGN_FORM);
+    }
+    let userId;
+    let res;
+    if (isUserTypeDriver) {
+      res = await fetchGetAllDrivers();
+      userId = res.find(
+        (user) => user.nome === nome && user.numeroHabilitacao === documento
+      );
+    } else {
+      res = await fetchGetAllRiders();
+      userId = res.find(
+        (user) => user.nome === nome && user.numeroDocumento === documento
+      );
+    }
+
+    if(!userId){
+      return alert("Algo deu errado, tente novamente.")
+    }
+    setUserId(userId)
+    router.push(`user/${userId}`)
   };
 
   return (
@@ -63,38 +87,7 @@ export default function SignIn() {
               }}
             >
               <Logo />
-              <Box sx={{ width: "100%" }}>
-                <Typography
-                  component="h2"
-                  variant="body1"
-                  align="center"
-                  sx={{ my: 2 }}
-                >
-                  {ACCOUNT_TYPE_COMMAND}
-                </Typography>
-                <Box display="flex" justifyContent="space-between">
-                  <Button
-                    variant={
-                      userType === USER_TYPE.DRIVER ? "contained" : "outlined"
-                    }
-                    sx={{ width: "45%" }}
-                    startIcon={<EmojiTransportationIcon />}
-                    onClick={() => setUserType(USER_TYPE.DRIVER)}
-                  >
-                    <p>{USER_TYPE.DRIVER}</p>
-                  </Button>
-                  <Button
-                    variant={
-                      userType === USER_TYPE.RIDER ? "contained" : "outlined"
-                    }
-                    sx={{ width: "45%" }}
-                    startIcon={<PersonPinIcon />}
-                    onClick={() => setUserType(USER_TYPE.RIDER)}
-                  >
-                    <p>{USER_TYPE.RIDER}</p>
-                  </Button>
-                </Box>
-              </Box>
+              <AccountTypeOption />
               <Box
                 component="form"
                 noValidate
@@ -111,18 +104,20 @@ export default function SignIn() {
                   autoComplete="name"
                   autoFocus
                   type="text"
+                  value={nome}
+                  onChange={(e) => setNome(e.target.value)}
                 />
                 <TextField
                   margin="normal"
                   required
                   fullWidth
                   name="document"
-                  label={
-                    userType === USER_TYPE.DRIVER ? "Número da habilitação" : "CPF"
-                  }
+                  label={isUserTypeDriver ? "Número da habilitação" : "CPF"}
                   type="password"
                   id="document"
                   autoComplete="document"
+                  value={documento}
+                  onChange={(e) => setDocumento(e.target.value)}
                 />
                 <Button
                   type="submit"
@@ -132,13 +127,7 @@ export default function SignIn() {
                 >
                   {SIGN_IN_SUBMIT_BUTTON}
                 </Button>
-                <Grid container alignItems="center" justifyContent="center">
-                  <Grid item>
-                    <Link href="/sign-up" variant="body2">
-                      {SIGN_UP}
-                    </Link>
-                  </Grid>
-                </Grid>
+                <SignSubmitButton route={"/sign-up"} command={SIGN_UP} />
               </Box>
             </Box>
           </Grid>

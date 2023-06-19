@@ -6,22 +6,22 @@ const fetchPostRider = async (rider: Rider) => {
   const RIDER = "/Cliente";
 
   try {
-    const res = await axios.post<RiderResponse>(`${API_URL + RIDER}`, rider);
+    const res = await axios.post<string>(`${API_URL + RIDER}`, rider);
     return true;
   } catch (error) {
     return(false);
   }
 };
 
-const fetchGetRider = async () => {
+const fetchGetAllRiders = async (): Promise<Rider[] > => {
   const RIDER = "/Cliente";
 
   try {
-    const res = await axios.get<RiderResponse>(`${API_URL + RIDER}`);
+    const res = await axios.get<Rider[]>(`${API_URL + RIDER}`);
     return res.data;
   } catch (error) {
-    return(error);
+    return [];
   }
 };
 
-export { fetchPostRider, fetchGetRider };
+export { fetchPostRider, fetchGetAllRiders };
