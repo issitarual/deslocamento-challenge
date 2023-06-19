@@ -38,25 +38,25 @@ export default function SignIn() {
     if (isNotValidUser) {
       return alert(MISSING_INFORMATION_SIGN_FORM);
     }
-    let userId;
+    let user;
     let res;
     if (isUserTypeDriver) {
       res = await fetchGetAllDrivers();
-      userId = res.find(
+      user = res.find(
         (user) => user.nome === nome && user.numeroHabilitacao === documento
       );
     } else {
       res = await fetchGetAllRiders();
-      userId = res.find(
+      user = res.find(
         (user) => user.nome === nome && user.numeroDocumento === documento
       );
     }
 
-    if(!userId){
+    if(!user?.id){
       return alert("Algo deu errado, tente novamente.")
     }
-    setUserId(userId)
-    router.push(`user/${userId}`)
+    setUserId(user?.id)
+    router.push(`user/${user?.id}`)
   };
 
   return (

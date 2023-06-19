@@ -171,126 +171,7 @@ export default function SignUp() {
                       : setNumeroDocumento(e.target.value);
                   }}
                 />
-                {isUserTypeDriver ? (
-                  <>
-                    <InputLabel>Categoria</InputLabel>
-                    <Select
-                      required
-                      fullWidth
-                      name="document category"
-                      label="Categoria da habilitação"
-                      type="text"
-                      id="document category"
-                      autoComplete="document category"
-                      onChange={(e) => {
-                        setCategoriaHabilitacao(e.target.value);
-                      }}
-                      value={categoriaHabilitacao}
-                    >
-                      <MenuItem value={CATEGORIA_HABILITAÇÃO_VALUES.A}>
-                        {CATEGORIA_HABILITAÇÃO_VALUES.A}
-                      </MenuItem>
-                      <MenuItem value={CATEGORIA_HABILITAÇÃO_VALUES.B}>
-                        {CATEGORIA_HABILITAÇÃO_VALUES.B}
-                      </MenuItem>
-                      <MenuItem value={CATEGORIA_HABILITAÇÃO_VALUES.C}>
-                        {CATEGORIA_HABILITAÇÃO_VALUES.C}
-                      </MenuItem>
-                      <MenuItem value={CATEGORIA_HABILITAÇÃO_VALUES.D}>
-                        {CATEGORIA_HABILITAÇÃO_VALUES.D}
-                      </MenuItem>
-                      <MenuItem value={CATEGORIA_HABILITAÇÃO_VALUES.E}>
-                        {CATEGORIA_HABILITAÇÃO_VALUES.E}
-                      </MenuItem>
-                    </Select>
-                    <InputLabel>Validade</InputLabel>
-                    <TextField
-                      required
-                      fullWidth
-                      name="document expiration date"
-                      type="date"
-                      id="document expiration date"
-                      autoComplete="document expiration date"
-                      value={vencimentoHabilitacao}
-                      onChange={(e) => {
-                        setVencimentoHabilitacao(e.target.value);
-                      }}
-                    />
-                  </>
-                ) : (
-                  <>
-                    <TextField
-                      margin="normal"
-                      required
-                      fullWidth
-                      name="adress"
-                      label="Logradouro"
-                      type="text"
-                      id="adress"
-                      autoComplete="adress"
-                      value={logradouro}
-                      onChange={(e) => {
-                        setLogradouro(e.target.value);
-                      }}
-                    />
-                    <TextField
-                      margin="normal"
-                      required
-                      fullWidth
-                      name="adress-number"
-                      label="Número"
-                      type="text"
-                      id="adress-number"
-                      autoComplete="adress-number"
-                      value={numero}
-                      onChange={(e) => {
-                        setNumero(e.target.value);
-                      }}
-                    />
-                    <TextField
-                      margin="normal"
-                      required
-                      fullWidth
-                      name="adress-district"
-                      label="Bairro"
-                      type="text"
-                      id="adress-district"
-                      autoComplete="adress-district"
-                      value={bairro}
-                      onChange={(e) => {
-                        setBairro(e.target.value);
-                      }}
-                    />
-                    <TextField
-                      margin="normal"
-                      required
-                      fullWidth
-                      name="adress-city"
-                      label="Cidade"
-                      type="text"
-                      id="adress-city"
-                      autoComplete="adress-city"
-                      value={cidade}
-                      onChange={(e) => {
-                        setCidade(e.target.value);
-                      }}
-                    />
-                    <TextField
-                      margin="normal"
-                      required
-                      fullWidth
-                      name="adress-state"
-                      label="Estado"
-                      type="text"
-                      id="adress-state"
-                      autoComplete="adress-state"
-                      value={uf}
-                      onChange={(e) => {
-                        setUF(e.target.value);
-                      }}
-                    />
-                  </>
-                )}
+                {isUserTypeDriver ? <DriverForm /> : <RiderForm />}
                 <Button
                   type="submit"
                   fullWidth
@@ -299,7 +180,7 @@ export default function SignUp() {
                 >
                   {SIGN_UP_SUBMIT_BUTTON}
                 </Button>
-                <SignSubmitButton route={"/sign-in"} command={SIGN_IN}/>
+                <SignSubmitButton route={"/sign-in"} command={SIGN_IN} />
               </Box>
             </Box>
           </Grid>
@@ -307,4 +188,131 @@ export default function SignUp() {
       </Box>
     </Container>
   );
+
+  function RiderForm() {
+    return (
+      <>
+        <TextField
+          margin="normal"
+          required
+          fullWidth
+          name="adress"
+          label="Logradouro"
+          type="text"
+          id="adress"
+          autoComplete="adress"
+          value={logradouro}
+          onChange={(e) => {
+            setLogradouro(e.target.value);
+          }}
+        />
+        <TextField
+          margin="normal"
+          required
+          fullWidth
+          name="adress-number"
+          label="Número"
+          type="text"
+          id="adress-number"
+          autoComplete="adress-number"
+          value={numero}
+          onChange={(e) => {
+            setNumero(e.target.value);
+          }}
+        />
+        <TextField
+          margin="normal"
+          required
+          fullWidth
+          name="adress-district"
+          label="Bairro"
+          type="text"
+          id="adress-district"
+          autoComplete="adress-district"
+          value={bairro}
+          onChange={(e) => {
+            setBairro(e.target.value);
+          }}
+        />
+        <TextField
+          margin="normal"
+          required
+          fullWidth
+          name="adress-city"
+          label="Cidade"
+          type="text"
+          id="adress-city"
+          autoComplete="adress-city"
+          value={cidade}
+          onChange={(e) => {
+            setCidade(e.target.value);
+          }}
+        />
+        <TextField
+          margin="normal"
+          required
+          fullWidth
+          name="adress-state"
+          label="Estado"
+          type="text"
+          id="adress-state"
+          autoComplete="adress-state"
+          value={uf}
+          onChange={(e) => {
+            setUF(e.target.value);
+          }}
+        />
+      </>
+    );
+  }
+
+  function DriverForm() {
+    return (
+      <>
+        <InputLabel>Categoria</InputLabel>
+        <Select
+          required
+          fullWidth
+          name="document category"
+          label="Categoria da habilitação"
+          type="text"
+          id="document category"
+          autoComplete="document category"
+          onChange={(e) => {
+            setCategoriaHabilitacao(e.target.value);
+          }}
+          value={categoriaHabilitacao}
+        >
+          <MenuItem value={CATEGORIA_HABILITAÇÃO_VALUES.A}>
+            {CATEGORIA_HABILITAÇÃO_VALUES.A}
+          </MenuItem>
+          <MenuItem value={CATEGORIA_HABILITAÇÃO_VALUES.B}>
+            {CATEGORIA_HABILITAÇÃO_VALUES.B}
+          </MenuItem>
+          <MenuItem value={CATEGORIA_HABILITAÇÃO_VALUES.C}>
+            {CATEGORIA_HABILITAÇÃO_VALUES.C}
+          </MenuItem>
+          <MenuItem value={CATEGORIA_HABILITAÇÃO_VALUES.D}>
+            {CATEGORIA_HABILITAÇÃO_VALUES.D}
+          </MenuItem>
+          <MenuItem value={CATEGORIA_HABILITAÇÃO_VALUES.E}>
+            {CATEGORIA_HABILITAÇÃO_VALUES.E}
+          </MenuItem>
+        </Select>
+        <InputLabel>Validade</InputLabel>
+        <TextField
+          required
+          fullWidth
+          name="document expiration date"
+          type="date"
+          id="document expiration date"
+          autoComplete="document expiration date"
+          value={vencimentoHabilitacao}
+          onChange={(e) => {
+            setVencimentoHabilitacao(e.target.value);
+          }}
+        />
+      </>
+    );
+  }
 }

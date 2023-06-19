@@ -1,4 +1,5 @@
 type Rider = {
+  id?: string;
   nome: string;
   numeroDocumento: string;
   tipoDocumento: string;
