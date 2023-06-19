@@ -13,12 +13,21 @@ const fetchPostDriver = async (driver: Driver) => {
   }
 };
 
-const fetchGetAllDrivers = async () => {
+const fetchGetAllDrivers: () => Promise<Driver[]> = async () => {
+  const emptyDriver = [
+    {
+      id: "",
+      nome: "",
+      numeroHabilitacao: "",
+      categoriaHabilitacao: "",
+      vencimentoHabilitacao: "",
+    },
+  ];
   try {
     const res = await axios.get<Driver[]>(`${API_URL + DRIVER}`);
-    return res.data;
+    return res.data || emptyDriver;
   } catch (error) {
-    return [];
+    return emptyDriver
   }
 };
 
