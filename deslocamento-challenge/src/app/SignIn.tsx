@@ -52,11 +52,11 @@ export default function SignIn() {
       );
     }
 
-    if(!user?.id){
-      return alert("Algo deu errado, tente novamente.")
+    if (!user?.id) {
+      return alert("Algo deu errado, tente novamente.");
     }
-    setUserId(user?.id)
-    router.push(`user/${user?.id}`)
+    setUserId(user?.id);
+    router.push(`user/${user?.id}`);
   };
 
   return (

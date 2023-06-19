@@ -1,21 +1,28 @@
-import axios from "axios";
-import { Rider, RiderResponse } from "@/types/RiderType";
+import axios, { HttpStatusCode } from "axios";
+import { Rider } from "@/types/RiderType";
 import { API_URL } from "../contants";
 
-const fetchPostRider = async (rider: Rider) => {
-  const RIDER = "/Cliente";
+const RIDER = "/Cliente";
 
+const fetchPostRider = async (rider: Rider) => {
   try {
     const res = await axios.post<string>(`${API_URL + RIDER}`, rider);
-    return true;
+    return !!res.data;
   } catch (error) {
-    return(false);
+    return false;
   }
 };
 
-const fetchGetAllRiders = async (): Promise<Rider[] > => {
-  const RIDER = "/Cliente";
+const fetchGetRider = async ({ id }: { id: string }) => {
+  try {
+    const res = await axios.get<Rider>(`${API_URL + RIDER}/${id}`);
+    return res.data;
+  } catch (error) {
+    return error;
+  }
+};
 
+const fetchGetAllRiders = async () => {
   try {
     const res = await axios.get<Rider[]>(`${API_URL + RIDER}`);
     return res.data;
@@ -24,4 +31,31 @@ const fetchGetAllRiders = async (): Promise<Rider[] > => {
   }
 };
 
-export { fetchPostRider, fetchGetAllRiders };
+const fetchUpdateRider = async ({ rider }: { rider: Rider }) => {
+  try {
+    const res = await axios.put<HttpStatusCode>(
+      `${API_URL + RIDER}/${rider?.id}`,
+      rider
+    );
+    return res.status === 200;
+  } catch (error) {
+    return error;
+  }
+};
+
+const fetchDeleteRider = async ({ id }: { id: string }) => {
+  try {
+    const res = await axios.put<HttpStatusCode>(`${API_URL + RIDER}/${id}`, { id });
+    return res.status === 200;
+  } catch (error) {
+    return error;
+  }
+};
+
+export {
+  fetchPostRider,
+  fetchGetAllRiders,
+  fetchGetRider,
+  fetchUpdateRider,
+  fetchDeleteRider,
+};

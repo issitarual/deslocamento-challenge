@@ -10,11 +10,4 @@ type Rider = {
   uf: string;
 };
 
-interface RiderResponse {
-  riders: Rider[];
-  total: number;
-  skip: number;
-  limit: number;
-}
-
-export type {Rider, RiderResponse};
+export type {Rider};
