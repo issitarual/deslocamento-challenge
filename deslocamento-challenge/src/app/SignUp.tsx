@@ -15,23 +15,89 @@ import {
   SIGN_IN_COMMAND as SIGN_IN,
   ACCOUNT_TYPE_COMMAND,
   SIGN_UP_SUBMIT_BUTTON,
+  CATEGORIA_HABILITAÇÃO_VALUES,
+  MISSING_INFORMATION_SIGN_FORM,
+  ERROR_SIGN_FORM,
 } from "@/helpers/contants";
 import Logo from "@/components/Logo";
+import { fetchPostDriver } from "@/helpers/api/Driver";
+import { FormEventHandler, useState } from "react";
+import { useRouter } from "next/router";
+import { fetchPostRider } from "@/helpers/api/Rider";
 
 export default function SignUp() {
+  const router = useRouter();
   const { userType, setUserType } = useGlobalContext();
-  const handleSubmit = (event: React.SyntheticEvent) => {
-    event.preventDefault();
-    const target = event.target as typeof event.target & {
-      email: { value: string };
-      password: { value: string };
-    };
-    console.log({
-      email: target.email.value,
-      password: target.password.value,
-    });
-  };
 
+  const [nome, setNome] = useState("");
+
+  // DRIVER
+  const [numeroHabilitacao, setNumeroHabilitacao] = useState("");
+  const [categoriaHabilitacao, setCategoriaHabilitacao] = useState(
+    CATEGORIA_HABILITAÇÃO_VALUES.A
+  );
+  const [vencimentoHabilitacao, setVencimentoHabilitacao] = useState("");
+
+  //RIDER
+  const [numeroDocumento, setNumeroDocumento] = useState("");
+  const [logradouro, setLogradouro] = useState("");
+  const [numero, setNumero] = useState("");
+  const [bairro, setBairro] = useState("");
+  const [cidade, setCidade] = useState("");
+  const [uf, setUF] = useState("");
+
+  async function handleSubmitDriver(e: {
+    preventDefault: () => void;
+  }): Promise<FormEventHandler<HTMLFormElement> | undefined | void> {
+    e.preventDefault();
+    if (
+      !nome.trim().length ||
+      !numeroHabilitacao.trim().length ||
+      !categoriaHabilitacao.trim().length ||
+      !vencimentoHabilitacao.trim().length
+    ) {
+      return alert(MISSING_INFORMATION_SIGN_FORM);
+    }
+    const isUserSigneUp = await fetchPostDriver({
+      nome,
+      numeroHabilitacao,
+      categoriaHabilitacao,
+      vencimentoHabilitacao,
+    });
+
+    isUserSigneUp ? router.push("/sign-in") : alert(ERROR_SIGN_FORM);
+  }
+
+  async function handleSubmitRider(e: {
+    preventDefault: () => void;
+  }): Promise<FormEventHandler<HTMLFormElement> | undefined | void> {
+    const tipoDocumento = "cpf";
+    e.preventDefault();
+
+    if (
+      !nome.trim().length ||
+      !numeroDocumento.trim().length ||
+      !logradouro.trim().length ||
+      !numero.trim().length ||
+      !bairro.trim().length ||
+      !cidade.trim().length ||
+      !uf.trim().length
+    ) {
+      return alert(MISSING_INFORMATION_SIGN_FORM);
+    }
+    const isUserSigneUp = await fetchPostRider({
+      nome,
+      numeroDocumento,
+      tipoDocumento,
+      logradouro,
+      numero,
+      bairro,
+      cidade,
+      uf,
+    });
+
+    isUserSigneUp ? router.push("/sign-in") : alert(ERROR_SIGN_FORM);
+  }
   return (
     <Container component="main" maxWidth="lg">
       <Box
@@ -95,7 +161,11 @@ export default function SignUp() {
               <Box
                 component="form"
                 noValidate
-                onSubmit={handleSubmit}
+                onSubmit={
+                  userType === USER_TYPE.DRIVER
+                    ? handleSubmitDriver
+                    : handleSubmitRider
+                }
                 sx={{ mt: 1 }}
               >
                 <TextField
@@ -108,6 +178,10 @@ export default function SignUp() {
                   autoComplete="name"
                   autoFocus
                   type="text"
+                  value={nome}
+                  onChange={(e) => {
+                    setNome(e.target.value);
+                  }}
                 />
                 <TextField
                   margin="normal"
@@ -115,11 +189,23 @@ export default function SignUp() {
                   fullWidth
                   name="document"
                   label={
-                    userType === USER_TYPE.DRIVER ? "Número da habilitação" : "CPF"
+                    userType === USER_TYPE.DRIVER
+                      ? "Número da habilitação"
+                      : "CPF"
                   }
                   type="number"
                   id="document"
                   autoComplete="document"
+                  value={
+                    userType === USER_TYPE.DRIVER
+                      ? numeroHabilitacao
+                      : numeroDocumento
+                  }
+                  onChange={(e) => {
+                    userType === USER_TYPE.DRIVER
+                      ? setNumeroHabilitacao(e.target.value)
+                      : setNumeroDocumento(e.target.value);
+                  }}
                 />
                 {userType === USER_TYPE.DRIVER ? (
                   <>
@@ -129,15 +215,29 @@ export default function SignUp() {
                       fullWidth
                       name="document category"
                       label="Categoria da habilitação"
-                      type="number"
+                      type="text"
                       id="document category"
                       autoComplete="document category"
+                      onChange={(e) => {
+                        setCategoriaHabilitacao(e.target.value);
+                      }}
+                      value={categoriaHabilitacao}
                     >
-                      <MenuItem value={"A"}>A</MenuItem>
-                      <MenuItem value={"B"}>B</MenuItem>
-                      <MenuItem value={"C"}>C</MenuItem>
-                      <MenuItem value={"D"}>D</MenuItem>
-                      <MenuItem value={"E"}>E</MenuItem>
+                      <MenuItem value={CATEGORIA_HABILITAÇÃO_VALUES.A}>
+                        {CATEGORIA_HABILITAÇÃO_VALUES.A}
+                      </MenuItem>
+                      <MenuItem value={CATEGORIA_HABILITAÇÃO_VALUES.B}>
+                        {CATEGORIA_HABILITAÇÃO_VALUES.B}
+                      </MenuItem>
+                      <MenuItem value={CATEGORIA_HABILITAÇÃO_VALUES.C}>
+                        {CATEGORIA_HABILITAÇÃO_VALUES.C}
+                      </MenuItem>
+                      <MenuItem value={CATEGORIA_HABILITAÇÃO_VALUES.D}>
+                        {CATEGORIA_HABILITAÇÃO_VALUES.D}
+                      </MenuItem>
+                      <MenuItem value={CATEGORIA_HABILITAÇÃO_VALUES.E}>
+                        {CATEGORIA_HABILITAÇÃO_VALUES.E}
+                      </MenuItem>
                     </Select>
                     <InputLabel>Validade</InputLabel>
                     <TextField
@@ -147,6 +247,10 @@ export default function SignUp() {
                       type="date"
                       id="document expiration date"
                       autoComplete="document expiration date"
+                      value={vencimentoHabilitacao}
+                      onChange={(e) => {
+                        setVencimentoHabilitacao(e.target.value);
+                      }}
                     />
                   </>
                 ) : (
@@ -160,6 +264,10 @@ export default function SignUp() {
                       type="text"
                       id="adress"
                       autoComplete="adress"
+                      value={logradouro}
+                      onChange={(e) => {
+                        setLogradouro(e.target.value);
+                      }}
                     />
                     <TextField
                       margin="normal"
@@ -170,6 +278,10 @@ export default function SignUp() {
                       type="text"
                       id="adress-number"
                       autoComplete="adress-number"
+                      value={numero}
+                      onChange={(e) => {
+                        setNumero(e.target.value);
+                      }}
                     />
                     <TextField
                       margin="normal"
@@ -180,6 +292,10 @@ export default function SignUp() {
                       type="text"
                       id="adress-district"
                       autoComplete="adress-district"
+                      value={bairro}
+                      onChange={(e) => {
+                        setBairro(e.target.value);
+                      }}
                     />
                     <TextField
                       margin="normal"
@@ -190,6 +306,10 @@ export default function SignUp() {
                       type="text"
                       id="adress-city"
                       autoComplete="adress-city"
+                      value={cidade}
+                      onChange={(e) => {
+                        setCidade(e.target.value);
+                      }}
                     />
                     <TextField
                       margin="normal"
@@ -200,6 +320,10 @@ export default function SignUp() {
                       type="text"
                       id="adress-state"
                       autoComplete="adress-state"
+                      value={uf}
+                      onChange={(e) => {
+                        setUF(e.target.value);
+                      }}
                     />
                   </>
                 )}
@@ -225,4 +349,7 @@ export default function SignUp() {
       </Box>
     </Container>
   );
+}
+function useEffect(arg0: () => void, arg1: never[]) {
+  throw new Error("Function not implemented.");
 }

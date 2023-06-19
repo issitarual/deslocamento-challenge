@@ -124,10 +124,6 @@ export default function SignIn() {
                   id="document"
                   autoComplete="document"
                 />
-                <FormControlLabel
-                  control={<Checkbox value="remember" color="primary" />}
-                  label="Lembrar de mim"
-                />
                 <Button
                   type="submit"
                   fullWidth
