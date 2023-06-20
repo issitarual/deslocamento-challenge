@@ -23,6 +23,8 @@ const API_URL = "https://api-deslocamento.herokuapp.com/api/v1";
 
 const CATEGORIA_HABILITAÇÃO_VALUES = { A: "A", B: "B", C: "C", D: "D", E: "E" };
 
+const DRAWER_WIDTH = 240;
+
 export {
   USER_TYPE,
   SIGN_UP_COMMAND,
@@ -35,4 +37,5 @@ export {
   CATEGORIA_HABILITAÇÃO_VALUES,
   MISSING_INFORMATION_SIGN_FORM,
   ERROR_SIGN_FORM,
+  DRAWER_WIDTH,
 };
