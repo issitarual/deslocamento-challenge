@@ -19,11 +19,60 @@ const MISSING_INFORMATION_SIGN_FORM = "Digite todas as informações solicitadas
 
 const ERROR_SIGN_FORM = "Algo deu errado, tente novamente.";
 
+const FIND_DISPLACEMENT = "Buscar outra corrida";
+
+const FIND_RIDER = "Buscar outro motorista";
+
+const ASK_FOR_DISPLACEMENT = "Solicitar corrida";
+
+const START_DISPLACEMENT = "Iniciar corrida";
+
+const WITHOUT_DISPLACEMENT_MESSAGE =
+  "Até o momento você não fez nenhuma corrida";
+
 const API_URL = "https://api-deslocamento.herokuapp.com/api/v1";
 
 const CATEGORIA_HABILITAÇÃO_VALUES = { A: "A", B: "B", C: "C", D: "D", E: "E" };
 
 const DRAWER_WIDTH = 240;
+
+const EMPTY_DRIVER = {
+  nome: "",
+  numeroHabilitacao: "",
+  categoriaHabilitacao: "",
+  vencimentoHabilitacao: "",
+};
+
+const EMPTY_WEATHER = {
+  date: "",
+  summary: "",
+  temperatureC: 0,
+  temperatureF: 0,
+};
+
+const EMPTY_DISPLACEMENT = {
+  kmInicial: 0,
+  kmFinal: 0,
+  inicioDeslocamento: "",
+  fimDeslocamento: "",
+  checkList: "",
+  motivo: "",
+  observacao: "",
+  idCondutor: 0,
+  idVeiculo: 0,
+  idCliente: 0,
+};
+
+const EMPTY_RIDER = {
+  nome: "",
+  numeroDocumento: "",
+  tipoDocumento: "",
+  logradouro: "",
+  numero: "",
+  bairro: "",
+  cidade: "",
+  uf: "",
+};
 
 export {
   USER_TYPE,
@@ -38,4 +87,13 @@ export {
   MISSING_INFORMATION_SIGN_FORM,
   ERROR_SIGN_FORM,
   DRAWER_WIDTH,
+  EMPTY_DRIVER,
+  EMPTY_WEATHER,
+  EMPTY_DISPLACEMENT,
+  EMPTY_RIDER,
+  FIND_DISPLACEMENT,
+  FIND_RIDER,
+  ASK_FOR_DISPLACEMENT,
+  START_DISPLACEMENT,
+  WITHOUT_DISPLACEMENT_MESSAGE,
 };

@@ -1,6 +1,6 @@
 import axios, { HttpStatusCode } from "axios";
 import { Rider } from "@/types/RiderType";
-import { API_URL } from "../contants";
+import { API_URL, EMPTY_RIDER } from "../contants";
 
 const RIDER = "/Cliente";
 
@@ -13,12 +13,12 @@ const fetchPostRider = async (rider: Rider) => {
   }
 };
 
-const fetchGetRider = async ({ id }: { id: string }) => {
+const fetchGetRider = async ({ id }: { id: string }): Promise<Rider>  => {
   try {
     const res = await axios.get<Rider>(`${API_URL + RIDER}/${id}`);
-    return res.data;
+    return res.data || EMPTY_RIDER;
   } catch (error) {
-    return error;
+    return EMPTY_RIDER;
   }
 };
 

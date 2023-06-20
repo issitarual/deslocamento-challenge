@@ -2,7 +2,7 @@ import axios, { HttpStatusCode } from "axios";
 import { Displacement } from "@/types/DisplacementType";
 import { API_URL } from "../contants";
 
-const DISPLACEMENT = "Deslocamento";
+const DISPLACEMENT = "/Deslocamento";
 
 const fetchPostDisplacement = async (vehicle: Displacement) => {
   try {

@@ -1,6 +1,6 @@
 import axios, { HttpStatusCode } from "axios";
 import { Driver } from "@/types/DriverType";
-import { API_URL } from "../contants";
+import { API_URL, EMPTY_DRIVER } from "../contants";
 
 const DRIVER = "/Condutor";
 
@@ -14,20 +14,11 @@ const fetchPostDriver = async (driver: Driver) => {
 };
 
 const fetchGetAllDrivers: () => Promise<Driver[]> = async () => {
-  const emptyDriver = [
-    {
-      id: "",
-      nome: "",
-      numeroHabilitacao: "",
-      categoriaHabilitacao: "",
-      vencimentoHabilitacao: "",
-    },
-  ];
   try {
     const res = await axios.get<Driver[]>(`${API_URL + DRIVER}`);
-    return res.data || emptyDriver;
+    return res.data || EMPTY_DRIVER;
   } catch (error) {
-    return emptyDriver
+    return [EMPTY_DRIVER]
   }
 };
 

@@ -2,63 +2,79 @@ import ThermostatIcon from "@mui/icons-material/Thermostat";
 import { fetchGetAllDrivers } from "@/helpers/api/Driver";
 import { fetchGetWeather } from "@/helpers/api/Weather";
 import { Driver } from "@/types/DriverType";
-import {
-  Box,
-  Button,
-  CssBaseline,
-  TextField,
-  Typography,
-} from "@mui/material";
+import { Box, Button, CssBaseline, TextField, Typography } from "@mui/material";
 import { grey } from "@mui/material/colors";
 import { useEffect, useState } from "react";
 import React from "react";
 import Main from "@/components/Main";
 import { useGlobalContext } from "@/hooks/useGlobalContext ";
-import { DRAWER_WIDTH } from "@/helpers/contants";
+import {
+  ASK_FOR_DISPLACEMENT,
+  DRAWER_WIDTH,
+  EMPTY_DISPLACEMENT,
+  EMPTY_DRIVER,
+  EMPTY_RIDER,
+  EMPTY_WEATHER,
+  FIND_DISPLACEMENT,
+  FIND_RIDER,
+  START_DISPLACEMENT,
+  USER_TYPE,
+} from "@/helpers/contants";
 import MainHeader from "@/components/MainHeader";
 import DrawerMenu from "@/components/DrawerMenu";
+import { fetchGetAllDisplacements } from "@/helpers/api/Displacement";
+import { fetchGetRider } from "@/helpers/api/Rider";
 
 export default function Home() {
+  const { openDrawer, userType, userId } = useGlobalContext();
+  const isUserTypeDriver = userType === USER_TYPE.DRIVER;
 
-  const { openDrawer } = useGlobalContext();
-
-  const [weather, setWeather] = useState({
-    date: "",
-    summary: "",
-    temperatureC: 0,
-    temperatureF: 0,
-  });
-  const [drivers, setDrivers] = useState<Driver[]>([
-    {
-      nome: "",
-      numeroHabilitacao: "",
-      categoriaHabilitacao: "",
-      vencimentoHabilitacao: "",
-    },
+  const [weather, setWeather] = useState(EMPTY_WEATHER);
+  const [drivers, setDrivers] = useState<Driver[]>([EMPTY_DRIVER]);
+  const [currentDriver, setCurrentDriver] = useState(EMPTY_DRIVER);
+  const [displacement, setDisplacement] = useState([EMPTY_DISPLACEMENT]);
+  const [currentDisplacement, setCurrentDisplacement] = useState([
+    EMPTY_DISPLACEMENT,
   ]);
-  const [currentDriver, setCurrentDriver] = useState({
-    nome: "",
-    numeroHabilitacao: "",
-    categoriaHabilitacao: "",
-    vencimentoHabilitacao: "",
-  });
+  const [rider, setRider] = useState(EMPTY_RIDER);
+  const [windowWidth, setWindowWidth] = useState(0);
+
+  async function fetchWeather() {
+    const weatherResponse = await fetchGetWeather();
+    if (weatherResponse) {
+      setWeather(weatherResponse);
+    }
+  }
+
+  async function fetchDriver() {
+    const driversResponse = await fetchGetAllDrivers();
+    if (driversResponse) {
+      setDrivers(driversResponse);
+    }
+  }
+
+  async function fetchRider(id: string) {
+    const riderResponse = await fetchGetRider({ id });
+    if (riderResponse) {
+      setRider(riderResponse);
+    }
+  }
+
+  async function fetchDisplacement() {
+    const displacementResponse = await fetchGetAllDisplacements();
+    if (displacementResponse) {
+      setDisplacement(displacementResponse);
+    }
+  }
+
   useEffect(() => {
-    async function fetchWeather() {
-      const weatherResponse = await fetchGetWeather();
-      if (weatherResponse) {
-        setWeather(weatherResponse);
-      }
-    }
-    async function fetchDriver() {
-      const driversResponse = await fetchGetAllDrivers();
-      if (driversResponse) {
-        setDrivers(driversResponse);
-      }
-    }
     fetchWeather();
+
     fetchDriver();
     const driver = drivers[getRandom(drivers.length)];
     setCurrentDriver(driver);
+
+    setWindowWidth(window.screen.availWidth);
   }, []);
 
   return (
@@ -66,7 +82,7 @@ export default function Home() {
       <CssBaseline />
       <MainHeader />
       <DrawerMenu />
-      <Main open={window.screen.availWidth < 780 ? false : openDrawer}>
+      <Main open={windowWidth < 780 ? false : openDrawer}>
         <Box sx={{ marginTop: "100px", paddingLeft: `${DRAWER_WIDTH}px` }}>
           <Box
             sx={{
@@ -136,10 +152,10 @@ export default function Home() {
               }
               sx={{ paddingY: 2 }}
             >
-              Buscar outro motorista
+              {isUserTypeDriver ? FIND_RIDER : FIND_DISPLACEMENT}
             </Button>
             <Button sx={{ paddingY: 2 }} variant="contained">
-              Iniciar corrida
+              {isUserTypeDriver ? START_DISPLACEMENT : ASK_FOR_DISPLACEMENT}
             </Button>
           </Box>
         </Box>

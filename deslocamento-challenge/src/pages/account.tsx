@@ -1,9 +1,9 @@
-import SignUp from "../app/SignUp";
+import Account from "../app/Account";
 
 export default function Home() {
     return (
       <>
-        <SignUp/>
+        <Account/>
       </>
     );
   }
