@@ -8,10 +8,10 @@ interface IGlobalContextProps {
   userType: string,
   loading: boolean;
   openDrawer: boolean;
-  setUserId: (user: any) => void;
-  setUserType: (user: any) => void;
+  setUserId: (user: string) => void;
+  setUserType: (userType: string) => void;
   setLoading: (loading: boolean) => void;
-  setOpenDrawer: (loading: boolean) => void;
+  setOpenDrawer: (open: boolean) => void;
 }
 
 export const GlobalContext = React.createContext<IGlobalContextProps>({

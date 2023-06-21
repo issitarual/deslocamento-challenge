@@ -13,7 +13,7 @@ const fetchPostRider = async (rider: Rider) => {
   }
 };
 
-const fetchGetRider = async ({ id }: { id: string }): Promise<Rider>  => {
+const fetchGetRider = async ({ id }: { id: string }): Promise<Rider> => {
   try {
     const res = await axios.get<Rider>(`${API_URL + RIDER}/${id}`);
     return res.data || EMPTY_RIDER;
@@ -31,7 +31,7 @@ const fetchGetAllRiders = async () => {
   }
 };
 
-const fetchUpdateRider = async ({ rider }: { rider: Rider }) => {
+const fetchUpdateRider = async (rider: Rider) => {
   try {
     const res = await axios.put<HttpStatusCode>(
       `${API_URL + RIDER}/${rider?.id}`,
@@ -45,7 +45,9 @@ const fetchUpdateRider = async ({ rider }: { rider: Rider }) => {
 
 const fetchDeleteRider = async ({ id }: { id: string }) => {
   try {
-    const res = await axios.put<HttpStatusCode>(`${API_URL + RIDER}/${id}`, { id });
+    const res = await axios.put<HttpStatusCode>(`${API_URL + RIDER}/${id}`, {
+      id,
+    });
     return res.status === 200;
   } catch (error) {
     return error;
