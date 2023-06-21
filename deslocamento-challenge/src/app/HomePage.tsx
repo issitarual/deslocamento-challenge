@@ -78,7 +78,7 @@ export default function Home() {
   }, []);
 
   return (
-    <Box sx={{ height: "100vh", bgcolor: grey[100] }}>
+    <Box sx={{ minHeight: "100vh", bgcolor: grey[100] }}>
       <CssBaseline />
       <MainHeader />
       <DrawerMenu />

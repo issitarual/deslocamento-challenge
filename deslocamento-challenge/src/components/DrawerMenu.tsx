@@ -1,5 +1,5 @@
 import { DRAWER_WIDTH } from "@/helpers/contants";
-import DrawerHeader from "./DrawerHEader";
+import DrawerHeader from "./DrawerHeader";
 import { useTheme } from "@mui/material/styles";
 import {
   Divider,
@@ -67,7 +67,12 @@ export default function DrawerMenu() {
       <List>
         {menuItems.map((item, index) => (
           <ListItem key={index} disablePadding>
-            <ListItemButton onClick={() => router.push(item.route)}>
+            <ListItemButton
+              onClick={() => {
+                handleDrawerClose();
+                router.push(item.route);
+              }}
+            >
               <ListItemIcon>{item.icon}</ListItemIcon>
               <ListItemText primary={item.name} />
             </ListItemButton>
