@@ -107,7 +107,7 @@ export default function SignUp() {
     <Container component="main" maxWidth="lg">
       <Box
         sx={{
-          marginTop: 8,
+          marginY: 8,
         }}
       >
         <Grid container alignItems="center" justifyContent="center">
