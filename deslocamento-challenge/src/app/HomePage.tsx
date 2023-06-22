@@ -14,9 +14,9 @@ import {
   EMPTY_DRIVER,
   EMPTY_RIDER,
   EMPTY_WEATHER,
+  END_DISPLACEMENT,
   FIND_DISPLACEMENT,
   FIND_RIDER,
-  START_DISPLACEMENT,
   USER_TYPE,
 } from "@/helpers/contants";
 import MainHeader from "@/components/MainHeader";
@@ -24,9 +24,11 @@ import DrawerMenu from "@/components/DrawerMenu";
 import {
   fetchGetAllDisplacements,
   fetchPostDisplacement,
+  fetchUpdateDisplacement,
 } from "@/helpers/api/Displacement";
 import { fetchGetRider } from "@/helpers/api/Rider";
 import { useRouter } from "next/router";
+import DisplacementsForDriver from "@/components/DisplacementsForDriver";
 
 export default function Home() {
   const router = useRouter();
@@ -37,31 +39,49 @@ export default function Home() {
   const [drivers, setDrivers] = useState([EMPTY_DRIVER]);
   const [currentDriver, setCurrentDriver] = useState(EMPTY_DRIVER);
   const [displacement, setDisplacement] = useState([EMPTY_DISPLACEMENT]);
-  const [currentDisplacement, setCurrentDisplacement] = useState([
-    EMPTY_DISPLACEMENT,
-  ]);
+  const [currentDisplacement, setCurrentDisplacement] =
+    useState(EMPTY_DISPLACEMENT);
   const [rider, setRider] = useState(EMPTY_RIDER);
   const [windowWidth, setWindowWidth] = useState(0);
 
   const [checkList, setCheckList] = useState("");
   const [motivo, setMotivo] = useState("");
   const [observacao, setObservacao] = useState("");
+  const [kmFinal, setKmFinal] = useState(0);
 
   async function handleDisplacement() {
-    const inicioDeslocamento = Date.now().toString();
-    const idCondutor = parseInt(currentDriver?.id);
-    const displacement = {
-      kmInicial: 0,
-      inicioDeslocamento,
-      checkList,
-      motivo,
-      observacao,
-      idCondutor,
-      idVeiculo: 0,
-      idCliente: parseInt(userId),
-    };
+    const displacementTime = Date.now().toString();
+    if (isUserTypeDriver) {
+      const finishDisplacement = {
+        id: currentDisplacement.id,
+        kmFinal,
+        fimDeslocamento: displacementTime,
+        observacao,
+      };
+      fetchUpdateDisplacement(finishDisplacement);
+      fetchDisplacement();
 
-    fetchPostDisplacement(displacement);
+      const randomDisplacementPosition = getRandom(displacement.length);
+      const displacementToDo = displacement[randomDisplacementPosition];
+      setCurrentDisplacement(displacementToDo);
+    } else {
+      const idCondutor = parseInt(currentDriver?.id);
+      const displacement = {
+        kmInicial: 0,
+        inicioDeslocamento: displacementTime,
+        checkList,
+        motivo,
+        observacao,
+        idCondutor,
+        idVeiculo: 0,
+        idCliente: parseInt(userId),
+      };
+      fetchPostDisplacement(displacement);
+      fetchDriver();
+      const randomDriverPosition = getRandom(drivers.length);
+      const driver = drivers[randomDriverPosition];
+      setCurrentDriver(driver);
+    }
   }
 
   async function fetchWeather() {
@@ -79,10 +99,8 @@ export default function Home() {
   }
 
   async function fetchRider(id: string) {
-    const riderResponse = await fetchGetRider(id);
-    if (riderResponse) {
-      setRider(riderResponse);
-    }
+    const currentRider = (await fetchGetRider(id)) || EMPTY_RIDER;
+    setRider(currentRider);
   }
 
   async function fetchDisplacement() {
@@ -103,17 +121,21 @@ export default function Home() {
   }
 
   useEffect(() => {
-    if (isUserTypeDriver && !vehicleId) {
-      alert("Você precisa cadastrar um veículo antes de começar");
-      router.push("/vehicle");
-      return;
-    }
-    setWindowWidth(window.screen.availWidth);
+    // if (isUserTypeDriver && !vehicleId) {
+    //   alert("Você precisa cadastrar um veículo antes de começar");
+    //   router.push("/vehicle");
+    //   return;
+    // }
+    // setWindowWidth(window.screen.availWidth);
 
     fetchWeather();
 
     if (isUserTypeDriver) {
       fetchDisplacement();
+      const randomDisplacementPosition = getRandom(displacement.length);
+      const displacementToDo = displacement[randomDisplacementPosition];
+      setCurrentDisplacement(displacementToDo);
+      fetchRider(currentDisplacement.idCliente.toString());
     } else {
       fetchDriver();
       const randomDriverPosition = getRandom(drivers.length);
@@ -160,13 +182,28 @@ export default function Home() {
             component="p"
             textAlign="center"
           >
-            {isUserTypeDriver ? "Viagem Solicitada" : "Motorista Disponível"}
+            {isUserTypeDriver ? "Viagens Solicitadas" : "Motorista Disponível"}
           </Typography>
           <Typography variant="body1" component="p" textAlign="center">
-            {isUserTypeDriver ? null : currentDriver.nome}
+            {isUserTypeDriver
+              ? `Você possui ${displacement.length} ${
+                  displacement.length > 1
+                    ? "viagens a serem feitas"
+                    : "viagem a ser feita"
+                }`
+              : currentDriver.nome}
           </Typography>
           <Box display="flex" flexDirection="column" padding={2}>
-            {isUserTypeDriver ? null : (
+            {isUserTypeDriver ? (
+              <DisplacementsForDriver
+                displacement={currentDisplacement}
+                riderName={rider.nome}
+                kmFinal={kmFinal}
+                setKmFinal={setKmFinal}
+                observacaoDriver={observacao}
+                setObservacao={setObservacao}
+              />
+            ) : (
               <>
                 <TextField
                   margin="normal"
@@ -207,7 +244,11 @@ export default function Home() {
             <Button
               variant="text"
               onClick={() =>
-                setCurrentDriver(drivers[getRandom(drivers.length)])
+                isUserTypeDriver
+                  ? setCurrentDriver(drivers[getRandom(drivers.length)])
+                  : setCurrentDisplacement(
+                      displacement[getRandom(displacement.length)]
+                    )
               }
               sx={{ paddingY: 2 }}
             >
@@ -218,7 +259,7 @@ export default function Home() {
               variant="contained"
               onClick={handleDisplacement}
             >
-              {isUserTypeDriver ? START_DISPLACEMENT : ASK_FOR_DISPLACEMENT}
+              {isUserTypeDriver ? END_DISPLACEMENT : ASK_FOR_DISPLACEMENT}
             </Button>
           </Box>
         </Box>

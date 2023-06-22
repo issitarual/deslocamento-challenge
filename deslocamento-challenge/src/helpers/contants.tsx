@@ -25,7 +25,7 @@ const FIND_RIDER = "Buscar outro motorista";
 
 const ASK_FOR_DISPLACEMENT = "Solicitar corrida";
 
-const START_DISPLACEMENT = "Iniciar corrida";
+const END_DISPLACEMENT = "Finalizar corrida";
 
 const WITHOUT_DISPLACEMENT_MESSAGE =
   "Até o momento você não fez nenhuma corrida";
@@ -103,7 +103,7 @@ export {
   FIND_DISPLACEMENT,
   FIND_RIDER,
   ASK_FOR_DISPLACEMENT,
-  START_DISPLACEMENT,
+  END_DISPLACEMENT,
   WITHOUT_DISPLACEMENT_MESSAGE,
   EMPTY_VEHICLE,
 };
