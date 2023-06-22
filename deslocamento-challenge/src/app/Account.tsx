@@ -13,6 +13,7 @@ import {
   fetchGetRider,
   fetchUpdateRider,
 } from "@/helpers/api/Rider";
+import { fetchDeleteVehicle } from "@/helpers/api/Vehicle";
 import {
   CATEGORIA_HABILITAÇÃO_VALUES,
   DRAWER_WIDTH,
@@ -27,7 +28,7 @@ import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 
 export default function Account() {
-  const { openDrawer, userType, userId } = useGlobalContext();
+  const { openDrawer, userType, userId, vehicleId } = useGlobalContext();
   const router = useRouter();
 
   const [windowWidth, setWindowWidth] = useState(0);
@@ -108,6 +109,7 @@ export default function Account() {
   async function handleDeleteAccount(id: string) {
     if (isUserTypeDriver) {
       await fetchDeleteDriver(id);
+      await fetchDeleteVehicle(vehicleId);
     } else {
       await fetchDeleteRider(id);
     }
