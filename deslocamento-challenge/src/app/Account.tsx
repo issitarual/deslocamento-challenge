@@ -3,8 +3,16 @@ import DriverForm from "@/components/DriverForm";
 import Main from "@/components/Main";
 import MainHeader from "@/components/MainHeader";
 import RiderForm from "@/components/RiderForm";
-import { fetchGetDriver, fetchUpdateDriver } from "@/helpers/api/Driver";
-import { fetchGetRider, fetchUpdateRider } from "@/helpers/api/Rider";
+import {
+  fetchDeleteDriver,
+  fetchGetDriver,
+  fetchUpdateDriver,
+} from "@/helpers/api/Driver";
+import {
+  fetchDeleteRider,
+  fetchGetRider,
+  fetchUpdateRider,
+} from "@/helpers/api/Rider";
 import {
   CATEGORIA_HABILITAÇÃO_VALUES,
   DRAWER_WIDTH,
@@ -13,13 +21,14 @@ import {
   USER_TYPE,
 } from "@/helpers/contants";
 import { useGlobalContext } from "@/hooks/useGlobalContext ";
-import { Driver as DriverType } from "@/types/DriverType";
 import { Box, Button, CssBaseline, TextField, Typography } from "@mui/material";
 import { grey } from "@mui/material/colors";
+import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 
 export default function Account() {
   const { openDrawer, userType, userId } = useGlobalContext();
+  const router = useRouter();
 
   const [windowWidth, setWindowWidth] = useState(0);
 
@@ -62,25 +71,59 @@ export default function Account() {
       numero,
       bairro,
       cidade,
-      uf
+      uf,
     });
   };
 
   async function fetchDriver(id: string) {
-    const driverResponse = await fetchGetDriver({ id });
+    const driverResponse = await fetchGetDriver(id);
     if (driverResponse) {
       setDriver(driverResponse);
+      setNome(driverResponse.nome);
+      setNumeroHabilitacao(driverResponse.numeroHabilitacao);
+      setCategoriaHabilitacao(driverResponse.categoriaHabilitacao);
+      setVencimentoHabilitacao(driverResponse.vencimentoHabilitacao);
     }
   }
 
   async function fetchRider(id: string) {
-    const riderResponse = await fetchGetRider({ id });
+    const riderResponse = await fetchGetRider(id);
     if (riderResponse) {
       setRider(riderResponse);
+      setNome(riderResponse.nome);
+      setNumeroDocumento(riderResponse.numeroDocumento);
+      setLogradouro(riderResponse.logradouro);
+      setNumero(riderResponse.numero);
+      setBairro(riderResponse.bairro);
+      setCidade(riderResponse.cidade);
+      setUF(riderResponse.uf);
     }
   }
 
+  async function handleUpdateAccount() {
+    if (isUserTypeDriver) {
+      await handleUpdateDriver();
+    } else {
+      await handleUpdateRider();
+    }
+    router.push("/home");
+  }
+
+  async function handleDeleteAccount(id: string) {
+    if (isUserTypeDriver) {
+      await fetchDeleteDriver(id);
+    } else {
+      await fetchDeleteRider(id);
+    }
+    router.push("/sign-in");
+  }
+
   useEffect(() => {
+    if (isUserTypeDriver) {
+      fetchDriver(userId);
+    } else {
+      fetchRider(userId);
+    }
     setWindowWidth(window.screen.availWidth);
   }, []);
 
@@ -162,6 +205,7 @@ export default function Account() {
               fullWidth
               variant="contained"
               sx={{ paddingY: 2, marginY: 2 }}
+              onClick={handleUpdateAccount}
             >
               Atualizar informações
             </Button>
@@ -171,6 +215,7 @@ export default function Account() {
               variant="outlined"
               color="error"
               sx={{ paddingY: 2 }}
+              onClick={() => handleDeleteAccount(userId)}
             >
               Excluir Conta
             </Button>

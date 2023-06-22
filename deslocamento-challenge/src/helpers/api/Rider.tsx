@@ -13,7 +13,7 @@ const fetchPostRider = async (rider: Rider) => {
   }
 };
 
-const fetchGetRider = async ({ id }: { id: string }): Promise<Rider> => {
+const fetchGetRider = async (id: string): Promise<Rider> => {
   try {
     const res = await axios.get<Rider>(`${API_URL + RIDER}/${id}`);
     return res.data || EMPTY_RIDER;
@@ -43,7 +43,7 @@ const fetchUpdateRider = async (rider: Rider) => {
   }
 };
 
-const fetchDeleteRider = async ({ id }: { id: string }) => {
+const fetchDeleteRider = async (id: string) => {
   try {
     const res = await axios.put<HttpStatusCode>(`${API_URL + RIDER}/${id}`, {
       id,

@@ -22,7 +22,7 @@ const fetchGetAllDrivers: () => Promise<Driver[]> = async () => {
   }
 };
 
-const fetchGetDriver = async ({ id }: { id: string }) => {
+const fetchGetDriver = async (id: string) => {
   try {
     const res = await axios.get<Driver>(`${API_URL + DRIVER}/${id}`);
     return res.data || EMPTY_DRIVER;
@@ -31,7 +31,7 @@ const fetchGetDriver = async ({ id }: { id: string }) => {
   }
 };
 
-const fetchUpdateDriver = async (driver: Driver ) => {
+const fetchUpdateDriver = async (driver: Driver) => {
   try {
     const res = await axios.put<HttpStatusCode>(
       `${API_URL + DRIVER}/${driver.id}`,
@@ -43,7 +43,7 @@ const fetchUpdateDriver = async (driver: Driver ) => {
   }
 };
 
-const fetchDeleteDriver = async ({ id }: { id: string }) => {
+const fetchDeleteDriver = async (id: string) => {
   try {
     const res = await axios.put<HttpStatusCode>(`${API_URL + DRIVER}/${id}`, {
       id,
