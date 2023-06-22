@@ -1,10 +1,10 @@
 import axios, { HttpStatusCode } from "axios";
-import { Driver } from "@/types/DriverType";
+import { DriverRequest, DriverResponse } from "@/types/DriverType";
 import { API_URL, EMPTY_DRIVER } from "../contants";
 
 const DRIVER = "/Condutor";
 
-const fetchPostDriver = async (driver: Driver) => {
+const fetchPostDriver = async (driver: DriverRequest) => {
   try {
     await axios.post<string>(`${API_URL + DRIVER}`, driver);
     return true;
@@ -13,9 +13,9 @@ const fetchPostDriver = async (driver: Driver) => {
   }
 };
 
-const fetchGetAllDrivers: () => Promise<Driver[]> = async () => {
+const fetchGetAllDrivers: () => Promise<DriverResponse[]> = async () => {
   try {
-    const res = await axios.get<Driver[]>(`${API_URL + DRIVER}`);
+    const res = await axios.get<DriverResponse[]>(`${API_URL + DRIVER}`);
     return res.data || EMPTY_DRIVER;
   } catch (error) {
     return [EMPTY_DRIVER];
@@ -24,14 +24,14 @@ const fetchGetAllDrivers: () => Promise<Driver[]> = async () => {
 
 const fetchGetDriver = async (id: string) => {
   try {
-    const res = await axios.get<Driver>(`${API_URL + DRIVER}/${id}`);
+    const res = await axios.get<DriverResponse>(`${API_URL + DRIVER}/${id}`);
     return res.data || EMPTY_DRIVER;
   } catch (error) {
     return EMPTY_DRIVER;
   }
 };
 
-const fetchUpdateDriver = async (driver: Driver) => {
+const fetchUpdateDriver = async (driver: DriverResponse) => {
   try {
     const res = await axios.put<HttpStatusCode>(
       `${API_URL + DRIVER}/${driver.id}`,

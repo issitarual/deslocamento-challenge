@@ -37,6 +37,7 @@ const CATEGORIA_HABILITAÇÃO_VALUES = { A: "A", B: "B", C: "C", D: "D", E: "E" 
 const DRAWER_WIDTH = 240;
 
 const EMPTY_DRIVER = {
+  id: "0",
   nome: "",
   numeroHabilitacao: "",
   categoriaHabilitacao: "",

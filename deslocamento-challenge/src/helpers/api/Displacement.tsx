@@ -1,10 +1,10 @@
 import axios, { HttpStatusCode } from "axios";
-import { Displacement } from "@/types/DisplacementType";
+import {  DisplacementResponse, FinishDisplacementRequest, StartDisplacementRequest } from "@/types/DisplacementType";
 import { API_URL } from "../contants";
 
 const DISPLACEMENT = "/Deslocamento";
 
-const fetchPostDisplacement = async (displacement: Displacement) => {
+const fetchPostDisplacement = async (displacement: StartDisplacementRequest) => {
   try {
     const res = await axios.post<string>(
       `${API_URL + DISPLACEMENT}/IniciarDeslocamento`,
@@ -18,7 +18,7 @@ const fetchPostDisplacement = async (displacement: Displacement) => {
 
 const fetchGetDisplacement = async (id: string) => {
   try {
-    const res = await axios.get<Displacement>(
+    const res = await axios.get<DisplacementResponse>(
       `${API_URL + DISPLACEMENT}/${id}`
     );
     return res.data;
@@ -27,16 +27,16 @@ const fetchGetDisplacement = async (id: string) => {
   }
 };
 
-const fetchGetAllDisplacements: () => Promise<Displacement[]> = async () => {
+const fetchGetAllDisplacements: () => Promise<DisplacementResponse[]> = async () => {
   try {
-    const res = await axios.get<Displacement[]>(`${API_URL + DISPLACEMENT}`);
+    const res = await axios.get<DisplacementResponse[]>(`${API_URL + DISPLACEMENT}`);
     return res.data || [];
   } catch (error) {
     return [];
   }
 };
 
-const fetchUpdateDisplacement = async (displacement: Displacement) => {
+const fetchUpdateDisplacement = async (displacement: FinishDisplacementRequest) => {
   try {
     const res = await axios.put<HttpStatusCode>(
       `${API_URL + DISPLACEMENT}/${displacement.id}/EncerrarDeslocamento`,

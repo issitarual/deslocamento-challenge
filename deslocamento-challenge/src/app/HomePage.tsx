@@ -1,7 +1,6 @@
 import ThermostatIcon from "@mui/icons-material/Thermostat";
 import { fetchGetAllDrivers } from "@/helpers/api/Driver";
 import { fetchGetWeather } from "@/helpers/api/Weather";
-import { Driver } from "@/types/DriverType";
 import { Box, Button, CssBaseline, TextField, Typography } from "@mui/material";
 import { grey } from "@mui/material/colors";
 import { useEffect, useState } from "react";
@@ -35,7 +34,7 @@ export default function Home() {
   const isUserTypeDriver = userType === USER_TYPE.DRIVER;
 
   const [weather, setWeather] = useState(EMPTY_WEATHER);
-  const [drivers, setDrivers] = useState<Driver[]>([EMPTY_DRIVER]);
+  const [drivers, setDrivers] = useState([EMPTY_DRIVER]);
   const [currentDriver, setCurrentDriver] = useState(EMPTY_DRIVER);
   const [displacement, setDisplacement] = useState([EMPTY_DISPLACEMENT]);
   const [currentDisplacement, setCurrentDisplacement] = useState([
@@ -50,14 +49,14 @@ export default function Home() {
 
   async function handleDisplacement() {
     const inicioDeslocamento = Date.now().toString();
-    // const idCondutor: number = currentDriver?.id || 0;
+    const idCondutor = parseInt(currentDriver?.id);
     const displacement = {
       kmInicial: 0,
       inicioDeslocamento,
       checkList,
       motivo,
       observacao,
-      idCondutor: 0,
+      idCondutor,
       idVeiculo: 0,
       idCliente: parseInt(userId),
     };
@@ -87,34 +86,34 @@ export default function Home() {
   }
 
   async function fetchDisplacement() {
-    // const displacementResponse = await fetchGetAllDisplacements();
-    // if (isUserTypeDriver) {
-    //   displacement.find(
-    //     (d) => d.idCondutor.toString() === userId && !d.kmFinal
-    //   );
-    // } else {
-    //   displacement.find((d) => d.idCliente.toString() === userId && !d.kmFinal);
-    // }
-    // if (displacementResponse) {
-    //   setDisplacement(displacementResponse);
-    // }
+    const displacementResponse = await fetchGetAllDisplacements();
+    if (!displacementResponse) {
+      return;
+    }
+    if (displacementResponse) {
+      isUserTypeDriver
+        ? displacementResponse.find(
+            (d) => d.idCondutor.toString() === userId && !d.kmFinal
+          )
+        : displacementResponse.find(
+            (d) => d.idCliente.toString() === userId && !d.kmFinal
+          );
+      setDisplacement(displacementResponse);
+    }
   }
 
   useEffect(() => {
-    // if (isUserTypeDriver && !vehicleId) {
-    //   alert("Você precisa cadastrar um veículo antes de começar");
-    //   router.push("/vehicle");
-    //   return;
-    // }
+    if (isUserTypeDriver && !vehicleId) {
+      alert("Você precisa cadastrar um veículo antes de começar");
+      router.push("/vehicle");
+      return;
+    }
     setWindowWidth(window.screen.availWidth);
 
     fetchWeather();
 
     if (isUserTypeDriver) {
-      // fetchDisplacement();
-      // const randomDisplacementPosition = getRandom(displacement.length);
-      // const randomDisplacement = displacement[randomDisplacementPosition];
-      // setCurrentDisplacement(randomDisplacement);
+      fetchDisplacement();
     } else {
       fetchDriver();
       const randomDriverPosition = getRandom(drivers.length);
