@@ -4,34 +4,39 @@ import { API_URL } from "../contants";
 
 const DISPLACEMENT = "/Deslocamento";
 
-const fetchPostDisplacement = async (vehicle: Displacement) => {
+const fetchPostDisplacement = async (displacement: Displacement) => {
   try {
-    const res = await axios.post<string>(`${API_URL + DISPLACEMENT}/IniciarDeslocamento`, vehicle);
+    const res = await axios.post<string>(
+      `${API_URL + DISPLACEMENT}/IniciarDeslocamento`,
+      displacement
+    );
     return !!res.data;
   } catch (error) {
     return false;
   }
 };
 
-const fetchGetDisplacement = async ({ id }: { id: string }) => {
+const fetchGetDisplacement = async (id: string) => {
   try {
-    const res = await axios.get<Displacement>(`${API_URL + DISPLACEMENT}/${id}`);
+    const res = await axios.get<Displacement>(
+      `${API_URL + DISPLACEMENT}/${id}`
+    );
     return res.data;
   } catch (error) {
     return error;
   }
 };
 
-const fetchGetAllDisplacements = async () => {
+const fetchGetAllDisplacements: () => Promise<Displacement[]> = async () => {
   try {
     const res = await axios.get<Displacement[]>(`${API_URL + DISPLACEMENT}`);
-    return res.data;
+    return res.data || [];
   } catch (error) {
     return [];
   }
 };
 
-const fetchUpdateDisplacement = async ({ displacement }: { displacement: Displacement }) => {
+const fetchUpdateDisplacement = async (displacement: Displacement) => {
   try {
     const res = await axios.put<HttpStatusCode>(
       `${API_URL + DISPLACEMENT}/${displacement.id}/EncerrarDeslocamento`,
@@ -43,11 +48,14 @@ const fetchUpdateDisplacement = async ({ displacement }: { displacement: Displac
   }
 };
 
-const fetchDeleteDisplacement = async ({ id }: { id: string }) => {
+const fetchDeleteDisplacement = async (id: string) => {
   try {
-    const res = await axios.put<HttpStatusCode>(`${API_URL + DISPLACEMENT}/${id}`, {
-      id,
-    });
+    const res = await axios.put<HttpStatusCode>(
+      `${API_URL + DISPLACEMENT}/${id}`,
+      {
+        id,
+      }
+    );
     return res.status === 200;
   } catch (error) {
     return error;

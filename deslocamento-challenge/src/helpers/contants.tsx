@@ -52,9 +52,7 @@ const EMPTY_WEATHER = {
 
 const EMPTY_DISPLACEMENT = {
   kmInicial: 0,
-  kmFinal: 0,
   inicioDeslocamento: "",
-  fimDeslocamento: "",
   checkList: "",
   motivo: "",
   observacao: "",
@@ -72,6 +70,13 @@ const EMPTY_RIDER = {
   bairro: "",
   cidade: "",
   uf: "",
+};
+
+const EMPTY_VEHICLE = {
+  placa: "",
+  marcaModelo: "",
+  anoFabricacao: 0,
+  kmAtual: 0,
 };
 
 export {
@@ -96,4 +101,5 @@ export {
   ASK_FOR_DISPLACEMENT,
   START_DISPLACEMENT,
   WITHOUT_DISPLACEMENT_MESSAGE,
+  EMPTY_VEHICLE,
 };

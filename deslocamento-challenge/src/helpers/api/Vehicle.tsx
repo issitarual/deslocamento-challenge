@@ -1,24 +1,24 @@
 import axios, { HttpStatusCode } from "axios";
 import { Vehicle } from "@/types/VehicleType";
-import { API_URL } from "../contants";
+import { API_URL, EMPTY_VEHICLE } from "../contants";
 
 const VEHICLE = "/Veiculo";
 
 const fetchPostVehicle = async (vehicle: Vehicle) => {
   try {
     const res = await axios.post<string>(`${API_URL + VEHICLE}`, vehicle);
-    return !!res.data;
+    return res.data;
   } catch (error) {
-    return false;
+    return "";
   }
 };
 
-const fetchGetVehicle = async ({ id }: { id: string }) => {
+const fetchGetVehicle = async (id: string) => {
   try {
     const res = await axios.get<Vehicle>(`${API_URL + VEHICLE}/${id}`);
-    return res.data;
+    return res.data || EMPTY_VEHICLE;
   } catch (error) {
-    return error;
+    return EMPTY_VEHICLE;
   }
 };
 
@@ -31,7 +31,7 @@ const fetchGetAllVehicles = async () => {
   }
 };
 
-const fetchUpdateVehicle = async ({ vehicle }: { vehicle: Vehicle }) => {
+const fetchUpdateVehicle = async (vehicle: Vehicle) => {
   try {
     const res = await axios.put<HttpStatusCode>(
       `${API_URL + VEHICLE}/${vehicle?.id}`,
@@ -43,7 +43,7 @@ const fetchUpdateVehicle = async ({ vehicle }: { vehicle: Vehicle }) => {
   }
 };
 
-const fetchDeleteVehicle = async ({ id }: { id: string }) => {
+const fetchDeleteVehicle = async (id: string) => {
   try {
     const res = await axios.put<HttpStatusCode>(`${API_URL + VEHICLE}/${id}`, {
       id,

@@ -36,7 +36,6 @@ export default function Account() {
   const isUserTypeDriver = userType === USER_TYPE.DRIVER;
 
   // DRIVER
-  const [driver, setDriver] = useState(EMPTY_DRIVER);
   const [numeroHabilitacao, setNumeroHabilitacao] = useState("");
   const [categoriaHabilitacao, setCategoriaHabilitacao] = useState(
     CATEGORIA_HABILITAÇÃO_VALUES.A
@@ -44,7 +43,6 @@ export default function Account() {
   const [vencimentoHabilitacao, setVencimentoHabilitacao] = useState("");
 
   //RIDER
-  const [rider, setRider] = useState(EMPTY_RIDER);
   const [numeroDocumento, setNumeroDocumento] = useState("");
   const [logradouro, setLogradouro] = useState("");
   const [numero, setNumero] = useState("");
@@ -53,7 +51,7 @@ export default function Account() {
   const [uf, setUF] = useState("");
 
   const handleUpdateDriver = async () => {
-    const driverResponse = await fetchUpdateDriver({
+    await fetchUpdateDriver({
       id: userId,
       nome,
       numeroHabilitacao,
@@ -62,7 +60,7 @@ export default function Account() {
     });
   };
   const handleUpdateRider = async () => {
-    const driverResponse = await fetchUpdateRider({
+    await fetchUpdateRider({
       id: userId,
       nome,
       tipoDocumento: "cpf",
@@ -78,7 +76,6 @@ export default function Account() {
   async function fetchDriver(id: string) {
     const driverResponse = await fetchGetDriver(id);
     if (driverResponse) {
-      setDriver(driverResponse);
       setNome(driverResponse.nome);
       setNumeroHabilitacao(driverResponse.numeroHabilitacao);
       setCategoriaHabilitacao(driverResponse.categoriaHabilitacao);
@@ -89,7 +86,6 @@ export default function Account() {
   async function fetchRider(id: string) {
     const riderResponse = await fetchGetRider(id);
     if (riderResponse) {
-      setRider(riderResponse);
       setNome(riderResponse.nome);
       setNumeroDocumento(riderResponse.numeroDocumento);
       setLogradouro(riderResponse.logradouro);

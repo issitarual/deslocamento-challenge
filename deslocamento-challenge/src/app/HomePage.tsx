@@ -22,11 +22,16 @@ import {
 } from "@/helpers/contants";
 import MainHeader from "@/components/MainHeader";
 import DrawerMenu from "@/components/DrawerMenu";
-import { fetchGetAllDisplacements } from "@/helpers/api/Displacement";
+import {
+  fetchGetAllDisplacements,
+  fetchPostDisplacement,
+} from "@/helpers/api/Displacement";
 import { fetchGetRider } from "@/helpers/api/Rider";
+import { useRouter } from "next/router";
 
 export default function Home() {
-  const { openDrawer, userType, userId } = useGlobalContext();
+  const router = useRouter();
+  const { openDrawer, userType, userId, vehicleId } = useGlobalContext();
   const isUserTypeDriver = userType === USER_TYPE.DRIVER;
 
   const [weather, setWeather] = useState(EMPTY_WEATHER);
@@ -38,6 +43,27 @@ export default function Home() {
   ]);
   const [rider, setRider] = useState(EMPTY_RIDER);
   const [windowWidth, setWindowWidth] = useState(0);
+
+  const [checkList, setCheckList] = useState("");
+  const [motivo, setMotivo] = useState("");
+  const [observacao, setObservacao] = useState("");
+
+  async function handleDisplacement() {
+    const inicioDeslocamento = Date.now().toString();
+    const idCondutor: number = currentDriver?.id || 0;
+    const displacement = {
+      kmInicial: 0,
+      inicioDeslocamento,
+      checkList,
+      motivo,
+      observacao,
+      idCondutor,
+      idVeiculo: 0,
+      idCliente: parseInt(userId),
+    };
+
+    fetchPostDisplacement(displacement);
+  }
 
   async function fetchWeather() {
     const weatherResponse = await fetchGetWeather();
@@ -54,7 +80,7 @@ export default function Home() {
   }
 
   async function fetchRider(id: string) {
-    const riderResponse = await fetchGetRider({ id });
+    const riderResponse = await fetchGetRider(id);
     if (riderResponse) {
       setRider(riderResponse);
     }
@@ -62,20 +88,42 @@ export default function Home() {
 
   async function fetchDisplacement() {
     const displacementResponse = await fetchGetAllDisplacements();
+    if (isUserTypeDriver) {
+      displacement.find(
+        (d) => d.idCondutor.toString() === userId && !d.kmFinal
+      );
+    } else {
+      displacement.find((d) => d.idCliente.toString() === userId && !d.kmFinal);
+    }
     if (displacementResponse) {
       setDisplacement(displacementResponse);
     }
   }
 
   useEffect(() => {
+    // if (isUserTypeDriver && !vehicleId) {
+    //   alert("Você precisa cadastrar um veículo antes de começar");
+    //   router.push("/vehicle");
+    //   return;
+    // }
+    setWindowWidth(window.screen.availWidth);
+
     fetchWeather();
 
-    fetchDriver();
-    const driver = drivers[getRandom(drivers.length)];
-    setCurrentDriver(driver);
-
-    setWindowWidth(window.screen.availWidth);
+    if (isUserTypeDriver) {
+      fetchDisplacement();
+      const randomDisplacementPosition = getRandom(displacement.length);
+      const randomDisplacement = displacement[randomDisplacementPosition];
+      setCurrentDisplacement(randomDisplacement);
+    } else {
+      fetchDriver();
+      const randomDriverPosition = getRandom(drivers.length);
+      const driver = drivers[randomDriverPosition];
+      setCurrentDriver(driver);
+    }
   }, []);
+
+  console.log(drivers);
 
   return (
     <Box sx={{ minHeight: "100vh", bgcolor: grey[100] }}>
@@ -106,45 +154,57 @@ export default function Home() {
               Clima de hoje: {weather.temperatureC} ºC
             </Typography>
           </Box>
+          {isUserTypeDriver ? "" : <></>}
           <Typography
             sx={{ fontWeight: "bold" }}
             variant="h5"
             component="p"
             textAlign="center"
           >
-            Motorista Disponível
+            {isUserTypeDriver ? "Viagem Solicitada" : "Motorista Disponível"}
           </Typography>
           <Typography variant="body1" component="p" textAlign="center">
-            {currentDriver.nome}
+            {isUserTypeDriver ? null : currentDriver.nome}
           </Typography>
           <Box display="flex" flexDirection="column" padding={2}>
-            <TextField
-              margin="normal"
-              fullWidth
-              name="checklist"
-              label="checklist"
-              type="text"
-              id="checklist"
-              autoComplete="checklist"
-            />
-            <TextField
-              margin="normal"
-              fullWidth
-              name="motivo"
-              label="motivo"
-              type="text"
-              id="motivo"
-              autoComplete="motivo"
-            />
-            <TextField
-              margin="normal"
-              fullWidth
-              name="Observação"
-              label="Observação"
-              type="text"
-              id="Observação"
-              autoComplete="Observação"
-            />
+            {isUserTypeDriver ? null : (
+              <>
+                <TextField
+                  margin="normal"
+                  fullWidth
+                  name="Checklist"
+                  label="Checklist"
+                  type="text"
+                  id="Checklist"
+                  autoComplete="Checklist"
+                  value={checkList}
+                  onChange={(e) => setCheckList(e.target.value)}
+                />
+                <TextField
+                  margin="normal"
+                  fullWidth
+                  name="Motivo"
+                  label="Motivo"
+                  type="text"
+                  id="Motivo"
+                  autoComplete="Motivo"
+                  value={motivo}
+                  onChange={(e) => setMotivo(e.target.value)}
+                />
+                <TextField
+                  margin="normal"
+                  fullWidth
+                  name="Observação"
+                  label="Observação"
+                  type="text"
+                  id="Observação"
+                  value={observacao}
+                  onChange={(e) => setObservacao(e.target.value)}
+                  autoComplete="Observação"
+                />
+              </>
+            )}
+
             <Button
               variant="text"
               onClick={() =>
@@ -152,9 +212,13 @@ export default function Home() {
               }
               sx={{ paddingY: 2 }}
             >
-              {isUserTypeDriver ? FIND_RIDER : FIND_DISPLACEMENT}
+              {isUserTypeDriver ? FIND_DISPLACEMENT : FIND_RIDER}
             </Button>
-            <Button sx={{ paddingY: 2 }} variant="contained">
+            <Button
+              sx={{ paddingY: 2 }}
+              variant="contained"
+              onClick={handleDisplacement}
+            >
               {isUserTypeDriver ? START_DISPLACEMENT : ASK_FOR_DISPLACEMENT}
             </Button>
           </Box>

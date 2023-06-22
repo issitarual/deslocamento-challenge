@@ -1,9 +1,9 @@
 type Displacement = {
   id?: string,
   kmInicial: number,
-  kmFinal: number,
+  kmFinal?: number,
   inicioDeslocamento: string,
-  fimDeslocamento: string,
+  fimDeslocamento?: string,
   checkList: string,
   motivo: string,
   observacao: string,

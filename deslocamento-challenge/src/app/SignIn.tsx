@@ -24,7 +24,7 @@ import { fetchGetAllRiders } from "@/helpers/api/Rider";
 
 export default function SignIn() {
   const router = useRouter();
-  const { userType, setUserId } = useGlobalContext();
+  const { userType, setUserId, vehicleId } = useGlobalContext();
 
   const isUserTypeDriver = userType === USER_TYPE.DRIVER;
 
@@ -56,7 +56,10 @@ export default function SignIn() {
       return alert("Algo deu errado, tente novamente.");
     }
     setUserId(user?.id);
-    router.push(`user/${user?.id}`);
+    if (isUserTypeDriver && !vehicleId) {
+      return router.push("/vehicle");
+    }
+    router.push("/user");
   };
 
   return (
