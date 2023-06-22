@@ -5,7 +5,7 @@ type DriverRequest = {
   vencimentoHabilitacao: string;
 };
 
-type DriverResponse = {
+type Driver = {
   id: string;
   nome: string;
   numeroHabilitacao: string;
@@ -13,4 +13,4 @@ type DriverResponse = {
   vencimentoHabilitacao: string;
 };
 
-export type { DriverRequest, DriverResponse };
+export type { DriverRequest, Driver };

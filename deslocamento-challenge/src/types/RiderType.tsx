@@ -10,4 +10,15 @@ type Rider = {
   uf: string;
 };
 
-export type {Rider};
+type RiderRequest = {
+  nome: string;
+  numeroDocumento: string;
+  tipoDocumento: string;
+  logradouro: string;
+  numero: string;
+  bairro: string;
+  cidade: string;
+  uf: string;
+};
+
+export type { Rider, RiderRequest };

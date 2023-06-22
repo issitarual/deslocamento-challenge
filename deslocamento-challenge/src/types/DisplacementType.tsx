@@ -16,7 +16,7 @@ type FinishDisplacementRequest = {
   observacao: string;
 };
 
-type DisplacementResponse = {
+type Displacement = {
   id: string;
   kmInicial: number;
   kmFinal: number;
@@ -30,4 +30,4 @@ type DisplacementResponse = {
   idCliente: number;
 };
 
-export type { StartDisplacementRequest, DisplacementResponse, FinishDisplacementRequest };
+export type { StartDisplacementRequest, Displacement, FinishDisplacementRequest };

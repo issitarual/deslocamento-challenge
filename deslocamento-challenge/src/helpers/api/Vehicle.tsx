@@ -1,10 +1,10 @@
 import axios, { HttpStatusCode } from "axios";
-import { Vehicle } from "@/types/VehicleType";
+import { Vehicle, VehicleRequest } from "@/types/VehicleType";
 import { API_URL, EMPTY_VEHICLE } from "../contants";
 
 const VEHICLE = "/Veiculo";
 
-const fetchPostVehicle = async (vehicle: Vehicle) => {
+const fetchPostVehicle = async (vehicle: VehicleRequest) => {
   try {
     const res = await axios.post<string>(`${API_URL + VEHICLE}`, vehicle);
     return res.data;

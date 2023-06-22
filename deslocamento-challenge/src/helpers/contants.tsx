@@ -37,7 +37,7 @@ const CATEGORIA_HABILITAÇÃO_VALUES = { A: "A", B: "B", C: "C", D: "D", E: "E" 
 const DRAWER_WIDTH = 240;
 
 const EMPTY_DRIVER = {
-  id: "0",
+  id: "",
   nome: "",
   numeroHabilitacao: "",
   categoriaHabilitacao: "",
@@ -52,8 +52,11 @@ const EMPTY_WEATHER = {
 };
 
 const EMPTY_DISPLACEMENT = {
+  id: "",
   kmInicial: 0,
+  kmFinal: 0,
   inicioDeslocamento: "",
+  fimDeslocamento: "",
   checkList: "",
   motivo: "",
   observacao: "",
