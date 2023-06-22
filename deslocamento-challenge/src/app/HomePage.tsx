@@ -50,14 +50,14 @@ export default function Home() {
 
   async function handleDisplacement() {
     const inicioDeslocamento = Date.now().toString();
-    const idCondutor: number = currentDriver?.id || 0;
+    // const idCondutor: number = currentDriver?.id || 0;
     const displacement = {
       kmInicial: 0,
       inicioDeslocamento,
       checkList,
       motivo,
       observacao,
-      idCondutor,
+      idCondutor: 0,
       idVeiculo: 0,
       idCliente: parseInt(userId),
     };
@@ -87,17 +87,17 @@ export default function Home() {
   }
 
   async function fetchDisplacement() {
-    const displacementResponse = await fetchGetAllDisplacements();
-    if (isUserTypeDriver) {
-      displacement.find(
-        (d) => d.idCondutor.toString() === userId && !d.kmFinal
-      );
-    } else {
-      displacement.find((d) => d.idCliente.toString() === userId && !d.kmFinal);
-    }
-    if (displacementResponse) {
-      setDisplacement(displacementResponse);
-    }
+    // const displacementResponse = await fetchGetAllDisplacements();
+    // if (isUserTypeDriver) {
+    //   displacement.find(
+    //     (d) => d.idCondutor.toString() === userId && !d.kmFinal
+    //   );
+    // } else {
+    //   displacement.find((d) => d.idCliente.toString() === userId && !d.kmFinal);
+    // }
+    // if (displacementResponse) {
+    //   setDisplacement(displacementResponse);
+    // }
   }
 
   useEffect(() => {
@@ -111,10 +111,10 @@ export default function Home() {
     fetchWeather();
 
     if (isUserTypeDriver) {
-      fetchDisplacement();
-      const randomDisplacementPosition = getRandom(displacement.length);
-      const randomDisplacement = displacement[randomDisplacementPosition];
-      setCurrentDisplacement(randomDisplacement);
+      // fetchDisplacement();
+      // const randomDisplacementPosition = getRandom(displacement.length);
+      // const randomDisplacement = displacement[randomDisplacementPosition];
+      // setCurrentDisplacement(randomDisplacement);
     } else {
       fetchDriver();
       const randomDriverPosition = getRandom(drivers.length);
