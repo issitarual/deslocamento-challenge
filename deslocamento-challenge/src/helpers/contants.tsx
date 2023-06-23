@@ -42,6 +42,14 @@ const VEHICLE = {
   CURRENT_KM: "Km atual",
 };
 
+const RIDER = {
+  ADDRESS: "Logradouro",
+  NUMBER: "Número",
+  DISTRICT: "Bairro",
+  CITY: "Cidade",
+  STATE: "UF",
+};
+
 const WITHOUT_DISPLACEMENT_MESSAGE =
   "Até o momento você não fez nenhuma corrida";
 
@@ -192,4 +200,5 @@ export {
   DISPLACEMENT_AVAILABLE,
   PASSENGER_NAME,
   DISPLACEMENT_BOX_FIELDS,
+  RIDER,
 };

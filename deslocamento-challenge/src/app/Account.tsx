@@ -1,5 +1,6 @@
 import DrawerMenu from "@/components/DrawerMenu";
 import DriverForm from "@/components/DriverForm";
+import InputField from "@/components/InputField";
 import Main from "@/components/Main";
 import MainHeader from "@/components/MainHeader";
 import RiderForm from "@/components/RiderForm";
@@ -25,7 +26,7 @@ import {
   USER_TYPE,
 } from "@/helpers/contants";
 import { useGlobalContext } from "@/hooks/useGlobalContext ";
-import { Box, Button, CssBaseline, TextField, Typography } from "@mui/material";
+import { Box, Button, CssBaseline, Typography } from "@mui/material";
 import { grey } from "@mui/material/colors";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
@@ -156,25 +157,9 @@ export default function Account() {
             onSubmit={isUserTypeDriver ? handleUpdateDriver : handleUpdateRider}
             sx={{ mt: 1 }}
           >
-            <TextField
-              margin="normal"
-              required
-              fullWidth
-              id={FULL_NAME}
-              label={FULL_NAME}
-              name={FULL_NAME}
-              autoComplete={FULL_NAME}
-              autoFocus
-              type="text"
-              disabled={loading}
-              value={nome}
-              onChange={(e) => {
-                setNome(e.target.value);
-              }}
-            />
+            <InputField label={FULL_NAME} value={nome} handleChange={setNome} />
             {isUserTypeDriver ? (
               <DriverForm
-                disableInput={loading}
                 numeroHabilitacao={numeroHabilitacao}
                 setNumeroHabilitacao={setNumeroHabilitacao}
                 categoriaHabilitacao={categoriaHabilitacao}
@@ -184,7 +169,6 @@ export default function Account() {
               />
             ) : (
               <RiderForm
-                disableInput={loading}
                 numeroDocumento={numeroDocumento}
                 setNumeroDocumento={setNumeroDocumento}
                 logradouro={logradouro}

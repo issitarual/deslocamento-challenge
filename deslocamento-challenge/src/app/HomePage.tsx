@@ -1,7 +1,6 @@
-import ThermostatIcon from "@mui/icons-material/Thermostat";
 import { fetchGetAllDrivers } from "@/helpers/api/Driver";
 import { fetchGetWeather } from "@/helpers/api/Weather";
-import { Box, Button, CssBaseline, TextField, Typography } from "@mui/material";
+import { Box, Button, CssBaseline, Typography } from "@mui/material";
 import { grey } from "@mui/material/colors";
 import { useEffect, useState } from "react";
 import React from "react";
@@ -18,11 +17,8 @@ import {
   FIND_DISPLACEMENT,
   FIND_RIDER,
   USER_TYPE,
-  ROUTE,
-  HOME_ERROR_MESSAGE,
-  DISPLACEMENT,
   DISPLACEMENT_AVAILABLE,
-  DRIVER_AVAILABLE
+  DRIVER_AVAILABLE,
 } from "@/helpers/contants";
 import MainHeader from "@/components/MainHeader";
 import DrawerMenu from "@/components/DrawerMenu";
@@ -35,6 +31,8 @@ import { fetchGetRider } from "@/helpers/api/Rider";
 import { useRouter } from "next/router";
 import DisplacementsForDriver from "@/components/DisplacementsForDriver";
 import ThreeDotsLoading from "@/components/ThreeDotsLoading";
+import DisplacementForRider from "@/components/DisplacementForRider";
+import WeatherBox from "@/components/WeatherBox";
 
 export default function Home() {
   const router = useRouter();
@@ -56,7 +54,7 @@ export default function Home() {
   const [checkList, setCheckList] = useState("");
   const [motivo, setMotivo] = useState("");
   const [observacao, setObservacao] = useState("");
-  const [kmFinal, setKmFinal] = useState(0);
+  const [kmFinal, setKmFinal] = useState("");
 
   async function handleDisplacement() {
     setLoading(true);
@@ -64,7 +62,7 @@ export default function Home() {
     if (isUserTypeDriver) {
       const finishDisplacement = {
         id: currentDisplacement.id,
-        kmFinal,
+        kmFinal: parseInt(kmFinal),
         fimDeslocamento: displacementTime,
         observacao,
       };
@@ -170,34 +168,7 @@ export default function Home() {
       <DrawerMenu />
       <Main open={windowWidth < 780 ? false : openDrawer}>
         <Box sx={{ marginTop: "100px", paddingLeft: `${DRAWER_WIDTH}px` }}>
-          <Box
-            sx={{
-              borderRadius: "5px",
-              border: 1,
-              borderColor: "primary.main",
-              paddingY: 3,
-              margin: 3,
-            }}
-            display="flex"
-            alignItems="center"
-            justifyContent="center"
-          >
-            {isWeatherLoading ? (
-              <ThreeDotsLoading />
-            ) : (
-              <>
-                <ThermostatIcon color="primary" />
-                <Typography
-                  color="primary"
-                  variant="h5"
-                  component="p"
-                  textAlign="center"
-                >
-                  Clima de hoje: {weather.temperatureC} ºC
-                </Typography>
-              </>
-            )}
-          </Box>
+          <WeatherBox loading={isWeatherLoading} weather={weather} />
           <Typography
             sx={{ fontWeight: "bold" }}
             variant="h5"
@@ -226,46 +197,15 @@ export default function Home() {
                 setObservacao={setObservacao}
               />
             ) : (
-              <>
-                <TextField
-                  margin="normal"
-                  fullWidth
-                  name={DISPLACEMENT.CHECKLIST}
-                  label={DISPLACEMENT.CHECKLIST}
-                  type="text"
-                  id={DISPLACEMENT.CHECKLIST}
-                  autoComplete={DISPLACEMENT.CHECKLIST}
-                  disabled={loading}
-                  value={checkList}
-                  onChange={(e) => setCheckList(e.target.value)}
-                />
-                <TextField
-                  margin="normal"
-                  fullWidth
-                  name={DISPLACEMENT.REASON}
-                  label={DISPLACEMENT.REASON}
-                  type="text"
-                  id={DISPLACEMENT.REASON}
-                  autoComplete={DISPLACEMENT.REASON}
-                  disabled={loading}
-                  value={motivo}
-                  onChange={(e) => setMotivo(e.target.value)}
-                />
-                <TextField
-                  margin="normal"
-                  fullWidth
-                  name={DISPLACEMENT.OBSERVATION}
-                  label={DISPLACEMENT.OBSERVATION}
-                  type="text"
-                  id={DISPLACEMENT.OBSERVATION}
-                  disabled={loading}
-                  value={observacao}
-                  onChange={(e) => setObservacao(e.target.value)}
-                  autoComplete={DISPLACEMENT.OBSERVATION}
-                />
-              </>
+              <DisplacementForRider
+                checkList={checkList}
+                setCheckList={setCheckList}
+                motivo={motivo}
+                setMotivo={setMotivo}
+                observacao={observacao}
+                setObservacao={setObservacao}
+              />
             )}
-
             <Button
               variant="text"
               disabled={loading}

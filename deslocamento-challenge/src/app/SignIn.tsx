@@ -1,6 +1,5 @@
 import Button from "@mui/material/Button";
 import CssBaseline from "@mui/material/CssBaseline";
-import TextField from "@mui/material/TextField";
 import Paper from "@mui/material/Paper";
 import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
@@ -25,6 +24,7 @@ import SignSubmitButton from "@/components/SignSubmitButton";
 import { fetchGetAllDrivers } from "@/helpers/api/Driver";
 import { fetchGetAllRiders } from "@/helpers/api/Rider";
 import ThreeDotsLoading from "@/components/ThreeDotsLoading";
+import InputField from "@/components/InputField";
 
 export default function SignIn() {
   const router = useRouter();
@@ -105,32 +105,16 @@ export default function SignIn() {
                 onSubmit={handleSubmit}
                 sx={{ mt: 1 }}
               >
-                <TextField
-                  margin="normal"
-                  required
-                  fullWidth
-                  id={FULL_NAME}
+                <InputField
                   label={FULL_NAME}
-                  name={FULL_NAME}
-                  autoComplete={FULL_NAME}
-                  autoFocus
-                  type="text"
-                  disabled={loading}
                   value={nome}
-                  onChange={(e) => setNome(e.target.value)}
+                  handleChange={setNome}
                 />
-                <TextField
-                  margin="normal"
-                  required
-                  fullWidth
-                  name={isUserTypeDriver ? DOCUMENT.CNH : DOCUMENT.CPF}
+                <InputField
                   label={isUserTypeDriver ? DOCUMENT.CNH : DOCUMENT.CPF}
                   type="password"
-                  id={isUserTypeDriver ? DOCUMENT.CNH : DOCUMENT.CPF}
-                  autoComplete={isUserTypeDriver ? DOCUMENT.CNH : DOCUMENT.CPF}
-                  disabled={loading}
                   value={documento}
-                  onChange={(e) => setDocumento(e.target.value)}
+                  handleChange={setDocumento}
                 />
                 <Button
                   type="submit"

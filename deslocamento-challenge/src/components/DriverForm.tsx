@@ -6,6 +6,8 @@ import {
 } from "@/helpers/contants";
 import { InputLabel, MenuItem, Select, TextField } from "@mui/material";
 import { Dispatch, SetStateAction } from "react";
+import InputField from "./InputField";
+import { useGlobalContext } from "@/hooks/useGlobalContext ";
 
 export default function DriverForm({
   categoriaHabilitacao,
@@ -14,7 +16,6 @@ export default function DriverForm({
   setVencimentoHabilitacao,
   numeroHabilitacao,
   setNumeroHabilitacao,
-  disableInput,
 }: {
   categoriaHabilitacao: string;
   setCategoriaHabilitacao: Dispatch<SetStateAction<string>>;
@@ -22,24 +23,15 @@ export default function DriverForm({
   setVencimentoHabilitacao: Dispatch<SetStateAction<string>>;
   numeroHabilitacao: string;
   setNumeroHabilitacao: Dispatch<SetStateAction<string>>;
-  disableInput: boolean;
 }) {
+  const { loading } = useGlobalContext();
   return (
     <>
-      <TextField
-        margin="normal"
-        required
-        fullWidth
-        name={DOCUMENT.CNH}
+      <InputField
         label={DOCUMENT.CNH}
         type="number"
-        id={DOCUMENT.CNH}
-        autoComplete={DOCUMENT.CNH}
-        disabled={disableInput}
         value={numeroHabilitacao}
-        onChange={(e) => {
-          setNumeroHabilitacao(e.target.value);
-        }}
+        handleChange={setNumeroHabilitacao}
       />
       <InputLabel>{LICENSE_CATEGORY}</InputLabel>
       <Select
@@ -50,7 +42,7 @@ export default function DriverForm({
         type="text"
         id={LICENSE_CATEGORY}
         autoComplete={LICENSE_CATEGORY}
-        disabled={disableInput}
+        disabled={loading}
         onChange={(e) => {
           setCategoriaHabilitacao(e.target.value);
         }}
@@ -80,7 +72,7 @@ export default function DriverForm({
         type="date"
         id={EXPIRATION_DATE}
         autoComplete={EXPIRATION_DATE}
-        disabled={disableInput}
+        disabled={loading}
         value={vencimentoHabilitacao}
         onChange={(e) => {
           setVencimentoHabilitacao(e.target.value);

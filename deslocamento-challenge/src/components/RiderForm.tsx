@@ -1,5 +1,6 @@
-import { TextField } from "@mui/material";
 import { Dispatch, SetStateAction } from "react";
+import InputField from "./InputField";
+import { DOCUMENT, RIDER } from "@/helpers/contants";
 
 export default function RiderForm({
   numeroDocumento,
@@ -14,7 +15,6 @@ export default function RiderForm({
   setCidade,
   uf,
   setUF,
-  disableInput,
 }: {
   logradouro: string;
   setLogradouro: Dispatch<SetStateAction<string>>;
@@ -26,102 +26,38 @@ export default function RiderForm({
   setCidade: Dispatch<SetStateAction<string>>;
   uf: string;
   setUF: Dispatch<SetStateAction<string>>;
-  disableInput: boolean;
   numeroDocumento: string;
   setNumeroDocumento: Dispatch<SetStateAction<string>>;
 }) {
   return (
     <>
-      <TextField
-        margin="normal"
-        required
-        fullWidth
-        name="document"
-        label={"CPF"}
+      <InputField
+        label={DOCUMENT.CPF}
         type="number"
-        id="document"
-        autoComplete="document"
-        disabled={disableInput}
         value={numeroDocumento}
-        onChange={(e) => {
-          setNumeroDocumento(e.target.value);
-        }}
+        handleChange={setNumeroDocumento}
       />
-      <TextField
-        margin="normal"
-        required
-        fullWidth
-        name="adress"
-        label="Logradouro"
-        type="text"
-        id="adress"
-        autoComplete="adress"
-        disabled={disableInput}
+      <InputField
+        label={RIDER.ADDRESS}
         value={logradouro}
-        onChange={(e) => {
-          setLogradouro(e.target.value);
-        }}
+        handleChange={setLogradouro}
       />
-      <TextField
-        margin="normal"
-        required
-        fullWidth
-        name="adress-number"
-        label="Número"
-        type="text"
-        id="adress-number"
-        autoComplete="adress-number"
-        disabled={disableInput}
+      <InputField
+        label={RIDER.NUMBER}
         value={numero}
-        onChange={(e) => {
-          setNumero(e.target.value);
-        }}
+        handleChange={setNumero}
       />
-      <TextField
-        margin="normal"
-        required
-        fullWidth
-        name="adress-district"
-        label="Bairro"
-        type="text"
-        id="adress-district"
-        autoComplete="adress-district"
-        disabled={disableInput}
+      <InputField
+        label={RIDER.DISTRICT}
         value={bairro}
-        onChange={(e) => {
-          setBairro(e.target.value);
-        }}
+        handleChange={setBairro}
       />
-      <TextField
-        margin="normal"
-        required
-        fullWidth
-        name="adress-city"
-        label="Cidade"
-        type="text"
-        id="adress-city"
-        autoComplete="adress-city"
-        disabled={disableInput}
+      <InputField
+        label={RIDER.DISTRICT}
         value={cidade}
-        onChange={(e) => {
-          setCidade(e.target.value);
-        }}
+        handleChange={setCidade}
       />
-      <TextField
-        margin="normal"
-        required
-        fullWidth
-        name="adress-state"
-        label="Estado"
-        type="text"
-        id="adress-state"
-        autoComplete="adress-state"
-        disabled={disableInput}
-        value={uf}
-        onChange={(e) => {
-          setUF(e.target.value);
-        }}
-      />
+      <InputField label={RIDER.STATE} value={uf} handleChange={setUF} />
     </>
   );
 }

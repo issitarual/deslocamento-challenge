@@ -1,6 +1,5 @@
 import Button from "@mui/material/Button";
 import CssBaseline from "@mui/material/CssBaseline";
-import TextField from "@mui/material/TextField";
 import Paper from "@mui/material/Paper";
 import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
@@ -28,6 +27,7 @@ import SignSubmitButton from "@/components/SignSubmitButton";
 import RiderForm from "@/components/RiderForm";
 import DriverForm from "@/components/DriverForm";
 import ThreeDotsLoading from "@/components/ThreeDotsLoading";
+import InputField from "@/components/InputField";
 
 export default function SignUp() {
   const router = useRouter();
@@ -152,26 +152,14 @@ export default function SignUp() {
                 }
                 sx={{ mt: 1 }}
               >
-                <TextField
-                  margin="normal"
-                  required
-                  fullWidth
-                  id={FULL_NAME}
+                <InputField
                   label={FULL_NAME}
-                  name={FULL_NAME}
-                  autoComplete={FULL_NAME}
-                  autoFocus
-                  type="text"
-                  disabled={loading}
                   value={nome}
-                  onChange={(e) => {
-                    setNome(e.target.value);
-                  }}
+                  handleChange={setNome}
                 />
 
                 {isUserTypeDriver ? (
                   <DriverForm
-                    disableInput={loading}
                     categoriaHabilitacao={categoriaHabilitacao}
                     setCategoriaHabilitacao={setCategoriaHabilitacao}
                     vencimentoHabilitacao={vencimentoHabilitacao}
@@ -181,7 +169,6 @@ export default function SignUp() {
                   />
                 ) : (
                   <RiderForm
-                    disableInput={loading}
                     numeroDocumento={numeroDocumento}
                     setNumeroDocumento={setNumeroDocumento}
                     logradouro={logradouro}

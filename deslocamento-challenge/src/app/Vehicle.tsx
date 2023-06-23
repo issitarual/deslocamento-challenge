@@ -1,4 +1,5 @@
 import DrawerMenu from "@/components/DrawerMenu";
+import InputField from "@/components/InputField";
 import Main from "@/components/Main";
 import MainHeader from "@/components/MainHeader";
 import ThreeDotsLoading from "@/components/ThreeDotsLoading";
@@ -18,7 +19,7 @@ import {
 } from "@/helpers/contants";
 import { useGlobalContext } from "@/hooks/useGlobalContext ";
 import { Vehicle } from "@/types/VehicleType";
-import { Box, Button, CssBaseline, TextField, Typography } from "@mui/material";
+import { Box, Button, CssBaseline, Typography } from "@mui/material";
 import { grey } from "@mui/material/colors";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
@@ -32,16 +33,16 @@ export default function Vehicle() {
 
   const [placa, setPlaca] = useState("");
   const [marcaModelo, setMarcaModelo] = useState("");
-  const [anoFabricacao, setAnoFabricacao] = useState(0);
-  const [kmAtual, setKmAtual] = useState(0);
+  const [anoFabricacao, setAnoFabricacao] = useState("");
+  const [kmAtual, setKmAtual] = useState("");
 
   async function fetchVehicle() {
     const vehicleResponse = await fetchGetVehicle(vehicleId);
     if (vehicleResponse) {
       setPlaca(vehicleResponse.placa);
       setMarcaModelo(vehicleResponse.marcaModelo);
-      setAnoFabricacao(vehicleResponse.anoFabricacao);
-      setKmAtual(vehicleResponse.kmAtual);
+      setAnoFabricacao(vehicleResponse.anoFabricacao.toString());
+      setKmAtual(vehicleResponse.kmAtual.toString());
     }
   }
 
@@ -51,8 +52,8 @@ export default function Vehicle() {
       id: vehicleId,
       placa,
       marcaModelo,
-      anoFabricacao,
-      kmAtual,
+      anoFabricacao: parseInt(anoFabricacao),
+      kmAtual: parseInt(kmAtual),
     };
     if (vehicleId) {
       await fetchUpdateVehicle(vehicle);
@@ -93,65 +94,27 @@ export default function Vehicle() {
           >
             {MENU_OPTIONS.VEHICLE}
           </Typography>
-          <TextField
-            margin="normal"
-            required
-            fullWidth
-            name={VEHICLE.LICENTE_PLATE}
+          <InputField
             label={VEHICLE.LICENTE_PLATE}
-            type="text"
-            id={VEHICLE.LICENTE_PLATE}
-            autoComplete={VEHICLE.LICENTE_PLATE}
-            disabled={loading}
             value={placa}
-            onChange={(e) => {
-              setPlaca(e.target.value);
-            }}
+            handleChange={setPlaca}
           />
-          <TextField
-            margin="normal"
-            required
-            fullWidth
-            name={VEHICLE.BRAND_MODEL}
+          <InputField
             label={VEHICLE.BRAND_MODEL}
-            type="text"
-            id={VEHICLE.BRAND_MODEL}
-            autoComplete={VEHICLE.BRAND_MODEL}
-            disabled={loading}
             value={marcaModelo}
-            onChange={(e) => {
-              setMarcaModelo(e.target.value);
-            }}
+            handleChange={setMarcaModelo}
           />
-          <TextField
-            margin="normal"
-            required
-            fullWidth
-            name={VEHICLE.MANUFACTURE_YEAR}
+          <InputField
             label={VEHICLE.MANUFACTURE_YEAR}
             type="number"
-            id={VEHICLE.MANUFACTURE_YEAR}
-            autoComplete={VEHICLE.MANUFACTURE_YEAR}
-            disabled={loading}
             value={anoFabricacao}
-            onChange={(e) => {
-              setAnoFabricacao(parseInt(e.target.value));
-            }}
+            handleChange={setAnoFabricacao}
           />
-          <TextField
-            margin="normal"
-            required
-            fullWidth
-            name={VEHICLE.CURRENT_KM}
+          <InputField
             label={VEHICLE.CURRENT_KM}
             type="number"
-            id={VEHICLE.CURRENT_KM}
-            autoComplete={VEHICLE.CURRENT_KM}
-            disabled={loading}
             value={kmAtual}
-            onChange={(e) => {
-              setKmAtual(parseInt(e.target.value));
-            }}
+            handleChange={setKmAtual}
           />
           <Button
             type="submit"
@@ -159,9 +122,7 @@ export default function Vehicle() {
             variant="contained"
             sx={{ paddingY: 2, marginY: 2 }}
             disabled={loading}
-            onClick={() => {
-              handleSubmitVehicle;
-            }}
+            onClick={handleSubmitVehicle}
           >
             {loading ? (
               <ThreeDotsLoading />
