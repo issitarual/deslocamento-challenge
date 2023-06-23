@@ -18,6 +18,11 @@ import {
   FIND_DISPLACEMENT,
   FIND_RIDER,
   USER_TYPE,
+  ROUTE,
+  HOME_ERROR_MESSAGE,
+  DISPLACEMENT,
+  DISPLACEMENT_AVAILABLE,
+  DRIVER_AVAILABLE
 } from "@/helpers/contants";
 import MainHeader from "@/components/MainHeader";
 import DrawerMenu from "@/components/DrawerMenu";
@@ -128,14 +133,14 @@ export default function Home() {
 
   useEffect(() => {
     // if(!userId){
-    //   alert("Usuário não encontrado")
-    //   router.push("/sign-in")
+    //   alert(HOME_ERROR_MESSAGE.USER_NOT_FOUND)
+    //   router.push(ROUTE.SIGN_IN)
     // }
     setLoading(true);
     setIsWeatherLoading(true);
     // if (isUserTypeDriver && !vehicleId) {
-    //   alert("Você precisa cadastrar um veículo antes de começar");
-    //   router.push("/vehicle");
+    //   alert(HOME_ERROR_MESSAGE.VEHICLE_NOT_FOUND);
+    //   router.push(ROUTE.VEHICLE);
     //   return;
     // }
     // setWindowWidth(window.screen.availWidth);
@@ -157,8 +162,6 @@ export default function Home() {
     }
     setLoading(false);
   }, []);
-
-  console.log(drivers);
 
   return (
     <Box sx={{ minHeight: "100vh", bgcolor: grey[100] }}>
@@ -201,7 +204,7 @@ export default function Home() {
             component="p"
             textAlign="center"
           >
-            {isUserTypeDriver ? "Viagens Solicitadas" : "Motorista Disponível"}
+            {isUserTypeDriver ? DISPLACEMENT_AVAILABLE : DRIVER_AVAILABLE}
           </Typography>
           <Typography variant="body1" component="p" textAlign="center">
             {isUserTypeDriver
@@ -227,11 +230,11 @@ export default function Home() {
                 <TextField
                   margin="normal"
                   fullWidth
-                  name="Checklist"
-                  label="Checklist"
+                  name={DISPLACEMENT.CHECKLIST}
+                  label={DISPLACEMENT.CHECKLIST}
                   type="text"
-                  id="Checklist"
-                  autoComplete="Checklist"
+                  id={DISPLACEMENT.CHECKLIST}
+                  autoComplete={DISPLACEMENT.CHECKLIST}
                   disabled={loading}
                   value={checkList}
                   onChange={(e) => setCheckList(e.target.value)}
@@ -239,11 +242,11 @@ export default function Home() {
                 <TextField
                   margin="normal"
                   fullWidth
-                  name="Motivo"
-                  label="Motivo"
+                  name={DISPLACEMENT.REASON}
+                  label={DISPLACEMENT.REASON}
                   type="text"
-                  id="Motivo"
-                  autoComplete="Motivo"
+                  id={DISPLACEMENT.REASON}
+                  autoComplete={DISPLACEMENT.REASON}
                   disabled={loading}
                   value={motivo}
                   onChange={(e) => setMotivo(e.target.value)}
@@ -251,14 +254,14 @@ export default function Home() {
                 <TextField
                   margin="normal"
                   fullWidth
-                  name="Observação"
-                  label="Observação"
+                  name={DISPLACEMENT.OBSERVATION}
+                  label={DISPLACEMENT.OBSERVATION}
                   type="text"
-                  id="Observação"
+                  id={DISPLACEMENT.OBSERVATION}
                   disabled={loading}
                   value={observacao}
                   onChange={(e) => setObservacao(e.target.value)}
-                  autoComplete="Observação"
+                  autoComplete={DISPLACEMENT.OBSERVATION}
                 />
               </>
             )}

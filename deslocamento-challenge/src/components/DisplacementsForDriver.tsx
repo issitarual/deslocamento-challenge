@@ -1,3 +1,4 @@
+import { DISPLACEMENT, PASSENGER_NAME } from "@/helpers/contants";
 import { useGlobalContext } from "@/hooks/useGlobalContext ";
 import { Displacement } from "@/types/DisplacementType";
 import { Box, TextField, Typography } from "@mui/material";
@@ -26,20 +27,20 @@ export default function DisplacementsForDriver({
               border: 1,
               borderColor: "grey.500",
               padding: 2}}>
-      <Typography><b>Nome do passageiro:</b> {riderName}</Typography>
-      <Typography><b>Início do deslocamento:</b> {inicioDeslocamento}</Typography>
-      <Typography><b>Checklist:</b> {checkList}</Typography>
-      <Typography><b>Motivo:</b> {motivo}</Typography>
-      <Typography><b>Observação:</b> {observacao}</Typography>
+      <Typography><b>{PASSENGER_NAME}:</b> {riderName}</Typography>
+      <Typography><b>{DISPLACEMENT.START_DISPLACEMENT}:</b> {inicioDeslocamento}</Typography>
+      <Typography><b>{DISPLACEMENT.CHECKLIST}:</b> {checkList}</Typography>
+      <Typography><b>{DISPLACEMENT.REASON}:</b> {motivo}</Typography>
+      <Typography><b>{DISPLACEMENT.OBSERVATION}:</b> {observacao}</Typography>
       </Box>
       <TextField
         margin="normal"
         fullWidth
-        name="kmFinal"
-        label="kmFinal"
+        name={DISPLACEMENT.FINAL_KM}
+        label={DISPLACEMENT.FINAL_KM}
         type="number"
-        id="kmFinal"
-        autoComplete="kmFinal"
+        id={DISPLACEMENT.FINAL_KM}
+        autoComplete={DISPLACEMENT.FINAL_KM}
         disabled={loading}
         value={kmFinal}
         onChange={(e) => setKmFinal(parseInt(e.target.value))}
@@ -47,11 +48,11 @@ export default function DisplacementsForDriver({
       <TextField
         margin="normal"
         fullWidth
-        name="Observação"
-        label="Observação"
+        name={DISPLACEMENT.OBSERVATION}
+        label={DISPLACEMENT.OBSERVATION}
         type="string"
-        id="Observação"
-        autoComplete="Observação"
+        id={DISPLACEMENT.OBSERVATION}
+        autoComplete={DISPLACEMENT.OBSERVATION}
         disabled={loading}
         value={observacaoDriver}
         onChange={(e) => setObservacao(e.target.value)}

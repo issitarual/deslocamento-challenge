@@ -15,7 +15,9 @@ import {
   SIGN_UP_SUBMIT_BUTTON,
   CATEGORIA_HABILITAÇÃO_VALUES,
   MISSING_INFORMATION_SIGN_FORM,
-  ERROR_SIGN_FORM,
+  ERROR_FORM,
+  FULL_NAME,
+  ROUTE,
 } from "@/helpers/contants";
 import { fetchPostDriver } from "@/helpers/api/Driver";
 import { fetchPostRider } from "@/helpers/api/Rider";
@@ -74,7 +76,7 @@ export default function SignUp() {
     });
     setLoading(false);
 
-    isUserSigneUp ? router.push("/sign-in") : alert(ERROR_SIGN_FORM);
+    isUserSigneUp ? router.push(ROUTE.SIGN_IN) : alert(ERROR_FORM);
   }
 
   async function handleSubmitRider(e: {
@@ -110,7 +112,7 @@ export default function SignUp() {
       uf,
     });
 
-    isUserSigneUp ? router.push("/sign-in") : alert(ERROR_SIGN_FORM);
+    isUserSigneUp ? router.push(ROUTE.SIGN_IN) : alert(ERROR_FORM);
     setLoading(false);
   }
   return (
@@ -154,10 +156,10 @@ export default function SignUp() {
                   margin="normal"
                   required
                   fullWidth
-                  id="name"
-                  label="Nome completo"
-                  name="name"
-                  autoComplete="name"
+                  id={FULL_NAME}
+                  label={FULL_NAME}
+                  name={FULL_NAME}
+                  autoComplete={FULL_NAME}
                   autoFocus
                   type="text"
                   disabled={loading}
@@ -166,23 +168,7 @@ export default function SignUp() {
                     setNome(e.target.value);
                   }}
                 />
-                <TextField
-                  margin="normal"
-                  required
-                  fullWidth
-                  name="document"
-                  label={isUserTypeDriver ? "Número da habilitação" : "CPF"}
-                  type="number"
-                  id="document"
-                  autoComplete="document"
-                  disabled={loading}
-                  value={isUserTypeDriver ? numeroHabilitacao : numeroDocumento}
-                  onChange={(e) => {
-                    isUserTypeDriver
-                      ? setNumeroHabilitacao(e.target.value)
-                      : setNumeroDocumento(e.target.value);
-                  }}
-                />
+
                 {isUserTypeDriver ? (
                   <DriverForm
                     disableInput={loading}
@@ -190,10 +176,14 @@ export default function SignUp() {
                     setCategoriaHabilitacao={setCategoriaHabilitacao}
                     vencimentoHabilitacao={vencimentoHabilitacao}
                     setVencimentoHabilitacao={setVencimentoHabilitacao}
+                    numeroHabilitacao={numeroHabilitacao}
+                    setNumeroHabilitacao={setNumeroHabilitacao}
                   />
                 ) : (
                   <RiderForm
                     disableInput={loading}
+                    numeroDocumento={numeroDocumento}
+                    setNumeroDocumento={setNumeroDocumento}
                     logradouro={logradouro}
                     setLogradouro={setLogradouro}
                     numero={numero}
@@ -215,7 +205,7 @@ export default function SignUp() {
                 >
                   {loading ? <ThreeDotsLoading /> : SIGN_UP_SUBMIT_BUTTON}
                 </Button>
-                <SignSubmitButton route={"/sign-in"} command={SIGN_IN} />
+                <SignSubmitButton route={ROUTE.SIGN_IN} command={SIGN_IN} />
               </Box>
             </Box>
           </Grid>

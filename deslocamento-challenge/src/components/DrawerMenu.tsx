@@ -1,4 +1,9 @@
-import { DRAWER_WIDTH, USER_TYPE } from "@/helpers/contants";
+import {
+  DRAWER_WIDTH,
+  MENU_OPTIONS,
+  ROUTE,
+  USER_TYPE,
+} from "@/helpers/contants";
 import DrawerHeader from "./DrawerHeader";
 import { useTheme } from "@mui/material/styles";
 import {
@@ -26,14 +31,18 @@ export default function DrawerMenu() {
   const router = useRouter();
 
   const menuItems = [
-    { name: "Home", icon: <HomeIcon />, route: "/" },
+    { name: MENU_OPTIONS.HOME, icon: <HomeIcon />, route: ROUTE.HOME },
     {
-      name: "Conta",
+      name: MENU_OPTIONS.ACCOUNT,
       icon: <AccountCircleIcon />,
-      route: "/account",
+      route: ROUTE.ACCOUNT,
     },
-    { name: "Corridas", icon: <RouteIcon />, route: "/displacement" },
-    { name: "Sair", icon: <LogoutIcon />, route: "/sign-in" },
+    {
+      name: MENU_OPTIONS.DISPLACEMENT,
+      icon: <RouteIcon />,
+      route: ROUTE.DISPLACEMENT,
+    },
+    { name: MENU_OPTIONS.LOGOUT, icon: <LogoutIcon />, route: ROUTE.SIGN_IN },
   ];
   const { openDrawer, setOpenDrawer, userType } = useGlobalContext();
 
@@ -43,9 +52,9 @@ export default function DrawerMenu() {
 
   if (userType === USER_TYPE.DRIVER) {
     menuItems.splice(3, 0, {
-      name: "Veículo",
+      name: MENU_OPTIONS.VEHICLE,
       icon: <DirectionsCarIcon />,
-      route: "/vehicle",
+      route: ROUTE.VEHICLE,
     });
   }
 

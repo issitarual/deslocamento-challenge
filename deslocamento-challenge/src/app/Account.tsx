@@ -16,9 +16,12 @@ import {
 import { fetchDeleteVehicle } from "@/helpers/api/Vehicle";
 import {
   CATEGORIA_HABILITAÇÃO_VALUES,
+  DELETE_ACCOUNT,
   DRAWER_WIDTH,
-  EMPTY_DRIVER,
-  EMPTY_RIDER,
+  FULL_NAME,
+  MENU_OPTIONS,
+  ROUTE,
+  UPDATE_ACCOUNT,
   USER_TYPE,
 } from "@/helpers/contants";
 import { useGlobalContext } from "@/hooks/useGlobalContext ";
@@ -106,7 +109,7 @@ export default function Account() {
       await handleUpdateRider();
     }
     setLoading(false);
-    router.push("/home");
+    router.push(ROUTE.HOME);
   }
 
   async function handleDeleteAccount(id: string) {
@@ -118,7 +121,7 @@ export default function Account() {
       await fetchDeleteRider(id);
     }
     setLoading(false);
-    router.push("/sign-in");
+    router.push(ROUTE.SIGN_IN);
   }
 
   useEffect(() => {
@@ -145,7 +148,7 @@ export default function Account() {
             align="center"
             sx={{ fontWeight: "bold", color: "primary.main" }}
           >
-            Conta
+            {MENU_OPTIONS.ACCOUNT}
           </Typography>
           <Box
             component="form"
@@ -157,10 +160,10 @@ export default function Account() {
               margin="normal"
               required
               fullWidth
-              id="name"
-              label="Nome completo"
-              name="name"
-              autoComplete="name"
+              id={FULL_NAME}
+              label={FULL_NAME}
+              name={FULL_NAME}
+              autoComplete={FULL_NAME}
               autoFocus
               type="text"
               disabled={loading}
@@ -169,26 +172,11 @@ export default function Account() {
                 setNome(e.target.value);
               }}
             />
-            <TextField
-              margin="normal"
-              required
-              fullWidth
-              name="document"
-              label={isUserTypeDriver ? "Número da habilitação" : "CPF"}
-              type="number"
-              id="document"
-              autoComplete="document"
-              disabled={loading}
-              value={isUserTypeDriver ? numeroHabilitacao : numeroDocumento}
-              onChange={(e) => {
-                isUserTypeDriver
-                  ? setNumeroHabilitacao(e.target.value)
-                  : setNumeroDocumento(e.target.value);
-              }}
-            />
             {isUserTypeDriver ? (
               <DriverForm
                 disableInput={loading}
+                numeroHabilitacao={numeroHabilitacao}
+                setNumeroHabilitacao={setNumeroHabilitacao}
                 categoriaHabilitacao={categoriaHabilitacao}
                 setCategoriaHabilitacao={setCategoriaHabilitacao}
                 vencimentoHabilitacao={vencimentoHabilitacao}
@@ -197,6 +185,8 @@ export default function Account() {
             ) : (
               <RiderForm
                 disableInput={loading}
+                numeroDocumento={numeroDocumento}
+                setNumeroDocumento={setNumeroDocumento}
                 logradouro={logradouro}
                 setLogradouro={setLogradouro}
                 numero={numero}
@@ -217,7 +207,7 @@ export default function Account() {
               disabled={loading}
               onClick={handleUpdateAccount}
             >
-              Atualizar informações
+              {UPDATE_ACCOUNT}
             </Button>
             <Button
               type="submit"
@@ -228,7 +218,7 @@ export default function Account() {
               sx={{ paddingY: 2 }}
               onClick={() => handleDeleteAccount(userId)}
             >
-              Excluir Conta
+              {DELETE_ACCOUNT}
             </Button>
           </Box>
         </Box>

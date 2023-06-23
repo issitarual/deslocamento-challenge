@@ -1,4 +1,9 @@
-import { CATEGORIA_HABILITAÇÃO_VALUES } from "@/helpers/contants";
+import {
+  CATEGORIA_HABILITAÇÃO_VALUES,
+  DOCUMENT,
+  EXPIRATION_DATE,
+  LICENSE_CATEGORY,
+} from "@/helpers/contants";
 import { InputLabel, MenuItem, Select, TextField } from "@mui/material";
 import { Dispatch, SetStateAction } from "react";
 
@@ -7,25 +12,44 @@ export default function DriverForm({
   setCategoriaHabilitacao,
   vencimentoHabilitacao,
   setVencimentoHabilitacao,
-  disableInput
+  numeroHabilitacao,
+  setNumeroHabilitacao,
+  disableInput,
 }: {
   categoriaHabilitacao: string;
   setCategoriaHabilitacao: Dispatch<SetStateAction<string>>;
   vencimentoHabilitacao: string;
   setVencimentoHabilitacao: Dispatch<SetStateAction<string>>;
-  disableInput: boolean
+  numeroHabilitacao: string;
+  setNumeroHabilitacao: Dispatch<SetStateAction<string>>;
+  disableInput: boolean;
 }) {
   return (
     <>
-      <InputLabel>Categoria</InputLabel>
+      <TextField
+        margin="normal"
+        required
+        fullWidth
+        name={DOCUMENT.CNH}
+        label={DOCUMENT.CNH}
+        type="number"
+        id={DOCUMENT.CNH}
+        autoComplete={DOCUMENT.CNH}
+        disabled={disableInput}
+        value={numeroHabilitacao}
+        onChange={(e) => {
+          setNumeroHabilitacao(e.target.value);
+        }}
+      />
+      <InputLabel>{LICENSE_CATEGORY}</InputLabel>
       <Select
         required
         fullWidth
-        name="document category"
-        label="Categoria da habilitação"
+        name={LICENSE_CATEGORY}
+        label={LICENSE_CATEGORY}
         type="text"
-        id="document category"
-        autoComplete="document category"
+        id={LICENSE_CATEGORY}
+        autoComplete={LICENSE_CATEGORY}
         disabled={disableInput}
         onChange={(e) => {
           setCategoriaHabilitacao(e.target.value);
@@ -48,14 +72,14 @@ export default function DriverForm({
           {CATEGORIA_HABILITAÇÃO_VALUES.E}
         </MenuItem>
       </Select>
-      <InputLabel>Validade</InputLabel>
+      <InputLabel>{EXPIRATION_DATE}</InputLabel>
       <TextField
         required
         fullWidth
-        name="document expiration date"
+        name={EXPIRATION_DATE}
         type="date"
-        id="document expiration date"
-        autoComplete="document expiration date"
+        id={EXPIRATION_DATE}
+        autoComplete={EXPIRATION_DATE}
         disabled={disableInput}
         value={vencimentoHabilitacao}
         onChange={(e) => {

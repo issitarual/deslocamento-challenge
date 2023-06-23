@@ -2,6 +2,8 @@ import { TextField } from "@mui/material";
 import { Dispatch, SetStateAction } from "react";
 
 export default function RiderForm({
+  numeroDocumento,
+  setNumeroDocumento,
   logradouro,
   setLogradouro,
   numero,
@@ -25,9 +27,26 @@ export default function RiderForm({
   uf: string;
   setUF: Dispatch<SetStateAction<string>>;
   disableInput: boolean;
+  numeroDocumento: string;
+  setNumeroDocumento: Dispatch<SetStateAction<string>>;
 }) {
   return (
     <>
+      <TextField
+        margin="normal"
+        required
+        fullWidth
+        name="document"
+        label={"CPF"}
+        type="number"
+        id="document"
+        autoComplete="document"
+        disabled={disableInput}
+        value={numeroDocumento}
+        onChange={(e) => {
+          setNumeroDocumento(e.target.value);
+        }}
+      />
       <TextField
         margin="normal"
         required

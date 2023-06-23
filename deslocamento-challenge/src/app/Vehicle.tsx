@@ -7,7 +7,15 @@ import {
   fetchPostVehicle,
   fetchUpdateVehicle,
 } from "@/helpers/api/Vehicle";
-import { DRAWER_WIDTH } from "@/helpers/contants";
+import {
+  ADD_VEHICLE,
+  DRAWER_WIDTH,
+  ERROR_FORM,
+  MENU_OPTIONS,
+  ROUTE,
+  UPDATE_VEHICLE,
+  VEHICLE,
+} from "@/helpers/contants";
 import { useGlobalContext } from "@/hooks/useGlobalContext ";
 import { Vehicle } from "@/types/VehicleType";
 import { Box, Button, CssBaseline, TextField, Typography } from "@mui/material";
@@ -49,16 +57,16 @@ export default function Vehicle() {
     if (vehicleId) {
       await fetchUpdateVehicle(vehicle);
       setLoading(false);
-      return router.push("/home");
+      return router.push(ROUTE.HOME);
     } else {
       const id = await fetchPostVehicle(vehicle);
       if (!id) {
         setLoading(false);
-        return alert("Algo deu errado, tente novamente");
+        return alert(ERROR_FORM);
       }
       setVehicleId(id);
       setLoading(false);
-      return router.push("/home");
+      return router.push(ROUTE.HOME);
     }
   }
   useEffect(() => {
@@ -83,17 +91,17 @@ export default function Vehicle() {
             align="center"
             sx={{ fontWeight: "bold", color: "primary.main" }}
           >
-            Veículo
+            {MENU_OPTIONS.VEHICLE}
           </Typography>
           <TextField
             margin="normal"
             required
             fullWidth
-            name="Placa"
-            label="Placa"
+            name={VEHICLE.LICENTE_PLATE}
+            label={VEHICLE.LICENTE_PLATE}
             type="text"
-            id="Placa"
-            autoComplete="Placa"
+            id={VEHICLE.LICENTE_PLATE}
+            autoComplete={VEHICLE.LICENTE_PLATE}
             disabled={loading}
             value={placa}
             onChange={(e) => {
@@ -104,11 +112,11 @@ export default function Vehicle() {
             margin="normal"
             required
             fullWidth
-            name="Marca/Modelo"
-            label="Marca/Modelo"
+            name={VEHICLE.BRAND_MODEL}
+            label={VEHICLE.BRAND_MODEL}
             type="text"
-            id="Marca/Modelo"
-            autoComplete="Marca/Modelo"
+            id={VEHICLE.BRAND_MODEL}
+            autoComplete={VEHICLE.BRAND_MODEL}
             disabled={loading}
             value={marcaModelo}
             onChange={(e) => {
@@ -119,11 +127,11 @@ export default function Vehicle() {
             margin="normal"
             required
             fullWidth
-            name="Ano de fabricação"
-            label="Ano de fabricação"
+            name={VEHICLE.MANUFACTURE_YEAR}
+            label={VEHICLE.MANUFACTURE_YEAR}
             type="number"
-            id="Ano de fabricação"
-            autoComplete="Ano de fabricação"
+            id={VEHICLE.MANUFACTURE_YEAR}
+            autoComplete={VEHICLE.MANUFACTURE_YEAR}
             disabled={loading}
             value={anoFabricacao}
             onChange={(e) => {
@@ -134,11 +142,11 @@ export default function Vehicle() {
             margin="normal"
             required
             fullWidth
-            name="Km atual"
-            label="Km atual"
+            name={VEHICLE.CURRENT_KM}
+            label={VEHICLE.CURRENT_KM}
             type="number"
-            id="Km atual"
-            autoComplete="Km atual"
+            id={VEHICLE.CURRENT_KM}
+            autoComplete={VEHICLE.CURRENT_KM}
             disabled={loading}
             value={kmAtual}
             onChange={(e) => {
@@ -158,9 +166,9 @@ export default function Vehicle() {
             {loading ? (
               <ThreeDotsLoading />
             ) : vehicleId ? (
-              "Atualizar veículo"
+              UPDATE_VEHICLE
             ) : (
-              "Adicionar veículo "
+              ADD_VEHICLE
             )}
           </Button>
         </Box>

@@ -14,6 +14,9 @@ import {
   SIGN_UP_COMMAND as SIGN_UP,
   SIGN_IN_SUBMIT_BUTTON,
   MISSING_INFORMATION_SIGN_FORM,
+  FULL_NAME,
+  DOCUMENT,
+  ROUTE,
 } from "@/helpers/contants";
 import Logo from "@/components/Logo";
 
@@ -62,9 +65,9 @@ export default function SignIn() {
     setUserId(user?.id);
     setLoading(false);
     if (isUserTypeDriver && !vehicleId) {
-      return router.push("/vehicle");
+      return router.push(ROUTE.VEHICLE);
     }
-    router.push("/user");
+    router.push(ROUTE.HOME);
   };
 
   return (
@@ -106,10 +109,10 @@ export default function SignIn() {
                   margin="normal"
                   required
                   fullWidth
-                  id="name"
-                  label="Nome completo"
-                  name="name"
-                  autoComplete="name"
+                  id={FULL_NAME}
+                  label={FULL_NAME}
+                  name={FULL_NAME}
+                  autoComplete={FULL_NAME}
                   autoFocus
                   type="text"
                   disabled={loading}
@@ -120,11 +123,11 @@ export default function SignIn() {
                   margin="normal"
                   required
                   fullWidth
-                  name="document"
-                  label={isUserTypeDriver ? "Número da habilitação" : "CPF"}
+                  name={isUserTypeDriver ? DOCUMENT.CNH : DOCUMENT.CPF}
+                  label={isUserTypeDriver ? DOCUMENT.CNH : DOCUMENT.CPF}
                   type="password"
-                  id="document"
-                  autoComplete="document"
+                  id={isUserTypeDriver ? DOCUMENT.CNH : DOCUMENT.CPF}
+                  autoComplete={isUserTypeDriver ? DOCUMENT.CNH : DOCUMENT.CPF}
                   disabled={loading}
                   value={documento}
                   onChange={(e) => setDocumento(e.target.value)}
@@ -138,7 +141,7 @@ export default function SignIn() {
                 >
                   {loading ? <ThreeDotsLoading /> : SIGN_IN_SUBMIT_BUTTON}
                 </Button>
-                <SignSubmitButton route={"/sign-up"} command={SIGN_UP} />
+                <SignSubmitButton route={ROUTE.SIGN_UP} command={SIGN_UP} />
               </Box>
             </Box>
           </Grid>
