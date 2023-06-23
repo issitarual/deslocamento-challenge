@@ -25,6 +25,7 @@ export default function Displacement() {
   const [displacement, setDisplacement] = useState([EMPTY_DISPLACEMENT]);
 
   async function fetchDisplacement() {
+    setLoading(true);
     const displacementResponse = await fetchGetAllDisplacements();
     if (!displacementResponse.length) {
       return;
@@ -44,13 +45,12 @@ export default function Displacement() {
         setDisplacement(userDisplacement);
         break;
     }
+    setLoading(false);
   }
 
   useEffect(() => {
-    setLoading(true);
     fetchDisplacement();
     setWindowWidth(window.screen.availWidth);
-    setLoading(false);
   }, []);
 
   return (

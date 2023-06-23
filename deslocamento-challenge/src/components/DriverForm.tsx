@@ -4,7 +4,7 @@ import {
   EXPIRATION_DATE,
   LICENSE_CATEGORY,
 } from "@/helpers/contants";
-import { InputLabel, MenuItem, Select, TextField } from "@mui/material";
+import { InputLabel, MenuItem, Select } from "@mui/material";
 import { Dispatch, SetStateAction } from "react";
 import InputField from "./InputField";
 import { useGlobalContext } from "@/hooks/useGlobalContext ";
@@ -28,7 +28,7 @@ export default function DriverForm({
   return (
     <>
       <InputField
-        label={DOCUMENT.CNH}
+        name={DOCUMENT.CNH}
         type="number"
         value={numeroHabilitacao}
         handleChange={setNumeroHabilitacao}
@@ -65,18 +65,11 @@ export default function DriverForm({
         </MenuItem>
       </Select>
       <InputLabel>{EXPIRATION_DATE}</InputLabel>
-      <TextField
-        required
-        fullWidth
+      <InputField
         name={EXPIRATION_DATE}
         type="date"
-        id={EXPIRATION_DATE}
-        autoComplete={EXPIRATION_DATE}
-        disabled={loading}
         value={vencimentoHabilitacao}
-        onChange={(e) => {
-          setVencimentoHabilitacao(e.target.value);
-        }}
+        handleChange={setVencimentoHabilitacao}
       />
     </>
   );

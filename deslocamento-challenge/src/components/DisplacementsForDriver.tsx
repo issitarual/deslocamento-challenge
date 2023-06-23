@@ -47,13 +47,13 @@ export default function DisplacementsForDriver({
         </Typography>
       </Box>
       <InputField
-        label={DISPLACEMENT.FINAL_KM}
+        name={DISPLACEMENT.FINAL_KM}
         type="number"
         value={kmFinal}
         handleChange={setKmFinal}
       />
       <InputField
-        label={DISPLACEMENT.OBSERVATION}
+        name={DISPLACEMENT.OBSERVATION}
         value={observacaoDriver}
         handleChange={setObservacao}
       />

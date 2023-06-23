@@ -28,7 +28,7 @@ import {
 import { useGlobalContext } from "@/hooks/useGlobalContext ";
 import { Box, Button, CssBaseline, Typography } from "@mui/material";
 import { grey } from "@mui/material/colors";
-import { useRouter } from "next/router";
+import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
 export default function Account() {
@@ -80,6 +80,7 @@ export default function Account() {
   };
 
   async function fetchDriver(id: string) {
+    setLoading(true);
     const driverResponse = await fetchGetDriver(id);
     if (driverResponse) {
       setNome(driverResponse.nome);
@@ -87,9 +88,11 @@ export default function Account() {
       setCategoriaHabilitacao(driverResponse.categoriaHabilitacao);
       setVencimentoHabilitacao(driverResponse.vencimentoHabilitacao);
     }
+    setLoading(false);
   }
 
   async function fetchRider(id: string) {
+    setLoading(true);
     const riderResponse = await fetchGetRider(id);
     if (riderResponse) {
       setNome(riderResponse.nome);
@@ -100,6 +103,7 @@ export default function Account() {
       setCidade(riderResponse.cidade);
       setUF(riderResponse.uf);
     }
+    setLoading(false);
   }
 
   async function handleUpdateAccount() {
@@ -126,14 +130,12 @@ export default function Account() {
   }
 
   useEffect(() => {
-    setLoading(true);
     if (isUserTypeDriver) {
       fetchDriver(userId);
     } else {
       fetchRider(userId);
     }
     setWindowWidth(window.screen.availWidth);
-    setLoading(false);
   }, []);
 
   return (
@@ -157,7 +159,7 @@ export default function Account() {
             onSubmit={isUserTypeDriver ? handleUpdateDriver : handleUpdateRider}
             sx={{ mt: 1 }}
           >
-            <InputField label={FULL_NAME} value={nome} handleChange={setNome} />
+            <InputField name={FULL_NAME} value={nome} handleChange={setNome} />
             {isUserTypeDriver ? (
               <DriverForm
                 numeroHabilitacao={numeroHabilitacao}

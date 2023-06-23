@@ -20,17 +20,17 @@ export default function DisplacementForRider({
   return (
     <>
       <InputField
-        label={DISPLACEMENT.CHECKLIST}
+        name={DISPLACEMENT.CHECKLIST}
         value={checkList}
         handleChange={setCheckList}
       />
       <InputField
-        label={DISPLACEMENT.REASON}
+        name={DISPLACEMENT.REASON}
         value={motivo}
         handleChange={setMotivo}
       />
       <InputField
-        label={DISPLACEMENT.OBSERVATION}
+        name={DISPLACEMENT.OBSERVATION}
         value={observacao}
         handleChange={setObservacao}
       />

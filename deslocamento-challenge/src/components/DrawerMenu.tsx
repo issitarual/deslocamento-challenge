@@ -24,7 +24,7 @@ import RouteIcon from "@mui/icons-material/Route";
 import DirectionsCarIcon from "@mui/icons-material/DirectionsCar";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
-import { useRouter } from "next/router";
+import { useRouter } from "next/navigation";
 
 export default function DrawerMenu() {
   const theme = useTheme();

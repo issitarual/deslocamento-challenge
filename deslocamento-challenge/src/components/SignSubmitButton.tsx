@@ -1,5 +1,5 @@
 import { Grid, Link } from "@mui/material";
-import { useRouter } from "next/router";
+import { useRouter } from "next/navigation";
 
 export default function SignSubmitButton({route, command}: { route: string; command: string; }) {
   const router = useRouter();

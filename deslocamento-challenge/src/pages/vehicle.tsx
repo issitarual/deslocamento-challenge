@@ -1,6 +1,6 @@
 import Vehicle from "../app/Vehicle";
 
-export default function Home() {
+export default function VehiclePage() {
   return (
     <>
       <Vehicle />

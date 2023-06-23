@@ -21,7 +21,7 @@ import { useGlobalContext } from "@/hooks/useGlobalContext ";
 import { Vehicle } from "@/types/VehicleType";
 import { Box, Button, CssBaseline, Typography } from "@mui/material";
 import { grey } from "@mui/material/colors";
-import { useRouter } from "next/router";
+import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
 export default function Vehicle() {
@@ -37,6 +37,7 @@ export default function Vehicle() {
   const [kmAtual, setKmAtual] = useState("");
 
   async function fetchVehicle() {
+    setLoading(true);
     const vehicleResponse = await fetchGetVehicle(vehicleId);
     if (vehicleResponse) {
       setPlaca(vehicleResponse.placa);
@@ -44,6 +45,7 @@ export default function Vehicle() {
       setAnoFabricacao(vehicleResponse.anoFabricacao.toString());
       setKmAtual(vehicleResponse.kmAtual.toString());
     }
+    setLoading(false);
   }
 
   async function handleSubmitVehicle() {
@@ -70,14 +72,13 @@ export default function Vehicle() {
       return router.push(ROUTE.HOME);
     }
   }
+
   useEffect(() => {
-    setLoading(true);
     setWindowWidth(window.screen.availWidth);
 
     if (vehicleId) {
       fetchVehicle();
     }
-    setLoading(false);
   }, []);
   return (
     <Box sx={{ minHeight: "100vh", bgcolor: grey[100] }}>
@@ -95,23 +96,23 @@ export default function Vehicle() {
             {MENU_OPTIONS.VEHICLE}
           </Typography>
           <InputField
-            label={VEHICLE.LICENTE_PLATE}
+            name={VEHICLE.LICENTE_PLATE}
             value={placa}
             handleChange={setPlaca}
           />
           <InputField
-            label={VEHICLE.BRAND_MODEL}
+            name={VEHICLE.BRAND_MODEL}
             value={marcaModelo}
             handleChange={setMarcaModelo}
           />
           <InputField
-            label={VEHICLE.MANUFACTURE_YEAR}
+            name={VEHICLE.MANUFACTURE_YEAR}
             type="number"
             value={anoFabricacao}
             handleChange={setAnoFabricacao}
           />
           <InputField
-            label={VEHICLE.CURRENT_KM}
+            name={VEHICLE.CURRENT_KM}
             type="number"
             value={kmAtual}
             handleChange={setKmAtual}

@@ -28,7 +28,7 @@ import {
   fetchUpdateDisplacement,
 } from "@/helpers/api/Displacement";
 import { fetchGetRider } from "@/helpers/api/Rider";
-import { useRouter } from "next/router";
+import { useRouter } from "next/navigation";
 import DisplacementsForDriver from "@/components/DisplacementsForDriver";
 import ThreeDotsLoading from "@/components/ThreeDotsLoading";
 import DisplacementForRider from "@/components/DisplacementForRider";
@@ -91,28 +91,40 @@ export default function Home() {
       setCurrentDriver(driver);
       setLoading(false);
     }
+    const randomDisplacementPosition = getRandom(displacement.length);
+    const displacementToDo = displacement[randomDisplacementPosition];
+    setCurrentDisplacement(displacementToDo);
   }
 
   async function fetchWeather() {
+    setIsWeatherLoading(true);
     const weatherResponse = await fetchGetWeather();
     if (weatherResponse) {
       setWeather(weatherResponse);
     }
+    setIsWeatherLoading(false);
   }
 
   async function fetchDriver() {
+    setLoading(true);
     const driversResponse = await fetchGetAllDrivers();
     if (driversResponse) {
       setDrivers(driversResponse);
     }
+    const randomDriverPosition = getRandom(drivers.length);
+    const driver = drivers[randomDriverPosition];
+    setCurrentDriver(driver);
+    setLoading(false);
   }
 
   async function fetchRider(id: string) {
     const currentRider = (await fetchGetRider(id)) || EMPTY_RIDER;
     setRider(currentRider);
+    setLoading(false);
   }
 
   async function fetchDisplacement() {
+    setLoading(true);
     const displacementResponse = await fetchGetAllDisplacements();
     if (!displacementResponse) {
       return;
@@ -126,16 +138,18 @@ export default function Home() {
             (d) => d.idCliente.toString() === userId && !d.kmFinal
           );
       setDisplacement(displacementResponse);
+      const randomDisplacementPosition = getRandom(displacement.length);
+      const displacementToDo = displacement[randomDisplacementPosition];
+      setCurrentDisplacement(displacementToDo);
     }
   }
 
   useEffect(() => {
+    setWindowWidth(window.screen.availWidth);
     // if(!userId){
     //   alert(HOME_ERROR_MESSAGE.USER_NOT_FOUND)
     //   router.push(ROUTE.SIGN_IN)
     // }
-    setLoading(true);
-    setIsWeatherLoading(true);
     // if (isUserTypeDriver && !vehicleId) {
     //   alert(HOME_ERROR_MESSAGE.VEHICLE_NOT_FOUND);
     //   router.push(ROUTE.VEHICLE);
@@ -144,21 +158,13 @@ export default function Home() {
     // setWindowWidth(window.screen.availWidth);
 
     fetchWeather();
-    setIsWeatherLoading(false);
 
     if (isUserTypeDriver) {
       fetchDisplacement();
-      const randomDisplacementPosition = getRandom(displacement.length);
-      const displacementToDo = displacement[randomDisplacementPosition];
-      setCurrentDisplacement(displacementToDo);
       fetchRider(currentDisplacement.idCliente.toString());
     } else {
       fetchDriver();
-      const randomDriverPosition = getRandom(drivers.length);
-      const driver = drivers[randomDriverPosition];
-      setCurrentDriver(driver);
     }
-    setLoading(false);
   }, []);
 
   return (

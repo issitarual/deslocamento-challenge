@@ -4,12 +4,12 @@ import { Dispatch, SetStateAction } from "react";
 
 export default function InputField({
   type = "string",
-  label,
+  name,
   value,
   handleChange,
 }: {
   type?: string;
-  label: string;
+  name: string;
   value: string | number;
   handleChange: Dispatch<SetStateAction<string>>;
 }) {
@@ -20,11 +20,11 @@ export default function InputField({
       margin="normal"
       required
       fullWidth
-      name={label}
-      label={label}
+      name={name}
+      label={type === "date"? null: name}
       type={type}
-      id={label}
-      autoComplete={label}
+      id={name}
+      autoComplete={name}
       disabled={loading}
       value={value}
       onChange={(e) => handleChange(e.target.value)}

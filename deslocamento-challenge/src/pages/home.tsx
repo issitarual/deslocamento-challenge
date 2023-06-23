@@ -1,12 +1,9 @@
-import HomePage from "../app/HomePage";
+import Home from "../app/Home";
 
-const User = () => {
-
+export default function HomePage() {
   return (
     <>
-      <HomePage  />
+      <Home/>
     </>
   );
-};
-
-export default User;
+}

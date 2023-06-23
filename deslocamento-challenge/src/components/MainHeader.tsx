@@ -1,7 +1,7 @@
 import { Box, IconButton, Toolbar } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
 import { useGlobalContext } from "@/hooks/useGlobalContext ";
-import { useRouter } from "next/router";
+import { useRouter } from "next/navigation";
 
 import AppBar from "./AppBar";
 import Logo from "./Logo";

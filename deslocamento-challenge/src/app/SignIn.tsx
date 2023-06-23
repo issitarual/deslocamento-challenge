@@ -5,7 +5,7 @@ import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
 import { Container } from "@mui/material";
 import { useGlobalContext } from "@/hooks/useGlobalContext ";
-import { useRouter } from "next/router";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 
 import {
@@ -106,12 +106,12 @@ export default function SignIn() {
                 sx={{ mt: 1 }}
               >
                 <InputField
-                  label={FULL_NAME}
+                  name={FULL_NAME}
                   value={nome}
                   handleChange={setNome}
                 />
                 <InputField
-                  label={isUserTypeDriver ? DOCUMENT.CNH : DOCUMENT.CPF}
+                  name={isUserTypeDriver ? DOCUMENT.CNH : DOCUMENT.CPF}
                   type="password"
                   value={documento}
                   handleChange={setDocumento}

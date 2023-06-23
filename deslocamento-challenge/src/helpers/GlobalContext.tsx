@@ -19,7 +19,7 @@ interface IGlobalContextProps {
 export const GlobalContext = React.createContext<IGlobalContextProps>({
   userId: "",
   vehicleId: "",
-  loading: true,
+  loading: false,
   userType: "",
   openDrawer: false,
   setUserId: () => {},

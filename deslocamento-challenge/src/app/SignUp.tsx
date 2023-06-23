@@ -6,7 +6,7 @@ import Grid from "@mui/material/Grid";
 import { Container } from "@mui/material";
 import { useGlobalContext } from "@/hooks/useGlobalContext ";
 import { FormEventHandler, useState } from "react";
-import { useRouter } from "next/router";
+import { useRouter } from "next/navigation";
 
 import {
   USER_TYPE,
@@ -153,7 +153,7 @@ export default function SignUp() {
                 sx={{ mt: 1 }}
               >
                 <InputField
-                  label={FULL_NAME}
+                  name={FULL_NAME}
                   value={nome}
                   handleChange={setNome}
                 />

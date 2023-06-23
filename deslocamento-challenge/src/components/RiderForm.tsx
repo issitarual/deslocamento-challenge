@@ -32,32 +32,28 @@ export default function RiderForm({
   return (
     <>
       <InputField
-        label={DOCUMENT.CPF}
+        name={DOCUMENT.CPF}
         type="number"
         value={numeroDocumento}
         handleChange={setNumeroDocumento}
       />
       <InputField
-        label={RIDER.ADDRESS}
+        name={RIDER.ADDRESS}
         value={logradouro}
         handleChange={setLogradouro}
       />
+      <InputField name={RIDER.NUMBER} value={numero} handleChange={setNumero} />
       <InputField
-        label={RIDER.NUMBER}
-        value={numero}
-        handleChange={setNumero}
-      />
-      <InputField
-        label={RIDER.DISTRICT}
+        name={RIDER.DISTRICT}
         value={bairro}
         handleChange={setBairro}
       />
       <InputField
-        label={RIDER.DISTRICT}
+        name={RIDER.DISTRICT}
         value={cidade}
         handleChange={setCidade}
       />
-      <InputField label={RIDER.STATE} value={uf} handleChange={setUF} />
+      <InputField name={RIDER.STATE} value={uf} handleChange={setUF} />
     </>
   );
 }

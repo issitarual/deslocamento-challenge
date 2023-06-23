@@ -1,6 +1,6 @@
 import Displacement from "../app/Displacement";
 
-export default function Home() {
+export default function DisplacementPage() {
     return (
       <>
         <Displacement/>
