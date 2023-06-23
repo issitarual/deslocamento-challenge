@@ -29,13 +29,17 @@ import {
 import { fetchGetRider } from "@/helpers/api/Rider";
 import { useRouter } from "next/router";
 import DisplacementsForDriver from "@/components/DisplacementsForDriver";
+import { ThreeDots } from "react-loader-spinner";
 
 export default function Home() {
   const router = useRouter();
-  const { openDrawer, userType, userId, loading, setLoading } = useGlobalContext();
+  const { openDrawer, userType, userId, loading, setLoading } =
+    useGlobalContext();
   const isUserTypeDriver = userType === USER_TYPE.DRIVER;
 
   const [weather, setWeather] = useState(EMPTY_WEATHER);
+  const [isWeatherLoading, setIsWeatherLoading] = useState(false);
+
   const [drivers, setDrivers] = useState([EMPTY_DRIVER]);
   const [currentDriver, setCurrentDriver] = useState(EMPTY_DRIVER);
   const [displacement, setDisplacement] = useState([EMPTY_DISPLACEMENT]);
@@ -50,6 +54,7 @@ export default function Home() {
   const [kmFinal, setKmFinal] = useState(0);
 
   async function handleDisplacement() {
+    setLoading(true);
     const displacementTime = Date.now().toString();
     if (isUserTypeDriver) {
       const finishDisplacement = {
@@ -81,6 +86,7 @@ export default function Home() {
       const randomDriverPosition = getRandom(drivers.length);
       const driver = drivers[randomDriverPosition];
       setCurrentDriver(driver);
+      setLoading(false);
     }
   }
 
@@ -121,6 +127,8 @@ export default function Home() {
   }
 
   useEffect(() => {
+    setLoading(true);
+    setIsWeatherLoading(true);
     // if (isUserTypeDriver && !vehicleId) {
     //   alert("Você precisa cadastrar um veículo antes de começar");
     //   router.push("/vehicle");
@@ -129,6 +137,7 @@ export default function Home() {
     // setWindowWidth(window.screen.availWidth);
 
     fetchWeather();
+    setIsWeatherLoading(false);
 
     if (isUserTypeDriver) {
       fetchDisplacement();
@@ -142,6 +151,7 @@ export default function Home() {
       const driver = drivers[randomDriverPosition];
       setCurrentDriver(driver);
     }
+    setLoading(false);
   }, []);
 
   console.log(drivers);
@@ -165,17 +175,30 @@ export default function Home() {
             alignItems="center"
             justifyContent="center"
           >
-            <ThermostatIcon color="primary" />
-            <Typography
-              color="primary"
-              variant="h5"
-              component="p"
-              textAlign="center"
-            >
-              Clima de hoje: {weather.temperatureC} ºC
-            </Typography>
+            {isWeatherLoading ? (
+              <ThreeDots
+                height="30"
+                width="50"
+                radius="9"
+                color="#556CD6"
+                ariaLabel="three-dots-loading"
+                wrapperStyle={{}}
+                visible={isWeatherLoading}
+              />
+            ) : (
+              <>
+                <ThermostatIcon color="primary" />
+                <Typography
+                  color="primary"
+                  variant="h5"
+                  component="p"
+                  textAlign="center"
+                >
+                  Clima de hoje: {weather.temperatureC} ºC
+                </Typography>
+              </>
+            )}
           </Box>
-          {isUserTypeDriver ? "" : <></>}
           <Typography
             sx={{ fontWeight: "bold" }}
             variant="h5"
@@ -194,7 +217,7 @@ export default function Home() {
               : currentDriver.nome}
           </Typography>
           <Box display="flex" flexDirection="column" padding={2}>
-            {isUserTypeDriver ? (
+            {isUserTypeDriver && displacement.length ? (
               <DisplacementsForDriver
                 displacement={currentDisplacement}
                 riderName={rider.nome}
@@ -213,6 +236,7 @@ export default function Home() {
                   type="text"
                   id="Checklist"
                   autoComplete="Checklist"
+                  disabled={loading}
                   value={checkList}
                   onChange={(e) => setCheckList(e.target.value)}
                 />
@@ -224,6 +248,7 @@ export default function Home() {
                   type="text"
                   id="Motivo"
                   autoComplete="Motivo"
+                  disabled={loading}
                   value={motivo}
                   onChange={(e) => setMotivo(e.target.value)}
                 />
@@ -234,6 +259,7 @@ export default function Home() {
                   label="Observação"
                   type="text"
                   id="Observação"
+                  disabled={loading}
                   value={observacao}
                   onChange={(e) => setObservacao(e.target.value)}
                   autoComplete="Observação"
@@ -243,6 +269,7 @@ export default function Home() {
 
             <Button
               variant="text"
+              disabled={loading}
               onClick={() =>
                 isUserTypeDriver
                   ? setCurrentDriver(drivers[getRandom(drivers.length)])
@@ -252,14 +279,43 @@ export default function Home() {
               }
               sx={{ paddingY: 2 }}
             >
-              {isUserTypeDriver ? FIND_DISPLACEMENT : FIND_RIDER}
+              {loading ? (
+                <ThreeDots
+                  height="30"
+                  width="50"
+                  radius="9"
+                  color="#556CD6"
+                  ariaLabel="three-dots-loading"
+                  wrapperStyle={{}}
+                  visible={isWeatherLoading}
+                />
+              ) : isUserTypeDriver ? (
+                FIND_DISPLACEMENT
+              ) : (
+                FIND_RIDER
+              )}
             </Button>
             <Button
               sx={{ paddingY: 2 }}
               variant="contained"
+              disabled={loading}
               onClick={handleDisplacement}
             >
-              {isUserTypeDriver ? END_DISPLACEMENT : ASK_FOR_DISPLACEMENT}
+              {loading ? (
+                <ThreeDots
+                  height="30"
+                  width="50"
+                  radius="9"
+                  color="#556CD6"
+                  ariaLabel="three-dots-loading"
+                  wrapperStyle={{}}
+                  visible={isWeatherLoading}
+                />
+              ) : isUserTypeDriver ? (
+                END_DISPLACEMENT
+              ) : (
+                ASK_FOR_DISPLACEMENT
+              )}
             </Button>
           </Box>
         </Box>

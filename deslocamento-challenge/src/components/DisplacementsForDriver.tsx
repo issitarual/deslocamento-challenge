@@ -1,3 +1,4 @@
+import { useGlobalContext } from "@/hooks/useGlobalContext ";
 import { Displacement } from "@/types/DisplacementType";
 import { Box, TextField, Typography } from "@mui/material";
 import { Dispatch, SetStateAction } from "react";
@@ -17,6 +18,7 @@ export default function DisplacementsForDriver({
   observacaoDriver: string;
   setObservacao: Dispatch<SetStateAction<string>>;
 }) {
+  const { loading } = useGlobalContext();
   const { inicioDeslocamento, checkList, motivo, observacao } = displacement;
   return (
     <Box textAlign="center">
@@ -33,6 +35,7 @@ export default function DisplacementsForDriver({
         type="number"
         id="kmFinal"
         autoComplete="kmFinal"
+        disabled={loading}
         value={kmFinal}
         onChange={(e) => setKmFinal(parseInt(e.target.value))}
       />
@@ -44,6 +47,7 @@ export default function DisplacementsForDriver({
         type="string"
         id="Observação"
         autoComplete="Observação"
+        disabled={loading}
         value={observacaoDriver}
         onChange={(e) => setObservacao(e.target.value)}
       />
