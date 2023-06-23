@@ -21,10 +21,12 @@ import AccountTypeOption from "@/components/AccountTypeOptions";
 import SignSubmitButton from "@/components/SignSubmitButton";
 import { fetchGetAllDrivers } from "@/helpers/api/Driver";
 import { fetchGetAllRiders } from "@/helpers/api/Rider";
+import { ThreeDots } from "react-loader-spinner";
 
 export default function SignIn() {
   const router = useRouter();
-  const { userType, setUserId, vehicleId } = useGlobalContext();
+  const { userType, setUserId, vehicleId, loading, setLoading } =
+    useGlobalContext();
 
   const isUserTypeDriver = userType === USER_TYPE.DRIVER;
 
@@ -32,6 +34,7 @@ export default function SignIn() {
   const [documento, setDocumento] = useState("");
 
   const handleSubmit = async (e: React.SyntheticEvent) => {
+    setLoading(true);
     e.preventDefault();
 
     const isNotValidUser = !nome.trim().length || !documento.trim().length;
@@ -53,9 +56,11 @@ export default function SignIn() {
     }
 
     if (!user?.id) {
+      setLoading(false);
       return alert("Algo deu errado, tente novamente.");
     }
     setUserId(user?.id);
+    setLoading(false);
     if (isUserTypeDriver && !vehicleId) {
       return router.push("/vehicle");
     }
@@ -107,6 +112,7 @@ export default function SignIn() {
                   autoComplete="name"
                   autoFocus
                   type="text"
+                  disabled={loading}
                   value={nome}
                   onChange={(e) => setNome(e.target.value)}
                 />
@@ -119,6 +125,7 @@ export default function SignIn() {
                   type="password"
                   id="document"
                   autoComplete="document"
+                  disabled={loading}
                   value={documento}
                   onChange={(e) => setDocumento(e.target.value)}
                 />
@@ -127,8 +134,21 @@ export default function SignIn() {
                   fullWidth
                   variant="contained"
                   sx={{ mt: 3, mb: 2 }}
+                  disabled={loading}
                 >
-                  {SIGN_IN_SUBMIT_BUTTON}
+                  {loading ? (
+                    <ThreeDots
+                      height="30"
+                      width="50"
+                      radius="9"
+                      color="#556CD6"
+                      ariaLabel="three-dots-loading"
+                      wrapperStyle={{}}
+                      visible={true}
+                    />
+                  ) : (
+                    SIGN_IN_SUBMIT_BUTTON
+                  )}
                 </Button>
                 <SignSubmitButton route={"/sign-up"} command={SIGN_UP} />
               </Box>

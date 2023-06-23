@@ -72,9 +72,9 @@ export default function SignUp() {
       categoriaHabilitacao,
       vencimentoHabilitacao,
     });
+    setLoading(false);
 
     isUserSigneUp ? router.push("/sign-in") : alert(ERROR_SIGN_FORM);
-    setLoading(false);
   }
 
   async function handleSubmitRider(e: {
