@@ -29,7 +29,7 @@ import {
 import { fetchGetRider } from "@/helpers/api/Rider";
 import { useRouter } from "next/router";
 import DisplacementsForDriver from "@/components/DisplacementsForDriver";
-import { ThreeDots } from "react-loader-spinner";
+import ThreeDotsLoading from "@/components/ThreeDotsLoading";
 
 export default function Home() {
   const router = useRouter();
@@ -180,15 +180,7 @@ export default function Home() {
             justifyContent="center"
           >
             {isWeatherLoading ? (
-              <ThreeDots
-                height="30"
-                width="50"
-                radius="9"
-                color="#556CD6"
-                ariaLabel="three-dots-loading"
-                wrapperStyle={{}}
-                visible={isWeatherLoading}
-              />
+              <ThreeDotsLoading />
             ) : (
               <>
                 <ThermostatIcon color="primary" />
@@ -284,15 +276,7 @@ export default function Home() {
               sx={{ paddingY: 2 }}
             >
               {loading ? (
-                <ThreeDots
-                  height="30"
-                  width="50"
-                  radius="9"
-                  color="#556CD6"
-                  ariaLabel="three-dots-loading"
-                  wrapperStyle={{}}
-                  visible={isWeatherLoading}
-                />
+                <ThreeDotsLoading />
               ) : isUserTypeDriver ? (
                 FIND_DISPLACEMENT
               ) : (
@@ -306,15 +290,7 @@ export default function Home() {
               onClick={handleDisplacement}
             >
               {loading ? (
-                <ThreeDots
-                  height="30"
-                  width="50"
-                  radius="9"
-                  color="#556CD6"
-                  ariaLabel="three-dots-loading"
-                  wrapperStyle={{}}
-                  visible={isWeatherLoading}
-                />
+                <ThreeDotsLoading />
               ) : isUserTypeDriver ? (
                 END_DISPLACEMENT
               ) : (

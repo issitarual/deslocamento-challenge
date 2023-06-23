@@ -8,7 +8,6 @@ import { Container } from "@mui/material";
 import { useGlobalContext } from "@/hooks/useGlobalContext ";
 import { FormEventHandler, useState } from "react";
 import { useRouter } from "next/router";
-import { ThreeDots } from "react-loader-spinner";
 
 import {
   USER_TYPE,
@@ -26,6 +25,7 @@ import AccountTypeOption from "@/components/AccountTypeOptions";
 import SignSubmitButton from "@/components/SignSubmitButton";
 import RiderForm from "@/components/RiderForm";
 import DriverForm from "@/components/DriverForm";
+import ThreeDotsLoading from "@/components/ThreeDotsLoading";
 
 export default function SignUp() {
   const router = useRouter();
@@ -213,19 +213,7 @@ export default function SignUp() {
                   sx={{ mt: 3, mb: 2 }}
                   disabled={loading}
                 >
-                  {loading ? (
-                    <ThreeDots
-                      height="30"
-                      width="50"
-                      radius="9"
-                      color="#556CD6"
-                      ariaLabel="three-dots-loading"
-                      wrapperStyle={{}}
-                      visible={true}
-                    />
-                  ) : (
-                    SIGN_UP_SUBMIT_BUTTON
-                  )}
+                  {loading ? <ThreeDotsLoading /> : SIGN_UP_SUBMIT_BUTTON}
                 </Button>
                 <SignSubmitButton route={"/sign-in"} command={SIGN_IN} />
               </Box>

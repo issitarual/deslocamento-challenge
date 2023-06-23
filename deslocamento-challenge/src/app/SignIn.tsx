@@ -21,7 +21,7 @@ import AccountTypeOption from "@/components/AccountTypeOptions";
 import SignSubmitButton from "@/components/SignSubmitButton";
 import { fetchGetAllDrivers } from "@/helpers/api/Driver";
 import { fetchGetAllRiders } from "@/helpers/api/Rider";
-import { ThreeDots } from "react-loader-spinner";
+import ThreeDotsLoading from "@/components/ThreeDotsLoading";
 
 export default function SignIn() {
   const router = useRouter();
@@ -136,19 +136,7 @@ export default function SignIn() {
                   sx={{ mt: 3, mb: 2 }}
                   disabled={loading}
                 >
-                  {loading ? (
-                    <ThreeDots
-                      height="30"
-                      width="50"
-                      radius="9"
-                      color="#556CD6"
-                      ariaLabel="three-dots-loading"
-                      wrapperStyle={{}}
-                      visible={true}
-                    />
-                  ) : (
-                    SIGN_IN_SUBMIT_BUTTON
-                  )}
+                  {loading ? <ThreeDotsLoading /> : SIGN_IN_SUBMIT_BUTTON}
                 </Button>
                 <SignSubmitButton route={"/sign-up"} command={SIGN_UP} />
               </Box>

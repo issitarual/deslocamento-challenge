@@ -15,6 +15,7 @@ import { useEffect, useState } from "react";
 import { Displacement as DisplacementType } from "@/types/DisplacementType";
 import DisplacementBox from "@/components/DisplacementBox";
 import { TailSpin } from "react-loader-spinner";
+import TailSpinLoading from "@/components/TailSpinLoading";
 
 export default function Displacement() {
   const { openDrawer, userType, userId, loading, setLoading } =
@@ -67,16 +68,7 @@ export default function Displacement() {
           >
             Corridas
           </Typography>
-          <TailSpin
-            height="80"
-            width="80"
-            color="#556CD6"
-            ariaLabel="tail-spin-loading"
-            radius="1"
-            wrapperStyle={{ justifyContent: "center", marginTop: "20px" }}
-            wrapperClass=""
-            visible={loading}
-          />
+          <TailSpinLoading />
           {displacement.length && !loading ? (
             displacement.map((d, index) => (
               <DisplacementBox key={index} d={d} />

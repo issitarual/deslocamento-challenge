@@ -1,6 +1,7 @@
 import DrawerMenu from "@/components/DrawerMenu";
 import Main from "@/components/Main";
 import MainHeader from "@/components/MainHeader";
+import ThreeDotsLoading from "@/components/ThreeDotsLoading";
 import {
   fetchGetVehicle,
   fetchPostVehicle,
@@ -13,7 +14,6 @@ import { Box, Button, CssBaseline, TextField, Typography } from "@mui/material";
 import { grey } from "@mui/material/colors";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
-import { ThreeDots } from "react-loader-spinner";
 
 export default function Vehicle() {
   const router = useRouter();
@@ -156,15 +156,7 @@ export default function Vehicle() {
             }}
           >
             {loading ? (
-              <ThreeDots
-                height="30"
-                width="50"
-                radius="9"
-                color="#556CD6"
-                ariaLabel="three-dots-loading"
-                wrapperStyle={{}}
-                visible={loading}
-              />
+              <ThreeDotsLoading />
             ) : vehicleId ? (
               "Atualizar veículo"
             ) : (
