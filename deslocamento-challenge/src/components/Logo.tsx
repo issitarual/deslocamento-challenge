@@ -1,11 +1,11 @@
 import { Box, Typography } from "@mui/material";
-import LocationOnIcon from "@mui/icons-material/LocationOn";
+import { APP_NAME } from "@/helpers/contants";
 
 export default function Logo() {
   return (
     <Box display="flex" alignItems="center" justifyContent="center">
       <Typography component="h1" variant="h5" sx={{ fontWeight: "bold" }}>
-        Deslocamento
+        {APP_NAME}
       </Typography>
     </Box>
   );

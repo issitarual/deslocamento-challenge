@@ -9,7 +9,7 @@ const SIGN_IN_COMMAND = "Já possui uma conta? Entre já!";
 
 const ACCOUNT_TYPE_COMMAND = "Selecione o tipo de conta";
 
-const APP_NAME = "Deslocamento App";
+const APP_NAME = "Deslocamento";
 
 const SIGN_IN_SUBMIT_BUTTON = "Entrar";
 
