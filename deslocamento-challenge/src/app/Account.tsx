@@ -28,7 +28,8 @@ import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 
 export default function Account() {
-  const { openDrawer, userType, userId, vehicleId } = useGlobalContext();
+  const { openDrawer, userType, userId, vehicleId, loading, setLoading } =
+    useGlobalContext();
   const router = useRouter();
 
   const [windowWidth, setWindowWidth] = useState(0);
@@ -98,31 +99,37 @@ export default function Account() {
   }
 
   async function handleUpdateAccount() {
+    setLoading(true);
     if (isUserTypeDriver) {
       await handleUpdateDriver();
     } else {
       await handleUpdateRider();
     }
+    setLoading(false);
     router.push("/home");
   }
 
   async function handleDeleteAccount(id: string) {
+    setLoading(true);
     if (isUserTypeDriver) {
       await fetchDeleteDriver(id);
       await fetchDeleteVehicle(vehicleId);
     } else {
       await fetchDeleteRider(id);
     }
+    setLoading(false);
     router.push("/sign-in");
   }
 
   useEffect(() => {
+    setLoading(true);
     if (isUserTypeDriver) {
       fetchDriver(userId);
     } else {
       fetchRider(userId);
     }
     setWindowWidth(window.screen.availWidth);
+    setLoading(false);
   }, []);
 
   return (
@@ -156,6 +163,7 @@ export default function Account() {
               autoComplete="name"
               autoFocus
               type="text"
+              disabled={loading}
               value={nome}
               onChange={(e) => {
                 setNome(e.target.value);
@@ -170,6 +178,7 @@ export default function Account() {
               type="number"
               id="document"
               autoComplete="document"
+              disabled={loading}
               value={isUserTypeDriver ? numeroHabilitacao : numeroDocumento}
               onChange={(e) => {
                 isUserTypeDriver
@@ -179,6 +188,7 @@ export default function Account() {
             />
             {isUserTypeDriver ? (
               <DriverForm
+                disableInput={loading}
                 categoriaHabilitacao={categoriaHabilitacao}
                 setCategoriaHabilitacao={setCategoriaHabilitacao}
                 vencimentoHabilitacao={vencimentoHabilitacao}
@@ -186,6 +196,7 @@ export default function Account() {
               />
             ) : (
               <RiderForm
+                disableInput={loading}
                 logradouro={logradouro}
                 setLogradouro={setLogradouro}
                 numero={numero}
@@ -203,6 +214,7 @@ export default function Account() {
               fullWidth
               variant="contained"
               sx={{ paddingY: 2, marginY: 2 }}
+              disabled={loading}
               onClick={handleUpdateAccount}
             >
               Atualizar informações
@@ -212,6 +224,7 @@ export default function Account() {
               fullWidth
               variant="outlined"
               color="error"
+              disabled={loading}
               sx={{ paddingY: 2 }}
               onClick={() => handleDeleteAccount(userId)}
             >

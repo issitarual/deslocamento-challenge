@@ -43,7 +43,7 @@ export const GlobalContextProvider = (props: {
 }) => {
   const [userId, setUserId] = useState("");
   const [vehicleId, setVehicleId] = useState("");
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
   const [userType, setUserType] = useState(USER_TYPE.DRIVER);
   const [openDrawer, setOpenDrawer] = useState(false);
 

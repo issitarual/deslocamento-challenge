@@ -13,10 +13,12 @@ import { Box, Button, CssBaseline, TextField, Typography } from "@mui/material";
 import { grey } from "@mui/material/colors";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
+import { ThreeDots } from "react-loader-spinner";
 
 export default function Vehicle() {
   const router = useRouter();
-  const { openDrawer, vehicleId, setVehicleId } = useGlobalContext();
+  const { openDrawer, vehicleId, setVehicleId, setLoading, loading } =
+    useGlobalContext();
 
   const [windowWidth, setWindowWidth] = useState(0);
 
@@ -36,6 +38,7 @@ export default function Vehicle() {
   }
 
   async function handleSubmitVehicle() {
+    setLoading(true);
     const vehicle = {
       id: vehicleId,
       placa,
@@ -45,22 +48,27 @@ export default function Vehicle() {
     };
     if (vehicleId) {
       await fetchUpdateVehicle(vehicle);
+      setLoading(false);
       return router.push("/home");
     } else {
       const id = await fetchPostVehicle(vehicle);
       if (!id) {
+        setLoading(false);
         return alert("Algo deu errado, tente novamente");
       }
       setVehicleId(id);
+      setLoading(false);
       return router.push("/home");
     }
   }
   useEffect(() => {
+    setLoading(true);
     setWindowWidth(window.screen.availWidth);
 
     if (vehicleId) {
       fetchVehicle();
     }
+    setLoading(false);
   }, []);
   return (
     <Box sx={{ minHeight: "100vh", bgcolor: grey[100] }}>
@@ -86,6 +94,7 @@ export default function Vehicle() {
             type="text"
             id="Placa"
             autoComplete="Placa"
+            disabled={loading}
             value={placa}
             onChange={(e) => {
               setPlaca(e.target.value);
@@ -100,6 +109,7 @@ export default function Vehicle() {
             type="text"
             id="Marca/Modelo"
             autoComplete="Marca/Modelo"
+            disabled={loading}
             value={marcaModelo}
             onChange={(e) => {
               setMarcaModelo(e.target.value);
@@ -114,6 +124,7 @@ export default function Vehicle() {
             type="number"
             id="Ano de fabricação"
             autoComplete="Ano de fabricação"
+            disabled={loading}
             value={anoFabricacao}
             onChange={(e) => {
               setAnoFabricacao(parseInt(e.target.value));
@@ -128,6 +139,7 @@ export default function Vehicle() {
             type="number"
             id="Km atual"
             autoComplete="Km atual"
+            disabled={loading}
             value={kmAtual}
             onChange={(e) => {
               setKmAtual(parseInt(e.target.value));
@@ -138,11 +150,26 @@ export default function Vehicle() {
             fullWidth
             variant="contained"
             sx={{ paddingY: 2, marginY: 2 }}
+            disabled={loading}
             onClick={() => {
               handleSubmitVehicle;
             }}
           >
-            {vehicleId ? "Atualizar veículo" : "Adicionar veículo "}
+            {loading ? (
+              <ThreeDots
+                height="30"
+                width="50"
+                radius="9"
+                color="#556CD6"
+                ariaLabel="three-dots-loading"
+                wrapperStyle={{}}
+                visible={loading}
+              />
+            ) : vehicleId ? (
+              "Atualizar veículo"
+            ) : (
+              "Adicionar veículo "
+            )}
           </Button>
         </Box>
       </Main>
