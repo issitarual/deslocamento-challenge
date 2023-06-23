@@ -68,8 +68,9 @@ export default function Displacement() {
           >
             Corridas
           </Typography>
-          <TailSpinLoading />
-          {displacement.length && !loading ? (
+          {loading ? (
+            <TailSpinLoading />
+          ) : displacement.length ? (
             displacement.map((d, index) => (
               <DisplacementBox key={index} d={d} />
             ))
