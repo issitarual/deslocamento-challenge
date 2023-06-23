@@ -4,10 +4,11 @@ import TextField from "@mui/material/TextField";
 import Paper from "@mui/material/Paper";
 import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
-import { Container, InputLabel, MenuItem, Select } from "@mui/material";
+import { Container } from "@mui/material";
 import { useGlobalContext } from "@/hooks/useGlobalContext ";
 import { FormEventHandler, useState } from "react";
 import { useRouter } from "next/router";
+import { ThreeDots } from "react-loader-spinner";
 
 import {
   USER_TYPE,
@@ -28,7 +29,7 @@ import DriverForm from "@/components/DriverForm";
 
 export default function SignUp() {
   const router = useRouter();
-  const { userType } = useGlobalContext();
+  const { userType, setLoading, loading } = useGlobalContext();
 
   const [nome, setNome] = useState("");
   const isUserTypeDriver = userType === USER_TYPE.DRIVER;
@@ -51,6 +52,7 @@ export default function SignUp() {
   async function handleSubmitDriver(e: {
     preventDefault: () => void;
   }): Promise<FormEventHandler<HTMLFormElement> | undefined | void> {
+    setLoading(true);
     e.preventDefault();
 
     const isNotValidDriver =
@@ -60,6 +62,7 @@ export default function SignUp() {
       !vencimentoHabilitacao.trim().length;
 
     if (isNotValidDriver) {
+      setLoading(false);
       return alert(MISSING_INFORMATION_SIGN_FORM);
     }
 
@@ -71,11 +74,13 @@ export default function SignUp() {
     });
 
     isUserSigneUp ? router.push("/sign-in") : alert(ERROR_SIGN_FORM);
+    setLoading(false);
   }
 
   async function handleSubmitRider(e: {
     preventDefault: () => void;
   }): Promise<FormEventHandler<HTMLFormElement> | undefined | void> {
+    setLoading(true);
     e.preventDefault();
 
     const tipoDocumento = "cpf";
@@ -89,6 +94,8 @@ export default function SignUp() {
       !uf.trim().length;
 
     if (isNotValidRider) {
+      setLoading(false);
+
       return alert(MISSING_INFORMATION_SIGN_FORM);
     }
 
@@ -104,6 +111,7 @@ export default function SignUp() {
     });
 
     isUserSigneUp ? router.push("/sign-in") : alert(ERROR_SIGN_FORM);
+    setLoading(false);
   }
   return (
     <Container component="main" maxWidth="lg">
@@ -152,6 +160,7 @@ export default function SignUp() {
                   autoComplete="name"
                   autoFocus
                   type="text"
+                  disabled={loading}
                   value={nome}
                   onChange={(e) => {
                     setNome(e.target.value);
@@ -166,6 +175,7 @@ export default function SignUp() {
                   type="number"
                   id="document"
                   autoComplete="document"
+                  disabled={loading}
                   value={isUserTypeDriver ? numeroHabilitacao : numeroDocumento}
                   onChange={(e) => {
                     isUserTypeDriver
@@ -175,6 +185,7 @@ export default function SignUp() {
                 />
                 {isUserTypeDriver ? (
                   <DriverForm
+                    disableInput={loading}
                     categoriaHabilitacao={categoriaHabilitacao}
                     setCategoriaHabilitacao={setCategoriaHabilitacao}
                     vencimentoHabilitacao={vencimentoHabilitacao}
@@ -182,6 +193,7 @@ export default function SignUp() {
                   />
                 ) : (
                   <RiderForm
+                    disableInput={loading}
                     logradouro={logradouro}
                     setLogradouro={setLogradouro}
                     numero={numero}
@@ -199,8 +211,21 @@ export default function SignUp() {
                   fullWidth
                   variant="contained"
                   sx={{ mt: 3, mb: 2 }}
+                  disabled={loading}
                 >
-                  {SIGN_UP_SUBMIT_BUTTON}
+                  {loading ? (
+                    <ThreeDots
+                      height="30"
+                      width="50"
+                      radius="9"
+                      color="#556CD6"
+                      ariaLabel="three-dots-loading"
+                      wrapperStyle={{}}
+                      visible={true}
+                    />
+                  ) : (
+                    SIGN_UP_SUBMIT_BUTTON
+                  )}
                 </Button>
                 <SignSubmitButton route={"/sign-in"} command={SIGN_IN} />
               </Box>

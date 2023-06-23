@@ -12,6 +12,7 @@ export default function RiderForm({
   setCidade,
   uf,
   setUF,
+  disableInput,
 }: {
   logradouro: string;
   setLogradouro: Dispatch<SetStateAction<string>>;
@@ -23,6 +24,7 @@ export default function RiderForm({
   setCidade: Dispatch<SetStateAction<string>>;
   uf: string;
   setUF: Dispatch<SetStateAction<string>>;
+  disableInput: boolean;
 }) {
   return (
     <>
@@ -35,6 +37,7 @@ export default function RiderForm({
         type="text"
         id="adress"
         autoComplete="adress"
+        disabled={disableInput}
         value={logradouro}
         onChange={(e) => {
           setLogradouro(e.target.value);
@@ -49,6 +52,7 @@ export default function RiderForm({
         type="text"
         id="adress-number"
         autoComplete="adress-number"
+        disabled={disableInput}
         value={numero}
         onChange={(e) => {
           setNumero(e.target.value);
@@ -63,6 +67,7 @@ export default function RiderForm({
         type="text"
         id="adress-district"
         autoComplete="adress-district"
+        disabled={disableInput}
         value={bairro}
         onChange={(e) => {
           setBairro(e.target.value);
@@ -77,6 +82,7 @@ export default function RiderForm({
         type="text"
         id="adress-city"
         autoComplete="adress-city"
+        disabled={disableInput}
         value={cidade}
         onChange={(e) => {
           setCidade(e.target.value);
@@ -91,6 +97,7 @@ export default function RiderForm({
         type="text"
         id="adress-state"
         autoComplete="adress-state"
+        disabled={disableInput}
         value={uf}
         onChange={(e) => {
           setUF(e.target.value);

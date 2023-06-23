@@ -7,11 +7,13 @@ export default function DriverForm({
   setCategoriaHabilitacao,
   vencimentoHabilitacao,
   setVencimentoHabilitacao,
+  disableInput
 }: {
   categoriaHabilitacao: string;
   setCategoriaHabilitacao: Dispatch<SetStateAction<string>>;
   vencimentoHabilitacao: string;
   setVencimentoHabilitacao: Dispatch<SetStateAction<string>>;
+  disableInput: boolean
 }) {
   return (
     <>
@@ -24,6 +26,7 @@ export default function DriverForm({
         type="text"
         id="document category"
         autoComplete="document category"
+        disabled={disableInput}
         onChange={(e) => {
           setCategoriaHabilitacao(e.target.value);
         }}
@@ -53,6 +56,7 @@ export default function DriverForm({
         type="date"
         id="document expiration date"
         autoComplete="document expiration date"
+        disabled={disableInput}
         value={vencimentoHabilitacao}
         onChange={(e) => {
           setVencimentoHabilitacao(e.target.value);

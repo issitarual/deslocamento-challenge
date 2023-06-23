@@ -5,8 +5,9 @@ import PersonPinIcon from "@mui/icons-material/PersonPin";
 import { useGlobalContext } from "@/hooks/useGlobalContext ";
 
 export default function AccountTypeOption() {
-  const { userType, setUserType } = useGlobalContext();
+  const { userType, setUserType, loading } = useGlobalContext();
   const isUserTypeDriver = userType === USER_TYPE.DRIVER;
+  console.log(userType)
   return (
     <Box sx={{ width: "100%" }}>
       <Typography component="h2" variant="body1" align="center" sx={{ my: 2 }}>
@@ -18,6 +19,7 @@ export default function AccountTypeOption() {
           sx={{ width: "45%" }}
           startIcon={<EmojiTransportationIcon />}
           onClick={() => setUserType(USER_TYPE.DRIVER)}
+          disabled={loading}
         >
           <p>{USER_TYPE.DRIVER}</p>
         </Button>
@@ -26,6 +28,7 @@ export default function AccountTypeOption() {
           sx={{ width: "45%" }}
           startIcon={<PersonPinIcon />}
           onClick={() => setUserType(USER_TYPE.RIDER)}
+          disabled={loading}
         >
           <p>{USER_TYPE.RIDER}</p>
         </Button>
