@@ -14,9 +14,11 @@ import { grey } from "@mui/material/colors";
 import { useEffect, useState } from "react";
 import { Displacement as DisplacementType } from "@/types/DisplacementType";
 import DisplacementBox from "@/components/DisplacementBox";
+import { TailSpin } from "react-loader-spinner";
 
 export default function Displacement() {
-  const { openDrawer, userType, userId } = useGlobalContext();
+  const { openDrawer, userType, userId, loading, setLoading } =
+    useGlobalContext();
 
   const [windowWidth, setWindowWidth] = useState(0);
   const [displacement, setDisplacement] = useState([EMPTY_DISPLACEMENT]);
@@ -44,8 +46,10 @@ export default function Displacement() {
   }
 
   useEffect(() => {
+    setLoading(true);
     fetchDisplacement();
     setWindowWidth(window.screen.availWidth);
+    setLoading(false);
   }, []);
 
   return (
@@ -63,7 +67,17 @@ export default function Displacement() {
           >
             Corridas
           </Typography>
-          {displacement.length ? (
+          <TailSpin
+            height="80"
+            width="80"
+            color="#556CD6"
+            ariaLabel="tail-spin-loading"
+            radius="1"
+            wrapperStyle={{ justifyContent: "center", marginTop: "20px" }}
+            wrapperClass=""
+            visible={loading}
+          />
+          {displacement.length && !loading ? (
             displacement.map((d, index) => (
               <DisplacementBox key={index} d={d} />
             ))

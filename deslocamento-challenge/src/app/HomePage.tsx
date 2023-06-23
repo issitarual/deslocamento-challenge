@@ -32,7 +32,7 @@ import DisplacementsForDriver from "@/components/DisplacementsForDriver";
 
 export default function Home() {
   const router = useRouter();
-  const { openDrawer, userType, userId, vehicleId } = useGlobalContext();
+  const { openDrawer, userType, userId, loading, setLoading } = useGlobalContext();
   const isUserTypeDriver = userType === USER_TYPE.DRIVER;
 
   const [weather, setWeather] = useState(EMPTY_WEATHER);
