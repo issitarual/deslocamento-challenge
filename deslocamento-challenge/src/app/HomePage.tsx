@@ -127,6 +127,10 @@ export default function Home() {
   }
 
   useEffect(() => {
+    // if(!userId){
+    //   alert("Usuário não encontrado")
+    //   router.push("/sign-in")
+    // }
     setLoading(true);
     setIsWeatherLoading(true);
     // if (isUserTypeDriver && !vehicleId) {

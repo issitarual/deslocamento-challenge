@@ -22,11 +22,16 @@ export default function DisplacementsForDriver({
   const { inicioDeslocamento, checkList, motivo, observacao } = displacement;
   return (
     <Box textAlign="center">
-      <Typography>Nome do passageiro: {riderName}</Typography>
-      <Typography>Início do deslocamento: {inicioDeslocamento}</Typography>
-      <Typography>Checklist: {checkList}</Typography>
-      <Typography>Motivo: {motivo}</Typography>
-      <Typography>Observação: {observacao}</Typography>
+      <Box sx={{borderRadius: "5px",
+              border: 1,
+              borderColor: "grey.500",
+              padding: 2}}>
+      <Typography><b>Nome do passageiro:</b> {riderName}</Typography>
+      <Typography><b>Início do deslocamento:</b> {inicioDeslocamento}</Typography>
+      <Typography><b>Checklist:</b> {checkList}</Typography>
+      <Typography><b>Motivo:</b> {motivo}</Typography>
+      <Typography><b>Observação:</b> {observacao}</Typography>
+      </Box>
       <TextField
         margin="normal"
         fullWidth
