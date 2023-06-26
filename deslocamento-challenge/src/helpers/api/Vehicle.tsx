@@ -1,4 +1,4 @@
-import axios, { HttpStatusCode } from "axios";
+import axios, { AxiosError, HttpStatusCode } from "axios";
 import { Vehicle, VehicleRequest } from "@/types/VehicleType";
 import { API_URL, EMPTY_VEHICLE } from "../contants";
 
@@ -37,9 +37,11 @@ const fetchUpdateVehicle = async (vehicle: Vehicle) => {
       `${API_URL + VEHICLE}/${vehicle?.id}`,
       vehicle
     );
-    return res.status === 200;
+    return res.status;
   } catch (error) {
-    return error;
+    if (axios.isAxiosError(error)) {
+      return error?.response?.status;
+    }
   }
 };
 
@@ -48,9 +50,11 @@ const fetchDeleteVehicle = async (id: string) => {
     const res = await axios.put<HttpStatusCode>(`${API_URL + VEHICLE}/${id}`, {
       id,
     });
-    return res.status === 200;
+    return res.status;
   } catch (error) {
-    return error;
+    if (axios.isAxiosError(error)) {
+      return error?.response?.status;
+    }
   }
 };
 

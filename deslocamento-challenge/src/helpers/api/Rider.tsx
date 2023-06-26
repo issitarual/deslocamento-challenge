@@ -37,9 +37,11 @@ const fetchUpdateRider = async (rider: Rider) => {
       `${API_URL + RIDER}/${rider?.id}`,
       rider
     );
-    return res.status === 200;
+    return res.status;
   } catch (error) {
-    return error;
+    if (axios.isAxiosError(error)) {
+      return error?.response?.status;
+    }
   }
 };
 
@@ -48,9 +50,11 @@ const fetchDeleteRider = async (id: string) => {
     const res = await axios.put<HttpStatusCode>(`${API_URL + RIDER}/${id}`, {
       id,
     });
-    return res.status === 200;
+    return res.status;
   } catch (error) {
-    return error;
+    if (axios.isAxiosError(error)) {
+      return error?.response?.status;
+    }
   }
 };
 

@@ -7,7 +7,7 @@ import {
 import { InputLabel, MenuItem, Select } from "@mui/material";
 import { Dispatch, SetStateAction } from "react";
 import InputField from "./InputField";
-import { useGlobalContext } from "@/hooks/useGlobalContext ";
+import { useGlobalContext } from "../hooks/useGlobalContext";
 
 export default function DriverForm({
   categoriaHabilitacao,

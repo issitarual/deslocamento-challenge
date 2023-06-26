@@ -1,4 +1,4 @@
-import { useGlobalContext } from "@/hooks/useGlobalContext ";
+import { useGlobalContext } from "../hooks/useGlobalContext";
 import { TailSpin } from "react-loader-spinner";
 
 export default function TailSpinLoading() {

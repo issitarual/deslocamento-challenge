@@ -16,7 +16,7 @@ import {
   ListItemText,
   IconButton,
 } from "@mui/material";
-import { useGlobalContext } from "@/hooks/useGlobalContext ";
+import { useGlobalContext } from "../hooks/useGlobalContext";
 import HomeIcon from "@mui/icons-material/Home";
 import LogoutIcon from "@mui/icons-material/Logout";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";

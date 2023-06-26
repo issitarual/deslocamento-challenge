@@ -1,8 +1,8 @@
-import DrawerMenu from "@/components/DrawerMenu";
-import InputField from "@/components/InputField";
-import Main from "@/components/Main";
-import MainHeader from "@/components/MainHeader";
-import ThreeDotsLoading from "@/components/ThreeDotsLoading";
+import DrawerMenu from "../components/DrawerMenu";
+import InputField from "../components/InputField";
+import Main from "../components/Main";
+import MainHeader from "../components/MainHeader";
+import ThreeDotsLoading from "../components/ThreeDotsLoading";
 import {
   fetchGetVehicle,
   fetchPostVehicle,
@@ -17,8 +17,7 @@ import {
   UPDATE_VEHICLE,
   VEHICLE,
 } from "@/helpers/contants";
-import { useGlobalContext } from "@/hooks/useGlobalContext ";
-import { Vehicle } from "@/types/VehicleType";
+import { useGlobalContext } from "../hooks/useGlobalContext";
 import { Box, Button, CssBaseline, Typography } from "@mui/material";
 import { grey } from "@mui/material/colors";
 import { useRouter } from "next/navigation";
@@ -36,20 +35,9 @@ export default function Vehicle() {
   const [anoFabricacao, setAnoFabricacao] = useState("");
   const [kmAtual, setKmAtual] = useState("");
 
-  async function fetchVehicle() {
-    setLoading(true);
-    const vehicleResponse = await fetchGetVehicle(vehicleId);
-    if (vehicleResponse) {
-      setPlaca(vehicleResponse.placa);
-      setMarcaModelo(vehicleResponse.marcaModelo);
-      setAnoFabricacao(vehicleResponse.anoFabricacao.toString());
-      setKmAtual(vehicleResponse.kmAtual.toString());
-    }
-    setLoading(false);
-  }
-
   async function handleSubmitVehicle() {
     setLoading(true);
+
     const vehicle = {
       id: vehicleId,
       placa,
@@ -57,20 +45,37 @@ export default function Vehicle() {
       anoFabricacao: parseInt(anoFabricacao),
       kmAtual: parseInt(kmAtual),
     };
+
     if (vehicleId) {
-      await fetchUpdateVehicle(vehicle);
+      const response = await fetchUpdateVehicle(vehicle);
       setLoading(false);
-      return router.push(ROUTE.HOME);
+      return response === 200 ? router.push(ROUTE.HOME) : alert(ERROR_FORM);
     } else {
       const id = await fetchPostVehicle(vehicle);
+
       if (!id) {
         setLoading(false);
         return alert(ERROR_FORM);
       }
+
       setVehicleId(id);
       setLoading(false);
       return router.push(ROUTE.HOME);
     }
+  }
+
+  async function fetchVehicle() {
+    setLoading(true);
+    const vehicleResponse = await fetchGetVehicle(vehicleId);
+
+    if (vehicleResponse) {
+      setPlaca(vehicleResponse.placa);
+      setMarcaModelo(vehicleResponse.marcaModelo);
+      setAnoFabricacao(vehicleResponse.anoFabricacao.toString());
+      setKmAtual(vehicleResponse.kmAtual.toString());
+    }
+
+    setLoading(false);
   }
 
   useEffect(() => {
@@ -80,6 +85,7 @@ export default function Vehicle() {
       fetchVehicle();
     }
   }, []);
+
   return (
     <Box sx={{ minHeight: "100vh", bgcolor: grey[100] }}>
       <CssBaseline />

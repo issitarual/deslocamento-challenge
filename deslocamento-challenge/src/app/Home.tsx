@@ -4,8 +4,8 @@ import { Box, Button, CssBaseline, Typography } from "@mui/material";
 import { grey } from "@mui/material/colors";
 import { useEffect, useState } from "react";
 import React from "react";
-import Main from "@/components/Main";
-import { useGlobalContext } from "@/hooks/useGlobalContext ";
+import Main from "../components/Main";
+import { useGlobalContext } from "../hooks/useGlobalContext";
 import {
   ASK_FOR_DISPLACEMENT,
   DRAWER_WIDTH,
@@ -19,9 +19,11 @@ import {
   USER_TYPE,
   DISPLACEMENT_AVAILABLE,
   DRIVER_AVAILABLE,
+  HOME_ERROR_MESSAGE,
+  ROUTE,
 } from "@/helpers/contants";
-import MainHeader from "@/components/MainHeader";
-import DrawerMenu from "@/components/DrawerMenu";
+import MainHeader from "../components/MainHeader";
+import DrawerMenu from "../components/DrawerMenu";
 import {
   fetchGetAllDisplacements,
   fetchPostDisplacement,
@@ -29,14 +31,15 @@ import {
 } from "@/helpers/api/Displacement";
 import { fetchGetRider } from "@/helpers/api/Rider";
 import { useRouter } from "next/navigation";
-import DisplacementsForDriver from "@/components/DisplacementsForDriver";
-import ThreeDotsLoading from "@/components/ThreeDotsLoading";
-import DisplacementForRider from "@/components/DisplacementForRider";
-import WeatherBox from "@/components/WeatherBox";
+import DisplacementsForDriver from "../components/DisplacementsForDriver";
+import ThreeDotsLoading from "../components/ThreeDotsLoading";
+import DisplacementForRider from "../components/DisplacementForRider";
+import WeatherBox from "../components/WeatherBox";
+import { fetchGetAllVehicles } from "@/helpers/api/Vehicle";
 
 export default function Home() {
   const router = useRouter();
-  const { openDrawer, userType, userId, loading, setLoading } =
+  const { openDrawer, userType, userId, loading, vehicleId, setLoading } =
     useGlobalContext();
   const isUserTypeDriver = userType === USER_TYPE.DRIVER;
 
@@ -56,7 +59,11 @@ export default function Home() {
   const [observacao, setObservacao] = useState("");
   const [kmFinal, setKmFinal] = useState("");
 
-  async function handleDisplacement() {
+  function getRandom(max: number) {
+    return Math.floor(Math.random() * max);
+  }
+
+  async function handleClick() {
     setLoading(true);
     const displacementTime = Date.now().toString();
     if (isUserTypeDriver) {
@@ -74,6 +81,7 @@ export default function Home() {
       setCurrentDisplacement(displacementToDo);
     } else {
       const idCondutor = parseInt(currentDriver?.id);
+      const vehicles = await fetchGetAllVehicles();
       const displacement = {
         kmInicial: 0,
         inicioDeslocamento: displacementTime,
@@ -81,7 +89,7 @@ export default function Home() {
         motivo,
         observacao,
         idCondutor,
-        idVeiculo: 0,
+        idVeiculo: parseInt(vehicles[0].id),
         idCliente: parseInt(userId),
       };
       fetchPostDisplacement(displacement);
@@ -89,11 +97,11 @@ export default function Home() {
       const randomDriverPosition = getRandom(drivers.length);
       const driver = drivers[randomDriverPosition];
       setCurrentDriver(driver);
-      setLoading(false);
     }
     const randomDisplacementPosition = getRandom(displacement.length);
     const displacementToDo = displacement[randomDisplacementPosition];
     setCurrentDisplacement(displacementToDo);
+    setLoading(false);
   }
 
   async function fetchWeather() {
@@ -110,10 +118,8 @@ export default function Home() {
     const driversResponse = await fetchGetAllDrivers();
     if (driversResponse) {
       setDrivers(driversResponse);
+      setCurrentDriver(driversResponse[0]);
     }
-    const randomDriverPosition = getRandom(drivers.length);
-    const driver = drivers[randomDriverPosition];
-    setCurrentDriver(driver);
     setLoading(false);
   }
 
@@ -127,36 +133,36 @@ export default function Home() {
     setLoading(true);
     const displacementResponse = await fetchGetAllDisplacements();
     if (!displacementResponse) {
+      setLoading(false);
       return;
     }
     if (displacementResponse) {
-      isUserTypeDriver
-        ? displacementResponse.find(
-            (d) => d.idCondutor.toString() === userId && !d.kmFinal
+      const filterDisplacement = isUserTypeDriver
+        ? displacementResponse.filter(
+            (d) => d.idCondutor.toString() == userId && !d.kmFinal
           )
-        : displacementResponse.find(
-            (d) => d.idCliente.toString() === userId && !d.kmFinal
+        : displacementResponse.filter(
+            (d) => d.idCliente.toString() == userId && !d.kmFinal
           );
-      setDisplacement(displacementResponse);
-      const randomDisplacementPosition = getRandom(displacement.length);
-      const displacementToDo = displacement[randomDisplacementPosition];
-      setCurrentDisplacement(displacementToDo);
+      setDisplacement(filterDisplacement);
+      setCurrentDisplacement(filterDisplacement[0]);
+      setLoading(false);
     }
   }
 
+  const validateUser = () => {
+    if (!userId) {
+      alert(HOME_ERROR_MESSAGE.USER_NOT_FOUND);
+      router.push(ROUTE.SIGN_IN);
+    } else if (isUserTypeDriver && !vehicleId) {
+      alert(HOME_ERROR_MESSAGE.VEHICLE_NOT_FOUND);
+      router.push(ROUTE.VEHICLE);
+    }
+  };
+
   useEffect(() => {
     setWindowWidth(window.screen.availWidth);
-    // if(!userId){
-    //   alert(HOME_ERROR_MESSAGE.USER_NOT_FOUND)
-    //   router.push(ROUTE.SIGN_IN)
-    // }
-    // if (isUserTypeDriver && !vehicleId) {
-    //   alert(HOME_ERROR_MESSAGE.VEHICLE_NOT_FOUND);
-    //   router.push(ROUTE.VEHICLE);
-    //   return;
-    // }
-    // setWindowWidth(window.screen.availWidth);
-
+    validateUser();
     fetchWeather();
 
     if (isUserTypeDriver) {
@@ -193,7 +199,7 @@ export default function Home() {
               : currentDriver.nome}
           </Typography>
           <Box display="flex" flexDirection="column" padding={2}>
-            {isUserTypeDriver && displacement.length ? (
+            {!loading && isUserTypeDriver && displacement.length && (
               <DisplacementsForDriver
                 displacement={currentDisplacement}
                 riderName={rider.nome}
@@ -202,7 +208,8 @@ export default function Home() {
                 observacaoDriver={observacao}
                 setObservacao={setObservacao}
               />
-            ) : (
+            )}
+            {!loading && !isUserTypeDriver && (
               <DisplacementForRider
                 checkList={checkList}
                 setCheckList={setCheckList}
@@ -217,10 +224,10 @@ export default function Home() {
               disabled={loading}
               onClick={() =>
                 isUserTypeDriver
-                  ? setCurrentDriver(drivers[getRandom(drivers.length)])
-                  : setCurrentDisplacement(
+                  ? setCurrentDisplacement(
                       displacement[getRandom(displacement.length)]
                     )
+                  : setCurrentDriver(drivers[getRandom(drivers.length)])
               }
               sx={{ paddingY: 2 }}
             >
@@ -236,7 +243,7 @@ export default function Home() {
               sx={{ paddingY: 2 }}
               variant="contained"
               disabled={loading}
-              onClick={handleDisplacement}
+              onClick={handleClick}
             >
               {loading ? (
                 <ThreeDotsLoading />
@@ -251,8 +258,4 @@ export default function Home() {
       </Main>
     </Box>
   );
-
-  function getRandom(max: number) {
-    return Math.floor(Math.random() * max);
-  }
 }

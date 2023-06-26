@@ -1,10 +1,11 @@
 import { Box, IconButton, Toolbar } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
-import { useGlobalContext } from "@/hooks/useGlobalContext ";
+import { useGlobalContext } from "../hooks/useGlobalContext";
 import { useRouter } from "next/navigation";
 
 import AppBar from "./AppBar";
 import Logo from "./Logo";
+import { ROUTE } from "@/helpers/contants";
 
 export default function MainHeader() {
   const { openDrawer, setOpenDrawer } = useGlobalContext();
@@ -26,7 +27,7 @@ export default function MainHeader() {
         >
           <MenuIcon />
         </IconButton>
-        <Box margin={3} onClick={() => route.push("/")}>
+        <Box margin={3} onClick={() => route.push(ROUTE.HOME)}>
           <Logo />
         </Box>
       </Toolbar>

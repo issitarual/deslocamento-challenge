@@ -1,13 +1,13 @@
-import { ACCOUNT_TYPE_COMMAND, USER_TYPE } from "@/helpers/contants";
+import { ACCOUNT_TYPE_COMMAND, USER_TYPE } from "../helpers/contants";
 import { Box, Button, Typography } from "@mui/material";
 import EmojiTransportationIcon from "@mui/icons-material/EmojiTransportation";
 import PersonPinIcon from "@mui/icons-material/PersonPin";
-import { useGlobalContext } from "@/hooks/useGlobalContext ";
+import { useGlobalContext } from "../hooks/useGlobalContext";
 
 export default function AccountTypeOption() {
   const { userType, setUserType, loading } = useGlobalContext();
   const isUserTypeDriver = userType === USER_TYPE.DRIVER;
-  console.log(userType)
+
   return (
     <Box sx={{ width: "100%" }}>
       <Typography component="h2" variant="body1" align="center" sx={{ my: 2 }}>

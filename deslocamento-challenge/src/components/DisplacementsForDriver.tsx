@@ -19,7 +19,6 @@ export default function DisplacementsForDriver({
   observacaoDriver: string;
   setObservacao: Dispatch<SetStateAction<string>>;
 }) {
-  const { inicioDeslocamento, checkList, motivo, observacao } = displacement;
   return (
     <Box textAlign="center">
       <Box
@@ -31,19 +30,20 @@ export default function DisplacementsForDriver({
         }}
       >
         <Typography>
-          <b>{PASSENGER_NAME}:</b> {riderName}
+          <b>{PASSENGER_NAME}:</b> {riderName || ""}
         </Typography>
         <Typography>
-          <b>{DISPLACEMENT.START_DISPLACEMENT}:</b> {inicioDeslocamento}
+          <b>{DISPLACEMENT.START_DISPLACEMENT}:</b>{" "}
+          {displacement?.inicioDeslocamento || ""}
         </Typography>
         <Typography>
-          <b>{DISPLACEMENT.CHECKLIST}:</b> {checkList}
+          <b>{DISPLACEMENT.CHECKLIST}:</b> {displacement?.checkList || ""}
         </Typography>
         <Typography>
-          <b>{DISPLACEMENT.REASON}:</b> {motivo}
+          <b>{DISPLACEMENT.REASON}:</b> {displacement?.motivo || ""}
         </Typography>
         <Typography>
-          <b>{DISPLACEMENT.OBSERVATION}:</b> {observacao}
+          <b>{DISPLACEMENT.OBSERVATION}:</b> {displacement?.observacao || ""}
         </Typography>
       </Box>
       <InputField

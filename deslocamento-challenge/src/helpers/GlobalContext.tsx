@@ -1,6 +1,6 @@
 "use client";
 
-import { USER_TYPE } from "@/helpers/contants";
+import { USER_TYPE } from "./contants";
 import React, { useState } from "react";
 
 interface IGlobalContextProps {

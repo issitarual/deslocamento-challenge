@@ -1,6 +1,6 @@
-import DrawerMenu from "@/components/DrawerMenu";
-import Main from "@/components/Main";
-import MainHeader from "@/components/MainHeader";
+import DrawerMenu from "../components/DrawerMenu";
+import Main from "../components/Main";
+import MainHeader from "../components/MainHeader";
 import { fetchGetAllDisplacements } from "@/helpers/api/Displacement";
 import {
   DRAWER_WIDTH,
@@ -8,14 +8,13 @@ import {
   USER_TYPE,
   WITHOUT_DISPLACEMENT_MESSAGE,
 } from "@/helpers/contants";
-import { useGlobalContext } from "@/hooks/useGlobalContext ";
+import { useGlobalContext } from "../hooks/useGlobalContext";
 import { Box, CssBaseline, Typography } from "@mui/material";
 import { grey } from "@mui/material/colors";
 import { useEffect, useState } from "react";
 import { Displacement as DisplacementType } from "@/types/DisplacementType";
-import DisplacementBox from "@/components/DisplacementBox";
-import { TailSpin } from "react-loader-spinner";
-import TailSpinLoading from "@/components/TailSpinLoading";
+import DisplacementBox from "../components/DisplacementBox";
+import TailSpinLoading from "../components/TailSpinLoading";
 
 export default function Displacement() {
   const { openDrawer, userType, userId, loading, setLoading } =
@@ -25,26 +24,27 @@ export default function Displacement() {
   const [displacement, setDisplacement] = useState([EMPTY_DISPLACEMENT]);
 
   async function fetchDisplacement() {
+    let userDisplacement: DisplacementType[];
     setLoading(true);
+
     const displacementResponse = await fetchGetAllDisplacements();
     if (!displacementResponse.length) {
+      setLoading(false);
       return;
     }
-    let userDisplacement: DisplacementType[];
-    switch (userType) {
-      case USER_TYPE.DRIVER:
-        userDisplacement = displacementResponse.filter(
-          (ride) => ride.idCondutor.toString() === userId
-        );
-        setDisplacement(userDisplacement);
-        break;
-      case USER_TYPE.RIDER:
-        userDisplacement = displacementResponse.filter(
-          (ride) => ride.idCliente.toString() === userId
-        );
-        setDisplacement(userDisplacement);
-        break;
+
+    if (userType === USER_TYPE.DRIVER) {
+      userDisplacement = displacementResponse.filter(
+        (ride) => ride.idCondutor.toString() == userId
+      );
+      setDisplacement(userDisplacement);
+    } else {
+      userDisplacement = displacementResponse.filter(
+        (ride) => ride.idCliente.toString() == userId
+      );
+      setDisplacement(userDisplacement);
     }
+
     setLoading(false);
   }
 

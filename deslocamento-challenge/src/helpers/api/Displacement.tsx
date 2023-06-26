@@ -50,9 +50,11 @@ const fetchUpdateDisplacement = async (
       `${API_URL + DISPLACEMENT}/${displacement.id}/EncerrarDeslocamento`,
       displacement
     );
-    return res.status === 200;
+    return res.status;
   } catch (error) {
-    return error;
+    if (axios.isAxiosError(error)) {
+      return error?.response?.status;
+    }
   }
 };
 
@@ -64,9 +66,11 @@ const fetchDeleteDisplacement = async (id: string) => {
         id,
       }
     );
-    return res.status === 200;
+    return res.status;
   } catch (error) {
-    return error;
+    if (axios.isAxiosError(error)) {
+      return error?.response?.status;
+    }
   }
 };
 

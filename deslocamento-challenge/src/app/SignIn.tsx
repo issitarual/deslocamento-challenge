@@ -4,9 +4,9 @@ import Paper from "@mui/material/Paper";
 import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
 import { Container } from "@mui/material";
-import { useGlobalContext } from "@/hooks/useGlobalContext ";
+import { useGlobalContext } from "../hooks/useGlobalContext";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import {
   USER_TYPE,
@@ -16,15 +16,16 @@ import {
   FULL_NAME,
   DOCUMENT,
   ROUTE,
+  ERROR_FORM,
 } from "@/helpers/contants";
-import Logo from "@/components/Logo";
+import Logo from "../components/Logo";
 
-import AccountTypeOption from "@/components/AccountTypeOptions";
-import SignSubmitButton from "@/components/SignSubmitButton";
+import AccountTypeOption from "../components/AccountTypeOptions";
+import SignSubmitButton from "../components/SignSubmitButton";
 import { fetchGetAllDrivers } from "@/helpers/api/Driver";
 import { fetchGetAllRiders } from "@/helpers/api/Rider";
-import ThreeDotsLoading from "@/components/ThreeDotsLoading";
-import InputField from "@/components/InputField";
+import ThreeDotsLoading from "../components/ThreeDotsLoading";
+import InputField from "../components/InputField";
 
 export default function SignIn() {
   const router = useRouter();
@@ -42,8 +43,10 @@ export default function SignIn() {
 
     const isNotValidUser = !nome.trim().length || !documento.trim().length;
     if (isNotValidUser) {
+      setLoading(false);
       return alert(MISSING_INFORMATION_SIGN_FORM);
     }
+
     let user;
     let res;
     if (isUserTypeDriver) {
@@ -60,15 +63,21 @@ export default function SignIn() {
 
     if (!user?.id) {
       setLoading(false);
-      return alert("Algo deu errado, tente novamente.");
+      return alert(ERROR_FORM);
     }
+
     setUserId(user?.id);
     setLoading(false);
+
     if (isUserTypeDriver && !vehicleId) {
       return router.push(ROUTE.VEHICLE);
     }
     router.push(ROUTE.HOME);
   };
+
+  useEffect(() => {
+    if (loading) setLoading(false);
+  }, []);
 
   return (
     <Container component="main" maxWidth="lg">

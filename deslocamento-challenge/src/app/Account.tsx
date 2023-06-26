@@ -1,9 +1,9 @@
-import DrawerMenu from "@/components/DrawerMenu";
-import DriverForm from "@/components/DriverForm";
-import InputField from "@/components/InputField";
-import Main from "@/components/Main";
-import MainHeader from "@/components/MainHeader";
-import RiderForm from "@/components/RiderForm";
+import DrawerMenu from "../components/DrawerMenu";
+import DriverForm from "../components/DriverForm";
+import InputField from "../components/InputField";
+import Main from "../components/Main";
+import MainHeader from "../components/MainHeader";
+import RiderForm from "../components/RiderForm";
 import {
   fetchDeleteDriver,
   fetchGetDriver,
@@ -19,13 +19,16 @@ import {
   CATEGORIA_HABILITAÇÃO_VALUES,
   DELETE_ACCOUNT,
   DRAWER_WIDTH,
+  EMPTY_DRIVER,
+  EMPTY_RIDER,
+  ERROR_FORM,
   FULL_NAME,
   MENU_OPTIONS,
   ROUTE,
   UPDATE_ACCOUNT,
   USER_TYPE,
 } from "@/helpers/contants";
-import { useGlobalContext } from "@/hooks/useGlobalContext ";
+import { useGlobalContext } from "../hooks/useGlobalContext";
 import { Box, Button, CssBaseline, Typography } from "@mui/material";
 import { grey } from "@mui/material/colors";
 import { useRouter } from "next/navigation";
@@ -36,10 +39,11 @@ export default function Account() {
     useGlobalContext();
   const router = useRouter();
 
+  const isUserTypeDriver = userType === USER_TYPE.DRIVER;
+
   const [windowWidth, setWindowWidth] = useState(0);
 
   const [nome, setNome] = useState("");
-  const isUserTypeDriver = userType === USER_TYPE.DRIVER;
 
   // DRIVER
   const [numeroHabilitacao, setNumeroHabilitacao] = useState("");
@@ -56,85 +60,99 @@ export default function Account() {
   const [cidade, setCidade] = useState("");
   const [uf, setUF] = useState("");
 
-  const handleUpdateDriver = async () => {
-    await fetchUpdateDriver({
-      id: userId,
-      nome,
-      numeroHabilitacao,
-      categoriaHabilitacao,
-      vencimentoHabilitacao,
-    });
-  };
-  const handleUpdateRider = async () => {
-    await fetchUpdateRider({
-      id: userId,
-      nome,
-      tipoDocumento: "cpf",
-      numeroDocumento,
-      logradouro,
-      numero,
-      bairro,
-      cidade,
-      uf,
-    });
-  };
-
-  async function fetchDriver(id: string) {
-    setLoading(true);
-    const driverResponse = await fetchGetDriver(id);
-    if (driverResponse) {
-      setNome(driverResponse.nome);
-      setNumeroHabilitacao(driverResponse.numeroHabilitacao);
-      setCategoriaHabilitacao(driverResponse.categoriaHabilitacao);
-      setVencimentoHabilitacao(driverResponse.vencimentoHabilitacao);
-    }
-    setLoading(false);
-  }
-
-  async function fetchRider(id: string) {
-    setLoading(true);
-    const riderResponse = await fetchGetRider(id);
-    if (riderResponse) {
-      setNome(riderResponse.nome);
-      setNumeroDocumento(riderResponse.numeroDocumento);
-      setLogradouro(riderResponse.logradouro);
-      setNumero(riderResponse.numero);
-      setBairro(riderResponse.bairro);
-      setCidade(riderResponse.cidade);
-      setUF(riderResponse.uf);
-    }
-    setLoading(false);
-  }
-
   async function handleUpdateAccount() {
     setLoading(true);
+    let response;
+
     if (isUserTypeDriver) {
-      await handleUpdateDriver();
+      response = await fetchUpdateDriver({
+        id: userId,
+        nome,
+        numeroHabilitacao,
+        categoriaHabilitacao,
+        vencimentoHabilitacao,
+      });
     } else {
-      await handleUpdateRider();
+      response = await fetchUpdateRider({
+        id: userId,
+        nome,
+        tipoDocumento: "cpf",
+        numeroDocumento,
+        logradouro,
+        numero,
+        bairro,
+        cidade,
+        uf,
+      });
     }
+
+    if (response !== 200) {
+      setLoading(false);
+      return alert(ERROR_FORM);
+    }
+
     setLoading(false);
     router.push(ROUTE.HOME);
   }
 
   async function handleDeleteAccount(id: string) {
     setLoading(true);
+
     if (isUserTypeDriver) {
-      await fetchDeleteDriver(id);
-      await fetchDeleteVehicle(vehicleId);
+      const driverResponse = await fetchDeleteDriver(id);
+      const vehicleResponse = await fetchDeleteVehicle(vehicleId);
+
+      if (driverResponse !== 200 || vehicleResponse !== 200) {
+        setLoading(false);
+        return alert(ERROR_FORM);
+      }
     } else {
-      await fetchDeleteRider(id);
+      const riderResponse = await fetchDeleteRider(id);
+
+      if (riderResponse !== 200) {
+        setLoading(false);
+        return alert(ERROR_FORM);
+      }
     }
+
     setLoading(false);
     router.push(ROUTE.SIGN_IN);
   }
 
-  useEffect(() => {
+  const fetchAccountData = async (id: string) => {
+    setLoading(true);
     if (isUserTypeDriver) {
-      fetchDriver(userId);
+      const response = await fetchGetDriver(id);
+
+      if (response === EMPTY_DRIVER) {
+        return alert(ERROR_FORM);
+      }
+
+      setNome(response.nome);
+      setNumeroHabilitacao(response.numeroHabilitacao);
+      setCategoriaHabilitacao(response.categoriaHabilitacao);
+      setVencimentoHabilitacao(response.vencimentoHabilitacao);
     } else {
-      fetchRider(userId);
+      const response = await fetchGetRider(id);
+
+      if (response === EMPTY_RIDER) {
+        return alert(ERROR_FORM);
+      }
+
+      setNome(response.nome);
+      setNumeroDocumento(response.numeroDocumento);
+      setLogradouro(response.logradouro);
+      setNumero(response.numero);
+      setBairro(response.bairro);
+      setCidade(response.cidade);
+      setUF(response.uf);
     }
+
+    setLoading(false);
+  };
+
+  useEffect(() => {
+    fetchAccountData(userId);
     setWindowWidth(window.screen.availWidth);
   }, []);
 
@@ -156,7 +174,7 @@ export default function Account() {
           <Box
             component="form"
             noValidate
-            onSubmit={isUserTypeDriver ? handleUpdateDriver : handleUpdateRider}
+            onSubmit={handleUpdateAccount}
             sx={{ mt: 1 }}
           >
             <InputField name={FULL_NAME} value={nome} handleChange={setNome} />

@@ -4,7 +4,7 @@ import Paper from "@mui/material/Paper";
 import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
 import { Container } from "@mui/material";
-import { useGlobalContext } from "@/hooks/useGlobalContext ";
+import { useGlobalContext } from "../hooks/useGlobalContext";
 import { FormEventHandler, useState } from "react";
 import { useRouter } from "next/navigation";
 
@@ -21,20 +21,21 @@ import {
 import { fetchPostDriver } from "@/helpers/api/Driver";
 import { fetchPostRider } from "@/helpers/api/Rider";
 
-import Logo from "@/components/Logo";
-import AccountTypeOption from "@/components/AccountTypeOptions";
-import SignSubmitButton from "@/components/SignSubmitButton";
-import RiderForm from "@/components/RiderForm";
-import DriverForm from "@/components/DriverForm";
-import ThreeDotsLoading from "@/components/ThreeDotsLoading";
-import InputField from "@/components/InputField";
+import Logo from "../components/Logo";
+import AccountTypeOption from "../components/AccountTypeOptions";
+import SignSubmitButton from "../components/SignSubmitButton";
+import RiderForm from "../components/RiderForm";
+import DriverForm from "../components/DriverForm";
+import ThreeDotsLoading from "../components/ThreeDotsLoading";
+import InputField from "../components/InputField";
 
 export default function SignUp() {
   const router = useRouter();
   const { userType, setLoading, loading } = useGlobalContext();
 
-  const [nome, setNome] = useState("");
   const isUserTypeDriver = userType === USER_TYPE.DRIVER;
+
+  const [nome, setNome] = useState("");
 
   // DRIVER
   const [numeroHabilitacao, setNumeroHabilitacao] = useState("");
@@ -51,41 +52,7 @@ export default function SignUp() {
   const [cidade, setCidade] = useState("");
   const [uf, setUF] = useState("");
 
-  async function handleSubmitDriver(e: {
-    preventDefault: () => void;
-  }): Promise<FormEventHandler<HTMLFormElement> | undefined | void> {
-    setLoading(true);
-    e.preventDefault();
-
-    const isNotValidDriver =
-      !nome.trim().length ||
-      !numeroHabilitacao.trim().length ||
-      !categoriaHabilitacao.trim().length ||
-      !vencimentoHabilitacao.trim().length;
-
-    if (isNotValidDriver) {
-      setLoading(false);
-      return alert(MISSING_INFORMATION_SIGN_FORM);
-    }
-
-    const isUserSigneUp = await fetchPostDriver({
-      nome,
-      numeroHabilitacao,
-      categoriaHabilitacao,
-      vencimentoHabilitacao,
-    });
-    setLoading(false);
-
-    isUserSigneUp ? router.push(ROUTE.SIGN_IN) : alert(ERROR_FORM);
-  }
-
-  async function handleSubmitRider(e: {
-    preventDefault: () => void;
-  }): Promise<FormEventHandler<HTMLFormElement> | undefined | void> {
-    setLoading(true);
-    e.preventDefault();
-
-    const tipoDocumento = "cpf";
+  const validateUserData = () => {
     const isNotValidRider =
       !nome.trim().length ||
       !numeroDocumento.trim().length ||
@@ -95,26 +62,54 @@ export default function SignUp() {
       !cidade.trim().length ||
       !uf.trim().length;
 
-    if (isNotValidRider) {
-      setLoading(false);
+    const isNotValidDriver =
+      !nome.trim().length ||
+      !numeroHabilitacao.trim().length ||
+      !categoriaHabilitacao.trim().length ||
+      !vencimentoHabilitacao.trim().length;
 
+    return isUserTypeDriver ? isNotValidDriver : isNotValidRider;
+  };
+
+  const handleSubmit = async (e: { preventDefault: () => void }) => {
+    setLoading(true);
+    e.preventDefault();
+
+    const notValidUser = validateUserData();
+
+    if (notValidUser) {
+      setLoading(false);
       return alert(MISSING_INFORMATION_SIGN_FORM);
     }
 
-    const isUserSigneUp = await fetchPostRider({
-      nome,
-      numeroDocumento,
-      tipoDocumento,
-      logradouro,
-      numero,
-      bairro,
-      cidade,
-      uf,
-    });
+    let isUserSigneUp;
+
+    if (isUserTypeDriver) {
+      isUserSigneUp = await fetchPostDriver({
+        nome,
+        numeroHabilitacao,
+        categoriaHabilitacao,
+        vencimentoHabilitacao,
+      });
+    } else {
+      const tipoDocumento = "cpf";
+      isUserSigneUp = await fetchPostRider({
+        nome,
+        numeroDocumento,
+        tipoDocumento,
+        logradouro,
+        numero,
+        bairro,
+        cidade,
+        uf,
+      });
+    }
+
+    if (!isUserSigneUp) return;
 
     isUserSigneUp ? router.push(ROUTE.SIGN_IN) : alert(ERROR_FORM);
     setLoading(false);
-  }
+  };
   return (
     <Container component="main" maxWidth="lg">
       <Box
@@ -147,9 +142,7 @@ export default function SignUp() {
               <Box
                 component="form"
                 noValidate
-                onSubmit={
-                  isUserTypeDriver ? handleSubmitDriver : handleSubmitRider
-                }
+                onSubmit={(e) => handleSubmit(e)}
                 sx={{ mt: 1 }}
               >
                 <InputField
