@@ -49,7 +49,7 @@ export default function RiderForm({
         handleChange={setBairro}
       />
       <InputField
-        name={RIDER.DISTRICT}
+        name={RIDER.CITY}
         value={cidade}
         handleChange={setCidade}
       />
