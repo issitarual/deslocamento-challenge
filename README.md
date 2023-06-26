@@ -17,6 +17,14 @@ This is a web application made with NextJS in which a user can ask for a rider o
 </details>
 <details>
 <summary>Sign up</summary>
+
+- Driver view
+
+![Captura de tela 2023-06-26 201528](https://github.com/issitarual/deslocamento-challenge/assets/81389078/e8d07871-a3fa-4dbb-b582-2b576f0a9bfd)
+- Rider view
+
+![Captura de tela 2023-06-26 201519](https://github.com/issitarual/deslocamento-challenge/assets/81389078/b76a9489-437c-4cb5-82d3-1c951db35005)
+  
 </details>
 <details>
 <summary>Home</summary>
@@ -29,6 +37,9 @@ This is a web application made with NextJS in which a user can ask for a rider o
 </details>
 <details>
 <summary>Vehicle - only for riders</summary>
+
+![Captura de tela 2023-06-26 201859](https://github.com/issitarual/deslocamento-challenge/assets/81389078/f5e0edee-a393-43fe-8b9a-a241ea16061f)
+
 </details>
 
 ### Implemented features ✅
