@@ -73,12 +73,11 @@ export default function Home() {
         fimDeslocamento: displacementTime,
         observacao,
       };
+      setKmFinal("");
+      setObservacao("");
       fetchUpdateDisplacement(finishDisplacement);
       fetchDisplacement();
-
-      const randomDisplacementPosition = getRandom(displacement.length);
-      const displacementToDo = displacement[randomDisplacementPosition];
-      setCurrentDisplacement(displacementToDo);
+      fetchRider(currentDisplacement.idCliente.toString());
     } else {
       const idCondutor = parseInt(currentDriver?.id);
       const vehicles = await fetchGetAllVehicles();
@@ -92,16 +91,12 @@ export default function Home() {
         idVeiculo: parseInt(vehicles[0].id),
         idCliente: parseInt(userId),
       };
+      setObservacao("");
+      setMotivo("");
+      setCheckList("");
       fetchPostDisplacement(displacement);
       fetchDriver();
-      const randomDriverPosition = getRandom(drivers.length);
-      const driver = drivers[randomDriverPosition];
-      setCurrentDriver(driver);
     }
-    const randomDisplacementPosition = getRandom(displacement.length);
-    const displacementToDo = displacement[randomDisplacementPosition];
-    setCurrentDisplacement(displacementToDo);
-    setLoading(false);
   }
 
   async function fetchWeather() {
