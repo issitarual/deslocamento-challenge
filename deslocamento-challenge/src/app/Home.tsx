@@ -78,7 +78,7 @@ export default function Home() {
       setObservacao("");
       fetchUpdateDisplacement(finishDisplacement);
       fetchDisplacement();
-      fetchRider(currentDisplacement.idCliente.toString());
+      fetchRider(currentDisplacement?.idCliente.toString());
     } else {
       const idCondutor = parseInt(currentDriver?.id);
       const vehicles = await fetchGetAllVehicles();
@@ -98,7 +98,6 @@ export default function Home() {
       fetchPostDisplacement(displacement);
       fetchDriver();
     }
-
     setLoading(false);
   }
 
@@ -122,6 +121,7 @@ export default function Home() {
   }
 
   async function fetchRider(id: string) {
+    if (!id) return;
     const currentRider = (await fetchGetRider(id)) || EMPTY_RIDER;
     setRider(currentRider);
   }
@@ -143,9 +143,9 @@ export default function Home() {
           );
       setDisplacement(filterDisplacement);
       setCurrentDisplacement(filterDisplacement[0]);
-      fetchRider(displacementResponse[0].idCliente.toString());
-      setLoading(false);
+      fetchRider(displacementResponse[0]?.idCliente.toString());
     }
+    setLoading(false);
   }
 
   const validateUser = () => {
