@@ -28,12 +28,33 @@ This is a web application made with NextJS in which a user can ask for a rider o
 </details>
 <details>
 <summary>Home</summary>
+  
+- Driver view
+
+![Captura de tela 2023-06-27 092540](https://github.com/issitarual/deslocamento-challenge/assets/81389078/86a7e252-8b2e-4a84-8f79-60337f77881d)
+
+- Rider view
+
+![Captura de tela 2023-06-27 090905](https://github.com/issitarual/deslocamento-challenge/assets/81389078/29ba3119-2d13-4d20-b7ad-34d0a09532c6)
+
 </details>
 <details>
 <summary>Displacement</summary>
+
+![Captura de tela 2023-06-27 091324](https://github.com/issitarual/deslocamento-challenge/assets/81389078/e8e76ee8-a713-41c7-8760-b02f264d113a)
+
 </details>
 <details>
 <summary>Account</summary>
+
+- Driver view
+
+![Captura de tela 2023-06-27 091352](https://github.com/issitarual/deslocamento-challenge/assets/81389078/57fe0b2e-d378-4718-8034-f77baeed0102)
+
+- Rider view
+
+![Captura de tela 2023-06-27 090930](https://github.com/issitarual/deslocamento-challenge/assets/81389078/8b72058d-0669-41c0-ae58-95e95f0ccb7d)
+
 </details>
 <details>
 <summary>Vehicle - only for riders</summary>
