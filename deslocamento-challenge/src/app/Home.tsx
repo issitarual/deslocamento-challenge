@@ -66,6 +66,7 @@ export default function Home() {
   async function handleClick() {
     setLoading(true);
     const displacementTime = Date.now().toString();
+
     if (isUserTypeDriver) {
       const finishDisplacement = {
         id: currentDisplacement.id,
@@ -97,6 +98,8 @@ export default function Home() {
       fetchPostDisplacement(displacement);
       fetchDriver();
     }
+
+    setLoading(false);
   }
 
   async function fetchWeather() {
@@ -121,7 +124,6 @@ export default function Home() {
   async function fetchRider(id: string) {
     const currentRider = (await fetchGetRider(id)) || EMPTY_RIDER;
     setRider(currentRider);
-    setLoading(false);
   }
 
   async function fetchDisplacement() {
@@ -141,6 +143,7 @@ export default function Home() {
           );
       setDisplacement(filterDisplacement);
       setCurrentDisplacement(filterDisplacement[0]);
+      fetchRider(displacementResponse[0].idCliente.toString());
       setLoading(false);
     }
   }
@@ -162,7 +165,6 @@ export default function Home() {
 
     if (isUserTypeDriver) {
       fetchDisplacement();
-      fetchRider(currentDisplacement.idCliente.toString());
     } else {
       fetchDriver();
     }

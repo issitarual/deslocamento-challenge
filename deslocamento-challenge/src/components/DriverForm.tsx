@@ -25,6 +25,19 @@ export default function DriverForm({
   setNumeroHabilitacao: Dispatch<SetStateAction<string>>;
 }) {
   const { loading } = useGlobalContext();
+
+  function formatDate(date: string) {
+    var d = new Date(date),
+      month = "" + (d.getMonth() + 1),
+      day = "" + d.getDate(),
+      year = d.getFullYear();
+
+    if (month.length < 2) month = "0" + month;
+    if (day.length < 2) day = "0" + day;
+
+    return [year, month, day].join("-");
+  }
+
   return (
     <>
       <InputField
@@ -46,7 +59,7 @@ export default function DriverForm({
         onChange={(e) => {
           setCategoriaHabilitacao(e.target.value);
         }}
-        value={categoriaHabilitacao}
+        value={categoriaHabilitacao || CATEGORIA_HABILITAÇÃO_VALUES.A}
       >
         <MenuItem value={CATEGORIA_HABILITAÇÃO_VALUES.A}>
           {CATEGORIA_HABILITAÇÃO_VALUES.A}
@@ -68,7 +81,7 @@ export default function DriverForm({
       <InputField
         name={EXPIRATION_DATE}
         type="date"
-        value={vencimentoHabilitacao}
+        value={formatDate(vencimentoHabilitacao)}
         handleChange={setVencimentoHabilitacao}
       />
     </>
