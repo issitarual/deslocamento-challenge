@@ -196,7 +196,7 @@ export default function Home() {
               : currentDriver.nome}
           </Typography>
           <Box display="flex" flexDirection="column" padding={2}>
-            {!loading && isUserTypeDriver && displacement.length && (
+            {!loading && isUserTypeDriver && displacement.length > 0 && (
               <DisplacementsForDriver
                 displacement={currentDisplacement}
                 riderName={rider.nome}
